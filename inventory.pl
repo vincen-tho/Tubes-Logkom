@@ -1,0 +1,3 @@
+:- include('items.pl').
+
+:- dynamic()

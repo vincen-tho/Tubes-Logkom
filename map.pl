@@ -22,7 +22,7 @@ map_size(20, 15).
     special_tile(7, 7, 'H').
 
     % ranch tile
-    special_tile(8, 8, 'H').
+    special_tile(8, 8, 'R').
 
     % quest tile
     special_tile(9, 9, 'Q').
