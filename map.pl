@@ -119,8 +119,4 @@ write_tile(X, Y) :- map_size(W, H),
                     write_tile(NewX, Y).
 
 
-
-
-
-
 create_map :- write_tile(1, 1).
