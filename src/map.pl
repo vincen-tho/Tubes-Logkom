@@ -119,4 +119,8 @@ writeTile(X, Y) :- map_size(W, H),
                     writeTile(NewX, Y).
 
 
+<<<<<<< HEAD:src/map.pl
 createMap :- writeTile(1, 1).
+=======
+create_map :- write_tile(1, 1).
+>>>>>>> a5f000e9d6b224346da870da0dbfb2ca84b0cfea:map.pl
