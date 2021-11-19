@@ -1,6 +1,7 @@
 /* include files */
 :- include('map.pl').
 
+
 startGame :- 
     write('                                                          '),nl,
     write(' :::::::::     :::     ::::    ::: :::::::::: ::::    ::: '),nl,
@@ -45,5 +46,5 @@ start :- isRunning(_) -> write('You already started your adventure!').
 start :- \+isRunning(_), assertz(isRunning(true)), createMap.
 
 map :- isRunning(_), createMap.
-map :- \+isRunning(_) -> write('Start the game first!')
+map :- \+isRunning(_) -> write('Start the game first!').
 
