@@ -13,7 +13,7 @@ addTime(X) :- time(OLD),
 
 printTime :- 
     time(X),
-    Day is X//4,
-    hour is X mod 24,
+    Day is X//24,
+    Hour is X mod 24,
     write('It is day'), print(Day), nl,
     write('It is hour'), print(Hour).
