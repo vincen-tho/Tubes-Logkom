@@ -6,9 +6,10 @@
 % quest(QuestId, HasilFarming, HasilFishing, HasilRanching, Exp, Gold)
 
 % sample quest
-quest(1,1,2,3,50,50).
-quest(2,2,3,4,100,75).
-quest(3,3,4,5,125,100).
+quest(1,1,0,0,25,25).
+quest(2,1,2,3,50,50).
+quest(3,2,3,4,100,75).
+quest(4,3,4,5,125,100).
 
 initQuest :- 
     assertz(progressQuest(0,0,0,0)),
