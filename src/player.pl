@@ -43,6 +43,7 @@ startingEXPCap(100).
 /* RULES */
 /* Inisialisasi pemain */
 initializePlayer :- \+ playerInitialized(1),
+                    write('Select your job (farmer/rancher/fisher): '), nl,
                     assertz(playerRole('Default')),
                     assertz(playerLevel(0)),
                     assertz(playerFarmingLevel(0)),
