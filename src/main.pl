@@ -3,6 +3,9 @@
 :- include('movement.pl').
 :- include('items.pl').
 :- include('inventory.pl').
+:- include('player.pl').
+:- include('farming.pl').
+:- include('roles.pl').
 
 startGame :- 
     write('                                                          '),nl,
