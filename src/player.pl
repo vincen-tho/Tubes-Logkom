@@ -34,12 +34,16 @@
 /* Gold pemain */
 :- dynamic(gold/1).
 
+/* Status initialize */
+:- dynamic(playerInitialized/1).
+
 /* STATIC */
 startingEXPCap(100).
 
 /* RULES */
 /* Inisialisasi pemain */
-initializePlayer :- assertz(playerRole('Default')),
+initializePlayer :- \+ playerInitialized(1),
+                    assertz(playerRole('Default')),
                     assertz(playerLevel(0)),
                     assertz(playerFarmingLevel(0)),
                     assertz(playerFarmingEXP(0)),
@@ -50,7 +54,8 @@ initializePlayer :- assertz(playerRole('Default')),
                     assertz(exp(0)),
                     startingEXPCap(X),
                     assertz(expCap(X)),
-                    assertz(gold(0)).
+                    assertz(gold(0)),
+                    assertz(playerInitialized(1)).
 
 /* Mendapatkan Role */
 farmer :- playerRole('Default'), retract(playerRole('Default')), assertz(playerRole('Farmer')), !.
