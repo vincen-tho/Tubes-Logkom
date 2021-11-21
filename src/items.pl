@@ -10,6 +10,8 @@ items('Rice', 250).
 items('Potato', 300).
 items('Magic Mushroom', 1850).
 
+items('Rice Seed', 150).
+
 /* RANCH */
 items('Dung', 0).
 items('Egg', 110).

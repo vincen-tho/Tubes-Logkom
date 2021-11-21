@@ -41,22 +41,102 @@ buy :- !.
 sell :- !.
 */
 
+
+sell :- inventory(Inv), displayInventoryItems(Inv, 1),
+    write('What item do you want to sell? '),
+    read(Opt), nl,
+    write('How many items do you want to sell'), nl,
+    read(Qty), nl,
+    sellAction(Opt, Qty).
+
+sellAction(Opt, Qty) :- 
+    inventory(I),
+    Idx is Opt-1,
+    getElmtNoZero(Idx, I, Res),
+    getElmt(0, Res, ResN),
+    (member([ResN, ResQ], I)),
+            NewQ is (ResQ - Qty),
+            delete(I, [ResN, ResQ], TempI),
+            append(TempI, [[ResN, NewQ]], NewI),
+            retractall(inventory(_)),
+            assertz(inventory(NewI)).
+            
+
+/* FUNCTION */
+getElmt(0, [Head|Tail], Res) :-
+    Res = Head, !.
+getElmt(Idx, [Head|Tail], Res) :-
+    NewIdx is (Idx-1),
+    getElmt(NewIdx, Tail, Res).
+
+getElmtNoZero(0, [[Name, Qty]|Tail], Res) :-
+    Qty =\= 0,
+    items(Name, _),
+    Res = [Name, Qty], !.
+getElmtNoZero(Idx, [[Name, Qty]|Tail], Res) :-
+    Qty =\= 0,
+    items(Name, _),
+    NewIdx is (Idx-1),
+    getElmtNoZero(NewIdx, Tail, Res).
+
+getElmtNoZero(Idx, [[Name, Qty]|Tail], Res) :-
+    Qty =:= 0,
+    getElmtNoZero(Idx, Tail, Res).
+getElmtNoZero(Idx, [[Name, Qty]|Tail], Res) :-
+    \+ items(Name, _),
+    getElmtNoZero(Idx, Tail, Res).
+
+    % inventory(X), getElmt(0, X, Res), write(Res).
+
 /* debug only */
 % eqShop([['Shovel', 10, 15], ['Bucket', 11, 16]]).
 initShop :- retractall(eqShop(_)), assertz(eqShop([])), inventory(Inv), createEQShop(Inv), !.
 
-buy :- initShop, itemShop(IS), write('Items: '), nl, displayItemShop(IS), write('Equipments: '), nl, nl, eqShop(EQS), displayEQShop(EQS).
 
-displayItemShop([]) :- !.
+buyAction(X, Q) :- 
+    itemShop(IS),
+    inventory(I),
+    Idx is X-1,
+    getElmt(Idx, IS, Res),
+    getElmt(0, Res, ResN),
 
-displayItemShop([[Name, Price]|Tail]) :-
+    (member([ResN, ResQ], I)) ->
+            NewQ is (ResQ + Q),
+            delete(I, [ResN, ResQ], TempI),
+            append(TempI, [[ResN, NewQ]], NewI),
+            retractall(inventory(_)),
+            assertz(inventory(NewI))
+        ;
+            append(I, [[ResN, Q]], NewI),
+            retractall(inventory(_)),
+            assertz(inventory(NewI)).
+
+
+
+
+buy :- initShop, itemShop(IS), write('Items: '), nl, displayItemShop(IS, 1), nl, write('Equipments: '), nl, eqShop(EQS), displayEQShop(EQS, 1),
+    nl, write('What do you want to buy (0 to cancel)? '),
+    read(X),
+    nl, write('How many items do you want to buy? '),
+    read(Q),
+    buyAction(X, Q).
+
+displayItemShop([], _) :- !.
+
+displayItemShop([[Name, Price]|Tail], Num) :-
+    write(Num), write('. '),
     write(Name), write(', Price: '), write(Price), write(' Gold'), nl, 
-    displayItemShop(Tail), !.
+    NewNum is (1+Num),
+    displayItemShop(Tail, NewNum), !.
 
-displayEQShop([]) :- !.
+displayEQShop([], _) :- !.
 
-displayEQShop([[Name, Level, Price]|Tail]) :-
+displayEQShop([[Name, Level, Price]|Tail], Num) :-
+    write(Num), write('. '),
     write(Name), write(', lv.'), write(Level), write(', Price: '), write(Price), write(' Gold'), nl, 
-    displayEQShop(Tail), !.
+    NewNum is (1+Num),
+    displayEQShop(Tail, NewNum), !.
 
 test :- initInv, inventory(X), showInventory(X), initShop.
+
+disInv :- inventory(X), showInventory(X).

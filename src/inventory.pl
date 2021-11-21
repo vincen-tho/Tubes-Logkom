@@ -4,24 +4,26 @@
 
 showInventory([]) :- !.
 showInventory(Inv) :- write('Items: '), nl,
-                displayInventoryItems(Inv), nl,
+                displayInventoryItems(Inv, 1), nl,
                 write('Equipments: '), nl,                
                 displayInventoryEquipments(Inv), !.
 
 
                 
-displayInventoryItems([]) :- !.
-displayInventoryItems([[Name, Qty]|Tail]) :-
+displayInventoryItems([], _) :- !.
+displayInventoryItems([[Name, Qty]|Tail], Num) :-
+    NewNum is Num + 1,
     items(Name, Price),
     Qty =\= 0,
+    write(Num), write('. '),
     write(Name), write('('), write(Qty), write(')'), write(', Price: '), write(Price), write(' Gold'), nl, 
-    displayInventoryItems(Tail), !.
-displayInventoryItems([[Name, Qty]|Tail]) :-
+    displayInventoryItems(Tail, NewNum), !.
+displayInventoryItems([[Name, Qty]|Tail], Num) :-
     (\+ items(Name, _)),
-    displayInventoryItems(Tail), !.
-displayInventoryItems([[Name, Qty]|Tail]) :-
+    displayInventoryItems(Tail, Num), !.
+displayInventoryItems([[Name, Qty]|Tail], Num) :-
     (items(Name, _)), Qty =:= 0,
-    displayInventoryItems(Tail), !.
+    displayInventoryItems(Tail, Num), !.
 
 displayInventoryEquipments([]) :- !.
 displayInventoryEquipments([[Name, Level]|Tail]) :-
@@ -48,8 +50,26 @@ changeInv(Inv) :- retractall(inventory(_)),
 
 
 
+% inventory(X), inInventory('c', X).
+% inInventory('c', [['c', 5], ['d', 10]]).
+
 /* Debug Only */
 
 initInv :- retractall(inventory(_)),
-            assertz(inventory([['Dung', 3], ['Egg', 0], ['Milk', 11], ['Water Sprinkler', 1], ['Shovel', 1], ['Shearer', 0], ['Bucket', 0], ['Fishing Rod', 0], ['Bait', 0]])).
+            assertz(inventory(
+
+                [
+                ['Dung', 3],
+                ['Egg', 0],
+                ['Milk', 11],
+                ['Water Sprinkler', 1],
+                ['Shovel', 1],
+                ['Shearer', 0],
+                ['Bucket', 0],
+                ['Fishing Rod', 0],
+                ['Bait', 0],
+                ['Rice Seed', 0]
+                ]
+                
+                )).
 
