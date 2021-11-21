@@ -137,5 +137,5 @@ writeTile(X, Y) :- map_size(W, H),
 createMap :- writeTile(1, 1).
 
 /* debug only */
-/* start :- resetPlayerPos,
-        create_map. */
+startD :- resetPlayerPos,
+        createMap.

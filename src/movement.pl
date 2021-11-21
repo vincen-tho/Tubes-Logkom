@@ -101,13 +101,3 @@ d :- playerPos(X, _), map_size(W, _),
     NewX =:= W,
     hitBorder,
     createMap.
-
-
-
-
-    
-
-
-
-
-/* Disallowed move */
