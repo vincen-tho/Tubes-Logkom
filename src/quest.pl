@@ -24,8 +24,9 @@ resetQuest :-
 
 completedQuest :- 
     progressQuest(QuestId, CFarm, CFish, CRanch),
-    quest(QuestId, HasilFarm, HasilFish, HasilRanch, _, _),
-    CFarm >= HasilFarm, CFish >= HasilFish, CRanch >= HasilRanch.
+    quest(QuestId, HasilFarm, HasilFish, HasilRanch, Exp, Gold),
+    CFarm >= HasilFarm, CFish >= HasilFish, CRanch >= HasilRanch,
+    addEXP(Exp), addGold(Gold).
     
 getQuest :-
     playerPos(X, Y),

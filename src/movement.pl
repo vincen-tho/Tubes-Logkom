@@ -1,4 +1,3 @@
-:- include('game_manager.pl').
 
 resetPlayerPos :- retractall(playerPos(_, _)),
                     assertz(playerPos(2, 9)).

@@ -1,5 +1,4 @@
 /* Include */
-:- include('player.pl').
 
 /* Dynamic */
 :- dynamic(fishProbability/1).
