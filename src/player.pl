@@ -67,7 +67,7 @@ initializePlayer :- \+ playerInitialized(1),
 /* Mendapatkan Role */
 /* Ini jangan lupa dibikin loop idenya gimana */
 setRole(X) :- roleName(X, ROLE), retract(playerRole('Default')), assertz(playerRole(ROLE)), write('You are now a '), write(ROLE), write('!'), !.
-setRole(X) :-   X =\= 1, X =\= 2, X =\= 3,
+setRole(X) :-   X \== 1, X \== 2, X \== 3,
                 write('Input salah, ulangi:'), nl, 
                 write('> '), read(Y), setRole(Y), !.
 
