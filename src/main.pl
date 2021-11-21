@@ -5,7 +5,8 @@
 :- include('inventory.pl').
 :- include('player.pl').
 :- include('game_manager.pl').
-
+:- include('roles.pl').
+:- include('farming.pl').
 
 
 startGame :- 
