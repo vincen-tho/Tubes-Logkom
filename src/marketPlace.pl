@@ -10,6 +10,10 @@ eqShop([]).
 % displayItemShop([['Rice Seed', 200], ['Potato', 350], ['Tomato Seed', 150]]).
 
 
+/* Create EQ Shop based on equipments in inventory */
+createEQShop([]) :- !.
+
+/* need to be set manually each EQ */
 createEQShop([[Name, Level]|Tail]) :-
     equipment(Name),
     UpLv is (Level + 1),
@@ -32,15 +36,16 @@ createEQShop([[Name, _]|Tail]) :-
 
 
 
-
+/*
 buy :- !.
 sell :- !.
+*/
 
 /* debug only */
 % eqShop([['Shovel', 10, 15], ['Bucket', 11, 16]]).
-initShop :- inventory(Inv), createEQShop(Inv), !.
+initShop :- retractall(eqShop(_)), assertz(eqShop([])), inventory(Inv), createEQShop(Inv), !.
 
-displayShop :- itemShop(IS), displayItemShop(IS), nl, eqShop(EQS), displayEQShop(EQS).
+buy :- initShop, itemShop(IS), write('Items: '), nl, displayItemShop(IS), write('Equipments: '), nl, nl, eqShop(EQS), displayEQShop(EQS).
 
 displayItemShop([]) :- !.
 
