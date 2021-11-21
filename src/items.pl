@@ -3,30 +3,30 @@
 
 /* FARMING */
 items('Reed', 0).
-items('Wheat', 10).
-items('Corn', 15).
-items('Tomato', 20).
-items('Rice', 25).
-items('Potato', 30).
-items('Magic Mushroom', 185).
+items('Wheat', 100).
+items('Corn', 150).
+items('Tomato', 200).
+items('Rice', 250).
+items('Potato', 300).
+items('Magic Mushroom', 1850).
 
 /* RANCH */
 items('Dung', 0).
-items('Egg', 11).
-items('Milk', 16).
-items('Chicken', 21).
-items('Wool', 25).
-items('Sheep Meat', 29).
-items('Beef', 40).
-items('Golden Egg', 155).
+items('Egg', 110).
+items('Milk', 160).
+items('Chicken', 210).
+items('Wool', 250).
+items('Sheep Meat', 290).
+items('Beef', 400).
+items('Golden Egg', 1550).
 
 /* FISHING */
-items('Bottle', 1).
-items('Catfish', 8).
-items('Cod', 17).
-items('Salmon', 27).
-items('Tuna', 45).
-items('Puffer Fish', 175).
+items('Bottle', 10).
+items('Catfish', 80).
+items('Cod', 170).
+items('Salmon', 270).
+items('Tuna', 450).
+items('Puffer Fish', 1750).
 
 
 /* EQUIPMENT */

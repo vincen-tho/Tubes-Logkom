@@ -3,6 +3,7 @@
 :- include('movement.pl').
 :- include('items.pl').
 :- include('inventory.pl').
+:- include('marketPlace.pl').
 
 startGame :- 
     write('                                                          '),nl,
@@ -45,7 +46,7 @@ help :-
 
 :- dynamic(isRunning/1).
 start :- isRunning(_) -> write('You already started your adventure!').
-start :- \+isRunning(_), assertz(isRunning(true)), createMap.
+start :- \+isRunning(_), assertz(isRunning(true)), resetPlayerPos, createMap.
 
 map :- isRunning(_), createMap.
 map :- \+isRunning(_) -> write('Start the game first!').
