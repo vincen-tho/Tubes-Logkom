@@ -1,5 +1,6 @@
 
 :- dynamic(playerPos/2).
+:- dynamic(specialTile/3).
 
 /* membuat map size 20 * 15 WIDTH * HEIGHT */ 
 map_size(20, 15).

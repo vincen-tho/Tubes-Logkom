@@ -43,8 +43,14 @@ startingEXPCap(100).
 /* RULES */
 /* Inisialisasi pemain */
 initializePlayer :- \+ playerInitialized(1),
-                    write('Select your job (farmer/fisher/rancher): '), nl,
+                    write('Welcome to panen, please select your job:'), nl,
+                    write('1. Fisherman'), nl,
+                    write('2. Farmer'), nl,
+                    write('3. Rancher'), nl,
+                    write('> '),
                     assertz(playerRole('Default')),
+                    read(ROLE),
+                    setRole(ROLE),
                     assertz(playerLevel(0)),
                     assertz(playerFarmingLevel(0)),
                     assertz(playerFarmingEXP(0)),
@@ -53,18 +59,17 @@ initializePlayer :- \+ playerInitialized(1),
                     assertz(playerRanchingLevel(0)),
                     assertz(playerRanchingEXP(0)),
                     assertz(exp(0)),
-                    startingEXPCap(X),
-                    assertz(expCap(X)),
+                    startingEXPCap(CAP),
+                    assertz(expCap(CAP)),
                     assertz(gold(0)),
                     assertz(playerInitialized(1)).
 
 /* Mendapatkan Role */
-farmer :- playerRole('Default'), retract(playerRole('Default')), assertz(playerRole('Farmer')), !.
-farmer :- \+ playerRole('Default'), print('Failed to obtain role!'), !.
-rancher :- playerRole('Default'),retract(playerRole('Default')), assertz(playerRole('Rancher')), !.
-rancher :- \+ playerRole('Default'), print('Failed to obtain role!'), !.
-fisher :- playerRole('Default'), retract(playerRole('Default')), assertz(playerRole('Fisher')), !.
-fisher :- \+ playerRole('Default'), print('Failed to obtain role!'), !.
+/* Ini jangan lupa dibikin loop idenya gimana */
+setRole(X) :- roleName(X, ROLE), retract(playerRole('Default')), assertz(playerRole(ROLE)), write('You are now a '), write(ROLE), write('!'), !.
+setRole(X) :-   X =\= 1, X =\= 2, X =\= 3,
+                write('Input salah, ulangi:'), nl, 
+                write('> '), read(Y), setRole(Y), !.
 
 /* Level */
 /* addEXP(X) dimana X adalah jumlah EXP yang ingin ditambahkan */
