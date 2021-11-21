@@ -1,4 +1,5 @@
 
+:- dynamic(playerPos/2).
 
 /* membuat map size 20 * 15 WIDTH * HEIGHT */ 
 map_size(20, 15).
@@ -66,6 +67,7 @@ writeTile(X, Y) :- map_size(W, H),
 writeTile(X, Y) :- map_size(W, H),
                     X > 1, X < W, Y > 1, Y < H,
                     \+ specialTile(X, Y, _),
+                    \+ playerPos(X, Y),
                     write('- '),
                     NewX is X+1,
                     writeTile(NewX, Y).
@@ -82,6 +84,7 @@ writeTile(X, Y) :- map_size(W, H),
 writeTile(X, Y) :- map_size(W, H),
                     X > 1, X < W, Y > 1, Y < H,
                     specialTile(X, Y, 'H'),
+                    \+ playerPos(X, Y),
                     write('H '),
                     NewX is X+1,
                     writeTile(NewX, Y).
@@ -90,6 +93,7 @@ writeTile(X, Y) :- map_size(W, H),
 writeTile(X, Y) :- map_size(W, H),
                     X > 1, X < W, Y > 1, Y < H,
                     specialTile(X, Y, 'R'),
+                    \+ playerPos(X, Y),
                     write('R '),
                     NewX is X+1,
                     writeTile(NewX, Y).
@@ -98,6 +102,7 @@ writeTile(X, Y) :- map_size(W, H),
 writeTile(X, Y) :- map_size(W, H),
                     X > 1, X < W, Y > 1, Y < H,
                     specialTile(X, Y, 'Q'),
+                    \+ playerPos(X, Y),
                     write('Q '),
                     NewX is X+1,
                     writeTile(NewX, Y).
@@ -106,6 +111,7 @@ writeTile(X, Y) :- map_size(W, H),
 writeTile(X, Y) :- map_size(W, H),
                     X > 1, X < W, Y > 1, Y < H,
                     specialTile(X, Y, 'M'),
+                    \+ playerPos(X, Y),
                     write('M '),
                     NewX is X+1,
                     writeTile(NewX, Y).
@@ -114,13 +120,22 @@ writeTile(X, Y) :- map_size(W, H),
 writeTile(X, Y) :- map_size(W, H),
                     X > 1, X < W, Y > 1, Y < H,
                     specialTile(X, Y, 'D'),
+                    \+ playerPos(X, Y),
                     write('= '),
                     NewX is X+1,
                     writeTile(NewX, Y).
 
+/* render player tile */
+writeTile(X, Y) :- map_size(W, H),
+                    X > 1, X < W, Y > 1, Y < H,
+                    playerPos(X, Y),
+                    write('P '),
+                    NewX is X+1,
+                    writeTile(NewX, Y).
 
-<<<<<<< HEAD:src/map.pl
+
 createMap :- writeTile(1, 1).
-=======
-create_map :- write_tile(1, 1).
->>>>>>> a5f000e9d6b224346da870da0dbfb2ca84b0cfea:map.pl
+
+/* debug only */
+/* start :- resetPlayerPos,
+        create_map. */
