@@ -76,6 +76,11 @@ setRole(X) :-   X =\= 1, X =\= 2, X =\= 3,
 addEXP(X) :- exp(OLDEXP), NEWEXP is OLDEXP+X, expCap(OLDCAP), NEWEXP >= OLDCAP, retract(exp(OLDEXP)), assertz(exp(NEWEXP)), retract(expCap(OLDCAP)), playerLevel(OLDLEVEL), NEWLEVEL is OLDLEVEL+1, retract(playerLevel(OLDLEVEL)), assertz(playerLevel(NEWLEVEL)), NEWCAP is OLDCAP+100+(50*(NEWLEVEL)),  assertz(expCap(NEWCAP)), !.
 addEXP(X) :- exp(OLD), NEW is OLD+X, retract(exp(OLD)), assertz(exp(NEW)), !.
 
+/* Gold */
+/* addGold(X) dimana X adalah jumlah Gold yang ingin ditambahkan */
+addGold(X) :- gold(OLD), NEW is OLD+X, retract(gold(OLD)), assertz(gold(NEW)), !.
+
+
 /* Print player status */
 status :- playerRole(ROLE), playerLevel(LEVEL), playerFarmingLevel(FARMINGLEVEL), playerFarmingEXP(FARMINGEXP), playerFishingLevel(FISHINGLEVEL), playerFishingEXP(FISHINGEXP), playerRanchingLevel(RANCHINGLEVEL), playerRanchingEXP(RANCHINGEXP), exp(EXP), gold(GOLD), expCap(CAP),
 write('Your status: '), nl,

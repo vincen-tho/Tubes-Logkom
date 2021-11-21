@@ -1,13 +1,17 @@
 /* include files */
-:- include('map.pl').
-:- include('movement.pl').
-:- include('items.pl').
-:- include('inventory.pl').
-:- include('player.pl').
-:- include('game_manager.pl').
-:- include('quest.pl').
-:- include('roles.pl').
 :- include('farming.pl').
+:- include('fishing.pl').
+:- include('game_manager.pl').
+:- include('house.pl').
+:- include('inventory.pl').
+:- include('items.pl').
+:- include('map.pl').
+:- include('marketplace.pl').
+:- include('movement.pl').
+:- include('player.pl').
+:- include('quest.pl').
+% :- include('ranching.pl').
+:- include('roles.pl').
 
 
 startGame :- 
@@ -55,6 +59,7 @@ start :- \+isRunning(_),
     assertz(isRunning(true)), 
     resetPlayerPos, 
     initializeTime, 
+    initQuest,
     printTime, nl,
     initializePlayer.
 
