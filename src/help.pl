@@ -1,15 +1,17 @@
 help :- 
+    playerPos(X, Y),
     \+ (specialTile(X, Y, _)),
     write(' ################################################################################'),nl,
     write(' #                                 ~MAIN MENU~                                  #'),nl,
-    write(' # 1. start  : Start your adventure                                             #'),nl,
-    write(' # 2. map    : Show map                                                         #'),nl,
-    write(' # 3. status : Show your current status                                         #'),nl,
-    write(' # 4. w      : Move up 1 step                                                   #'),nl,   
-    write(' # 5. s      : Move down 1 step                                                 #'),nl,
-    write(' # 6. d      : Move right 1 step                                                #'),nl,
-    write(' # 7. a      : Move left 1 step                                                 #'),nl,
-    write(' # 8. help   : Show command list                                                #'),nl,
+    write(' # 1. map       : Show map                                                      #'),nl,
+    write(' # 2. status    : Show your current status                                      #'),nl,
+    write(' # 3. printTime : Show current time                                             #'),nl,
+    write(' # 4. w         : Move up 1 step                                                #'),nl,   
+    write(' # 5. s         : Move down 1 step                                              #'),nl,
+    write(' # 6. d         : Move right 1 step                                             #'),nl,
+    write(' # 7. a         : Move left 1 step                                              #'),nl,
+    write(' # 8. help      : Show command list                                             #'),nl,
+    write(' # 9. quit      : Quit the game                                                 #'),nl,
     write(' ################################################################################'), !.
 
 help :- 

@@ -124,7 +124,7 @@ addFishingEXP(X) :- playerFishingEXP(OLD),
                     assertz(playerFishingLevel(NEWLEVEL))),
                     retract(fishingExpCap(OLDCAP)),
                     NEWCAP is OLDCAP+100+(50*(NEWLEVEL)),
-                    assertz(expCap(NEWCAP))), !.
+                    assertz(expCap(NEWCAP)), !.
 
 /* addRanchingEXP(X) dimana X adalah jumlah Farming EXP yang ingin ditambahkan*/
 addRanchingEXP(X) :- playerRanchingEXP(OLD),
@@ -132,15 +132,15 @@ addRanchingEXP(X) :- playerRanchingEXP(OLD),
                     retract(playerRanchingEXP(OLD)),
                     assertz(playerRanchingEXP(NEW)),
                     addEXP(X),
-                    RanchingExpCap(OLDCAP),
+                    ranchingExpCap(OLDCAP),
                     (NEW >= OLDCAP) ->
                     (playerRanchingLevel(OLDLEVEL),
                     NEWLEVEL is OLDLEVEL+1,
                     retract(playerRanchingLevel(OLDLEVEL)),
-                    assertz(playerRanchingLevel(NEWLEVEL)))
+                    assertz(playerRanchingLevel(NEWLEVEL))),
                     retract(ranchingExpCap(OLDCAP)),
                     NEWCAP is OLDCAP+100+(50*(NEWLEVEL)),
-                    assertz(expCap(NEWCAP))), !.
+                    assertz(expCap(NEWCAP)), !.
 
 /* Gold */
 /* addGold(X) dimana X adalah jumlah Gold yang ingin ditambahkan */
