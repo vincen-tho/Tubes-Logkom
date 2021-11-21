@@ -1,4 +1,4 @@
-:- dynamic(progressQuest/4)
+:- dynamic(progressQuest/4).
 :- dynamic(isQuest/1).
 
 % isQuest untuk melihat apakah sedang menjalankan quest
@@ -12,11 +12,12 @@ quest(3,2,3,4,100,75).
 quest(4,3,4,5,125,100).
 
 initQuest :- 
-    assertz(progressQuest(0,0,0,0)),
+    assertz(progressQuest(1,0,0,0)),
+    assertz(isQuest(0)).
 
 resetQuest :-
-    retract(isQuest(_)),
-    assertz(isQuest(false)),
+    retract(isQuest(X)),
+    assertz(isQuest(0)),
     progressQuest(QuestId, CFarm, CFish, CRanch),
     retract(progressQuest(QuestId, CFarm, CFish, CRanch)),
     assertz(progressQuest(0, 0, 0, 0)).
@@ -27,16 +28,18 @@ completedQuest :-
     CFarm >= HasilFarm, CFish >= HasilFish, CRanch >= HasilRanch.
     
 getQuest :-
-    \+isQuest(_),
-    retract(isQuest(_)),
-    assertz(isQuest(true)),
+    playerPos(X, Y),
+    specialTile(X, Y, 'Q'),
+    isQuest(Z), Z =:= 0,
+    retract(isQuest(Z)),
+    assertz(isQuest(1)),
     progressQuest(QuestId, CFarm, CFish, CRanch),
     NewQuestId is QuestId + 1,
     retract(progressQuest(QuestId, CFarm, CFish, CRanch)),
-    assertz(progressQuest(NewQuestId, 0, 0, 0)).
+    assertz(progressQuest(NewQuestId, 0, 0, 0)), !.
 
 getQuest :-
-    isQuest(_) -> write('Finish your current quest first!')
+    isQuest(Z), Z =:= 1, write('Finish your current quest first!'), !.
 
 addCountFarm(X) :-
     progressQuest(QuestId, CFarm, CFish, CRanch),
@@ -57,28 +60,28 @@ addCountRanch(X) :-
     assertz(progressQuest(QuestId, CFarm, CFish, NewCRanch)).    
 
 printQuest :-
-    isQuest(_), 
+    isQuest(Z), Z =:= 1, 
     quest(QuestId, HasilFarm, HasilFish, HasilRanch, Exp, Gold),
     write('Quest details:'), nl,
     write('Harvest items: '), print(HasilFarm), nl,
     write('Fish: '), print(HasilFish), nl,
     write('Ranch item: '), print(HasilRanch), nl,
     write('Exp reward: '), print(Exp), nl,
-    write('Gold reward: '), print(Gold).
+    write('Gold reward: '), print(Gold), !.
 
 printQuest :-
-    \+isQuest(_) -> write('Get your quest first!').
+    isQuest(Z), Z =:= 0, write('Get your quest first!'), !.
 
 printProgress :-
-    isQuest(_), 
+    isQuest(Z), Z =:= 1,  
     progressQuest(QuestId, CFarm, CFish, CRanch),
     write('Your progress:'),nl,
     write('Harvest items: '), print(CFarm), nl,
     write('Fish: '), print(CFish), nl,
-    write('Ranch item: '), print(CRanch).
+    write('Ranch item: '), print(CRanch), !.
 
 printProgress :-
-    \+isQuest(_) -> write('You are currently not doing any quest.')
+    isQuest(Z), Z =:= 0, write('You are currently not doing any quest.'), !.
 
 /* belum di test 
    TODO :
