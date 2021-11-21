@@ -5,7 +5,7 @@
 
 /* RULES */
 dig :-  playerPos(X, Y),
-        NEWY is Y+1,
+        NEWY is Y-1,
         (\+ (specialTile(X, NEWY, 'W')),
         NEWY =\= 1,
         \+ (specialTile(X, Y, _)) ->
