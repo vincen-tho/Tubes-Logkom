@@ -60,11 +60,11 @@ initializePlayer :- \+ playerInitialized(1),
 
 /* Mendapatkan Role */
 farmer :- playerRole('Default'), retract(playerRole('Default')), assertz(playerRole('Farmer')), !.
-farmer :- \+ playerRole('Default'), print('Gagal mendapatkan role!'), !.
+farmer :- \+ playerRole('Default'), print('Failed to obtain role!'), !.
 rancher :- playerRole('Default'),retract(playerRole('Default')), assertz(playerRole('Rancher')), !.
-rancher :- \+ playerRole('Default'), print('Gagal mendapatkan role!'), !.
+rancher :- \+ playerRole('Default'), print('Failed to obtain role!'), !.
 fisher :- playerRole('Default'), retract(playerRole('Default')), assertz(playerRole('Fisher')), !.
-fisher :- \+ playerRole('Default'), print('Gagal mendapatkan role!'), !.
+fisher :- \+ playerRole('Default'), print('Failed to obtain role!'), !.
 
 /* Level */
 /* addEXP(X) dimana X adalah jumlah EXP yang ingin ditambahkan */
