@@ -15,5 +15,5 @@ printTime :-
     time(X),
     Day is X//24,
     Hour is X mod 24,
-    write('It is day'), print(Day), nl,
-    write('It is hour'), print(Hour).
+    write('It is day '), print(Day), nl,
+    write('It is hour '), print(Hour).
