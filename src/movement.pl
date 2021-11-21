@@ -1,13 +1,10 @@
+:- include('game_manager.pl').
 
 resetPlayerPos :- retractall(playerPos(_, _)),
                     assertz(playerPos(2, 9)).
 
 newPos(X, Y) :- retractall(playerPos(_, _)),
                 assertz(playerPos(X, Y)), !.
-
-
-
-
 
 
 hitWater :- nl, write('You can\'t step on water'), nl, nl, !.
@@ -21,19 +18,21 @@ w :- playerPos(X, Y), map_size(_, _),
     NewY =\= 1,
     \+ specialTile(X, NewY, 'W'),
     newPos(X, NewY), !,
-    createMap, !.
+    addTime(1),
+    createMap.
+
 % disallowed
 w :- playerPos(X, Y), map_size(_, _),
     NewY is Y-1,
     NewY =\= 1,
     specialTile(X, NewY, 'W'),
-    hitWater,
-    createMap, !.
+    hitWater, !,
+    createMap.
 w :- playerPos(_, Y), map_size(_, _),
     NewY is Y-1,
     NewY =:= 1,
-    hitBorder,
-    createMap, !.
+    hitBorder, !,
+    createMap.
 
 
 /* move down */
@@ -43,20 +42,21 @@ s :- playerPos(X, Y), map_size(_, H),
     NewY =\= H,
     \+ specialTile(X, NewY, 'W'),
     newPos(X, NewY), !,
+    addTime(1),
     createMap.
 
 % disallowed
 s :- playerPos(X, Y), map_size(_, _),
     NewY is Y+1,
     specialTile(X, NewY, 'W'),
-    hitWater,
-    createMap, !.
+    hitWater, !, 
+    createMap.
 
 s :- playerPos(_, Y), map_size(_, H),
     NewY is Y+1,
     NewY =:= H,
-    hitBorder,
-    createMap, !.
+    hitBorder, !,
+    createMap.
 
 
 /* move left */
@@ -66,18 +66,19 @@ a :- playerPos(X, Y), map_size(_, _),
     NewX =\= 1,
     \+ specialTile(NewX, Y, 'W'),
     newPos(NewX, Y), !,
+    addTime(1),
     createMap.
 
 % disallowed
 a :- playerPos(X, Y), map_size(_, _),
     NewX is X-1,
     specialTile(NewX, Y, 'W'),
-    hitWater,
+    hitWater, !,
     createMap.
 a :- playerPos(X, _), map_size(_, _),
     NewX is X-1,
     NewX =:= 1,
-    hitBorder,
+    hitBorder, !,
     createMap.
 
 /* move right */
@@ -88,16 +89,18 @@ d :- playerPos(X, Y), map_size(W, _),
     NewX =\= W,
     \+ specialTile(NewX, Y, 'W'),
     newPos(NewX, Y), !,
+    addTime(1),
     createMap.
+
 
 % disallowed
 d :- playerPos(X, Y), map_size(_, _),
     NewX is X+1,
     specialTile(NewX, Y, 'W'),
-    hitWater,
+    hitWater, !,
     createMap.
 d :- playerPos(X, _), map_size(W, _),
     NewX is X+1,
     NewX =:= W,
-    hitBorder,
+    hitBorder, !,
     createMap.
