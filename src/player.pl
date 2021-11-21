@@ -35,7 +35,27 @@
 :- dynamic(gold/1).
 
 /* STATIC */
-
+startingEXPCap(100).
 
 /* RULES */
-/* initializePlayer :- */
+/* Inisialisasi pemain */
+initializePlayer :- assertz(playerRole('Default')),
+                    assertz(playerLevel(0)),
+                    assertz(playerFarmingLevel(0)),
+                    assertz(playerFarmingEXP(0)),
+                    assertz(playerFishingLevel(0)),
+                    assertz(playerFishingEXP(0)),
+                    assertz(playerRanchingLevel(0)),
+                    assertz(playerRanchingEXP(0)),
+                    assertz(exp(0)),
+                    startingEXPCap(X),
+                    assertz(expCap(X)),
+                    assertz(gold(0)).
+
+/* Mendapatkan Role */
+farmer :- playerRole('Default'), retract(playerRole('Default')), assertz(playerRole('Farmer')), !.
+farmer :- \+ playerRole('Default'), print('Gagal mendapatkan role!'), !.
+rancher :- playerRole('Default'),retract(playerRole('Default')), assertz(playerRole('Rancher')), !.
+rancher :- \+ playerRole('Default'), print('Gagal mendapatkan role!'), !.
+fisher :- playerRole('Default'), retract(playerRole('Default')), assertz(playerRole('Fisher')), !.
+fisher :- \+ playerRole('Default'), print('Gagal mendapatkan role!'), !.
