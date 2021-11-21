@@ -64,3 +64,23 @@ rancher :- playerRole('Default'),retract(playerRole('Default')), assertz(playerR
 rancher :- \+ playerRole('Default'), print('Gagal mendapatkan role!'), !.
 fisher :- playerRole('Default'), retract(playerRole('Default')), assertz(playerRole('Fisher')), !.
 fisher :- \+ playerRole('Default'), print('Gagal mendapatkan role!'), !.
+
+/* Level */
+/* addEXP(X) dimana X adalah jumlah EXP yang ingin ditambahkan */
+addEXP(X) :- exp(OLDEXP), NEWEXP is OLDEXP+X, expCap(OLDCAP), NEWEXP >= OLDCAP, retract(exp(OLDEXP)), assertz(exp(NEWEXP)), retract(expCap(OLDCAP)), playerLevel(OLDLEVEL), NEWLEVEL is OLDLEVEL+1, retract(playerLevel(OLDLEVEL)), assertz(playerLevel(NEWLEVEL)), NEWCAP is OLDCAP+100+(50*(NEWLEVEL)),  assertz(expCap(NEWCAP)), !.
+addEXP(X) :- exp(OLD), NEW is OLD+X, retract(exp(OLD)), assertz(exp(NEW)), !.
+
+/* Print player status */
+status :- playerRole(ROLE), playerLevel(LEVEL), playerFarmingLevel(FARMINGLEVEL), playerFarmingEXP(FARMINGEXP), playerFishingLevel(FISHINGLEVEL), playerFishingEXP(FISHINGEXP), playerRanchingLevel(RANCHINGLEVEL), playerRanchingEXP(RANCHINGEXP), exp(EXP), gold(GOLD), expCap(CAP),
+write('Your status: '), nl,
+write('Job: '), write(ROLE), nl,
+write('Level: '), write(LEVEL), nl,
+write('Level farming: '), write(FARMINGLEVEL), nl,
+write('Exp farming: '), write(FARMINGEXP), nl,
+write('Level fishing: '), write(FISHINGLEVEL), nl,
+write('Exp farming: '), write(FISHINGEXP), nl,
+write('Level ranching: '), write(RANCHINGLEVEL), nl,
+write('Exp ranching: '), write(RANCHINGEXP), nl,
+write('Exp: '), write(EXP), nl,
+write('Gold: '), write(GOLD), nl,
+write('Minimum exp needed for next level: '), write(CAP), nl.
