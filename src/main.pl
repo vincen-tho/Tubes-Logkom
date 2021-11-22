@@ -1,6 +1,6 @@
 /* include files */
 :- include('farming.pl').
-:- include('fishing.pl').
+% :- include('fishing.pl').
 :- include('game_manager.pl').
 :- include('help.pl').
 :- include('house.pl').
@@ -13,6 +13,7 @@
 :- include('quest.pl').
 % :- include('ranching.pl').
 :- include('roles.pl').
+:- include('selector.pl').
 
 
 startGame :- 

@@ -3,11 +3,11 @@
 :- dynamic(eqShop/1). 
 
 /* itemShop(X, Y), X adalah nama item, Y adalah Price */
-itemShop([['Rice Seed', 200], ['Potato', 350], ['Tomato Seed', 150]]).
+itemShop([['Rice Seed', 200], ['Tomato Seed', 150], ['Potato', 350]]).
 eqShop([]).
 
 
-% displayItemShop([['Rice Seed', 200], ['Potato', 350], ['Tomato Seed', 150]]).
+% displayItemShop([['Rice Seed', 200], ['Tomato Seed', 150], ['Potato', 350]]).
 
 
 /* Create EQ Shop based on equipments in inventory */
@@ -15,7 +15,7 @@ createEQShop([]) :- !.
 
 /* need to be set manually each EQ */
 createEQShop([[Name, Level]|Tail]) :-
-    equipment(Name),
+    equipment(Name, _),
     UpLv is (Level + 1),
     Price is UpLv*100,
     eqShop(EQS),
@@ -25,7 +25,7 @@ createEQShop([[Name, Level]|Tail]) :-
     createEQShop(Tail), !.
 
 createEQShop([[Name, _]|Tail]) :-
-    \+ equipment(Name),
+    \+ equipment(Name, _),
     createEQShop(Tail), !.
 
 
@@ -42,84 +42,66 @@ sell :- !.
 */
 
 
+/* sell item */
 sell :- inventory(Inv), displayInventoryItems(Inv, 1),
     write('What item do you want to sell? '),
     read(Opt), nl,
     write('How many items do you want to sell'), nl,
     read(Qty), nl,
-    sellAction(Opt, Qty).
+    sellItem(Opt, Qty).
 
-sellAction(Opt, Qty) :- 
+sellItem(Opt, Qty) :- 
     inventory(I),
     Idx is Opt-1,
-    getElmtNoZero(Idx, I, Res),
-    getElmt(0, Res, ResN),
-    (member([ResN, ResQ], I)),
+    getItemNoZero(Idx, I, [ResN, ResQ]),
+    write(ResN), nl, write(ResQ).
+   /* member([ResN, ResQ], I),
             NewQ is (ResQ - Qty),
             delete(I, [ResN, ResQ], TempI),
             append(TempI, [[ResN, NewQ]], NewI),
-            retractall(inventory(_)),
-            assertz(inventory(NewI)).
+            changeInv(NewI). */
+
+/* buy item */
+buy :- initShop, itemShop(IS), write('Items: '), nl, displayItemShop(IS, 1), nl, write('Equipments: '), nl, eqShop(EQS), displayEQShop(EQS, 1),
+    nl, write('What do you want to buy (0 to cancel)? '),
+    read(X),
+    nl, write('How many items do you want to buy? '),
+    read(Q),
+    buyItem(X, Q).
+
+buyItem(X, Q) :- 
+    itemShop(IS),
+    inventory(I),
+    Idx is X-1,
+    getElmt(Idx, IS, [ResN, ResP]),
+
+    (member([ResN, ResQ], I) ->
+            NewQ is (ResQ + Q),
+            delete(I, [ResN, ResQ], TempI),
+            append(TempI, [[ResN, NewQ]], NewI),
+            changeInv(NewI)
+        ;
+            append(I, [[ResN, Q]], NewI),
+            changeInv(NewI)
+    ).
+    
+
             
 
 /* FUNCTION */
-getElmt(0, [Head|Tail], Res) :-
-    Res = Head, !.
-getElmt(Idx, [Head|Tail], Res) :-
-    NewIdx is (Idx-1),
-    getElmt(NewIdx, Tail, Res).
 
-getElmtNoZero(0, [[Name, Qty]|Tail], Res) :-
-    Qty =\= 0,
-    items(Name, _),
-    Res = [Name, Qty], !.
-getElmtNoZero(Idx, [[Name, Qty]|Tail], Res) :-
-    Qty =\= 0,
-    items(Name, _),
-    NewIdx is (Idx-1),
-    getElmtNoZero(NewIdx, Tail, Res).
 
-getElmtNoZero(Idx, [[Name, Qty]|Tail], Res) :-
-    Qty =:= 0,
-    getElmtNoZero(Idx, Tail, Res).
-getElmtNoZero(Idx, [[Name, Qty]|Tail], Res) :-
-    \+ items(Name, _),
-    getElmtNoZero(Idx, Tail, Res).
 
-    % inventory(X), getElmt(0, X, Res), write(Res).
+
+
 
 /* debug only */
 % eqShop([['Shovel', 10, 15], ['Bucket', 11, 16]]).
 initShop :- retractall(eqShop(_)), assertz(eqShop([])), inventory(Inv), createEQShop(Inv), !.
 
 
-buyAction(X, Q) :- 
-    itemShop(IS),
-    inventory(I),
-    Idx is X-1,
-    getElmt(Idx, IS, Res),
-    getElmt(0, Res, ResN),
-
-    (member([ResN, ResQ], I)) ->
-            NewQ is (ResQ + Q),
-            delete(I, [ResN, ResQ], TempI),
-            append(TempI, [[ResN, NewQ]], NewI),
-            retractall(inventory(_)),
-            assertz(inventory(NewI))
-        ;
-            append(I, [[ResN, Q]], NewI),
-            retractall(inventory(_)),
-            assertz(inventory(NewI)).
 
 
-
-
-buy :- initShop, itemShop(IS), write('Items: '), nl, displayItemShop(IS, 1), nl, write('Equipments: '), nl, eqShop(EQS), displayEQShop(EQS, 1),
-    nl, write('What do you want to buy (0 to cancel)? '),
-    read(X),
-    nl, write('How many items do you want to buy? '),
-    read(Q),
-    buyAction(X, Q).
 
 displayItemShop([], _) :- !.
 

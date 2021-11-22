@@ -1,50 +1,52 @@
 /* ITEMS */
-% items(X, Y), X adalah nama item, Y adalah harga item
+% items(X, Y, Z), X adalah nama item, Y adalah harga item, Z adalah kategori item
 
 /* FARMING */
-items('Reed', 0).
-items('Wheat', 100).
-items('Corn', 150).
-items('Tomato', 200).
-items('Rice', 250).
-items('Potato', 300).
-items('Magic Mushroom', 1850).
+items('TEST', 125, 'F').
+items('Reed', 0, 'F').
+items('Wheat', 100, 'F').
+items('Corn', 150, 'F').
+items('Tomato', 200, 'F').
+items('Rice', 250, 'F').
+items('Potato', 300, 'F').
+items('Magic Mushroom', 1850, 'F').
 
-items('Rice Seed', 150).
+items('Rice Seed', 150, 'F').
+
 
 /* RANCH */
-items('Dung', 0).
-items('Egg', 110).
-items('Milk', 160).
-items('Chicken', 210).
-items('Wool', 250).
-items('Sheep Meat', 290).
-items('Beef', 400).
-items('Golden Egg', 1550).
+items('Dung', 0, 'R').
+items('Egg', 110, 'R').
+items('Milk', 160, 'R').
+items('Chicken', 210, 'R').
+items('Wool', 250, 'R').
+items('Sheep Meat', 290, 'R').
+items('Beef', 400, 'R').
+items('Golden Egg', 1550, 'R').
 
 /* FISHING */
-items('Bottle', 10).
-items('Catfish', 80).
-items('Cod', 170).
-items('Salmon', 270).
-items('Tuna', 450).
-items('Puffer Fish', 1750).
+items('Bottle', 10, 'F').
+items('Catfish', 80, 'F').
+items('Cod', 170, 'F').
+items('Salmon', 270, 'F').
+items('Tuna', 450, 'F').
+items('Puffer Fish', 1750, 'F').
 
 
 /* EQUIPMENT */
-% equipment(X), X adalah nama equipment
+% equipment(X, Y), X adalah nama equipment, Y adalah kategori
 
 /* FARMING */
-equipment('Shovel').
-equipment('Water Sprinkler').
+equipment('Shovel', 'F').
+equipment('Water Sprinkler', 'F').
 
 /* RANCHING */
-equipment('Shearer').
-equipment('Bucket').
+equipment('Shearer', 'R').
+equipment('Bucket', 'R').
 
 /* FISHING */
-equipment('Fishing Rod').
-equipment('Bait').
+equipment('Fishing Rod', 'F').
+equipment('Bait', 'F').
 
 
 

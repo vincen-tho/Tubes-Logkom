@@ -2,42 +2,6 @@
 
 :- dynamic(inventory/1).
 
-showInventory([]) :- !.
-showInventory(Inv) :- write('Items: '), nl,
-                displayInventoryItems(Inv, 1), nl,
-                write('Equipments: '), nl,                
-                displayInventoryEquipments(Inv), !.
-
-
-                
-displayInventoryItems([], _) :- !.
-displayInventoryItems([[Name, Qty]|Tail], Num) :-
-    NewNum is Num + 1,
-    items(Name, Price),
-    Qty =\= 0,
-    write(Num), write('. '),
-    write(Name), write('('), write(Qty), write(')'), write(', Price: '), write(Price), write(' Gold'), nl, 
-    displayInventoryItems(Tail, NewNum), !.
-displayInventoryItems([[Name, Qty]|Tail], Num) :-
-    (\+ items(Name, _)),
-    displayInventoryItems(Tail, Num), !.
-displayInventoryItems([[Name, Qty]|Tail], Num) :-
-    (items(Name, _)), Qty =:= 0,
-    displayInventoryItems(Tail, Num), !.
-
-displayInventoryEquipments([]) :- !.
-displayInventoryEquipments([[Name, Level]|Tail]) :-
-    equipment(Name), Level =\= 0,
-    write(Name), write(', Lv.'), write(Level), nl, 
-    displayInventoryEquipments(Tail), !.
-
-displayInventoryEquipments([[Name, Level]|Tail]) :-
-    equipment(Name), Level =:= 0,
-    displayInventoryEquipments(Tail), !.
-
-displayInventoryEquipments([[Name, Level]|Tail]) :-
-    (\+ equipment(Name)),
-    displayInventoryEquipments(Tail), !.
 
 
 
@@ -49,9 +13,43 @@ changeInv(Inv) :- retractall(inventory(_)),
 
 
 
+/* display and initialize */
+showInventory([]) :- !.
+showInventory(Inv) :- write('Items: '), nl,
+                displayInventoryItems(Inv, 1), nl,
+                write('Equipments: '), nl,                
+                displayInventoryEquipments(Inv), !.
 
-% inventory(X), inInventory('c', X).
-% inInventory('c', [['c', 5], ['d', 10]]).
+
+                
+displayInventoryItems([], _) :- !.
+displayInventoryItems([[Name, Qty]|Tail], Num) :-
+    NewNum is Num + 1,
+    items(Name, Price, _),
+    Qty =\= 0,
+    write(Num), write('. '),
+    write(Name), write('('), write(Qty), write(')'), write(', Price: '), write(Price), write(' Gold'), nl, 
+    displayInventoryItems(Tail, NewNum), !.
+displayInventoryItems([[Name, Qty]|Tail], Num) :-
+    (\+ items(Name, _, _)),
+    displayInventoryItems(Tail, Num), !.
+displayInventoryItems([[Name, Qty]|Tail], Num) :-
+    (items(Name, _, _)), Qty =:= 0,
+    displayInventoryItems(Tail, Num), !.
+
+displayInventoryEquipments([]) :- !.
+displayInventoryEquipments([[Name, Level]|Tail]) :-
+    equipment(Name, _), Level =\= 0,
+    write(Name), write(', Lv.'), write(Level), nl, 
+    displayInventoryEquipments(Tail), !.
+
+displayInventoryEquipments([[Name, Level]|Tail]) :-
+    equipment(Name, _), Level =:= 0,
+    displayInventoryEquipments(Tail), !.
+
+displayInventoryEquipments([[Name, Level]|Tail]) :-
+    (\+ equipment(Name, _)),
+    displayInventoryEquipments(Tail), !.
 
 /* Debug Only */
 
@@ -59,6 +57,7 @@ initInv :- retractall(inventory(_)),
             assertz(inventory(
 
                 [
+                ['TEST', 3],
                 ['Dung', 3],
                 ['Egg', 0],
                 ['Milk', 11],
@@ -68,8 +67,10 @@ initInv :- retractall(inventory(_)),
                 ['Bucket', 0],
                 ['Fishing Rod', 0],
                 ['Bait', 0],
-                ['Rice Seed', 0]
+                ['Rice Seed', 5]
+                
                 ]
                 
                 )).
+
 
