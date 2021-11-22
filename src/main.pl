@@ -54,3 +54,5 @@ start :- \+isRunning(_),
 map :- isRunning(_), createMap.
 map :- \+isRunning(_) -> write('Start the game first!').
 
+quit :-
+    retractall(playerInitialized(_)).
