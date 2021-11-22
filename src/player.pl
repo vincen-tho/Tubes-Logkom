@@ -1,5 +1,4 @@
 /* FAKTA */
-
 /* DYNAMIC */
 
 /* Role pemain */
@@ -47,11 +46,10 @@ startingEXPCap(100).
 /* Inisialisasi pemain */
 initializePlayer :- \+ playerInitialized(1),
                     write('Welcome to panen, please select your job:'), nl,
-                    write('1. Fisherman'), nl,
-                    write('2. Farmer'), nl,
-                    write('3. Rancher'), nl,
+                    write('1. fisherman'), nl,
+                    write('2. farmer'), nl,
+                    write('3. rancher'), nl,
                     write('> '),
-                    assertz(playerRole('Default')),
                     read(ROLE),
                     setRole(ROLE),
                     assertz(playerLevel(0)),
@@ -73,7 +71,7 @@ initializePlayer :- \+ playerInitialized(1),
 /* Mendapatkan Role */
 /* Ini jangan lupa dibikin loop idenya gimana */
 setRole(X) :-   roleName(X, ROLE) -> 
-                (retract(playerRole('Default')), assertz(playerRole(ROLE)), write('You are now a '), write(ROLE), write('!'));
+                (assertz(playerRole(ROLE)), write('You are now a '), write(ROLE), write('!'));
                 (write('Input salah, ulangi:'), nl, 
                 write('> '), read(Y), setRole(Y)), !.
 
@@ -95,56 +93,187 @@ addEXP(X) :-    exp(OLDEXP),
 addEXP(X) :-    exp(OLD), NEW is OLD+X, retract(exp(OLD)), assertz(exp(NEW)), !.
 
 /* addFarmingEXP(X) dimana X adalah jumlah Farming EXP yang ingin ditambahkan*/
+
 addFarmingEXP(X) :- playerFarmingEXP(OLD),
+                    playerRole(ROLE),
+                    roleName(2, GETROLE),
+                    ROLE \= GETROLE,
                     NEW is OLD+X,
+                    farmingExpCap(OLDCAP),
+                    NEW >= OLDCAP,
                     retract(playerFarmingEXP(OLD)),
                     assertz(playerFarmingEXP(NEW)),
                     addEXP(X),
-                    farmingExpCap(OLDCAP),
-                    (NEW >= OLDCAP) ->
                     (playerFarmingLevel(OLDLEVEL),
                     NEWLEVEL is OLDLEVEL+1,
                     retract(playerFarmingLevel(OLDLEVEL)),
                     assertz(playerFarmingLevel(NEWLEVEL)),
                     retract(farmingExpCap(OLDCAP)),
                     NEWCAP is OLDCAP+100+(50*(NEWLEVEL)),
-                    assertz(expCap(NEWCAP))), !.
+                    assertz(farmingExpCap(NEWCAP))), !.
 
-/* addFishingEXP(X) dimana X adalah jumlah Farming EXP yang ingin ditambahkan*/
-addFishingEXP(X) :- playerFishingEXP(OLD),
+addFarmingEXP(X) :- playerFarmingEXP(OLD),
+                    playerRole(ROLE),
+                    roleName(2, GETROLE),
+                    ROLE = GETROLE,
+                    NEW is OLD+X*2,
+                    farmingExpCap(OLDCAP),
+                    NEW >= OLDCAP,
+                    retract(playerFarmingEXP(OLD)),
+                    assertz(playerFarmingEXP(NEW)),
+                    addEXP(X*2),
+                    (playerFarmingLevel(OLDLEVEL),
+                    NEWLEVEL is OLDLEVEL+1,
+                    retract(playerFarmingLevel(OLDLEVEL)),
+                    assertz(playerFarmingLevel(NEWLEVEL)),
+                    retract(farmingExpCap(OLDCAP)),
+                    NEWCAP is OLDCAP+100+(50*(NEWLEVEL)),
+                    assertz(farmingExpCap(NEWCAP))), !.
+
+addFarmingEXP(X) :- playerFarmingEXP(OLD),
+                    playerRole(ROLE),
+                    roleName(2, GETROLE),
+                    ROLE \= GETROLE,
                     NEW is OLD+X,
+                    farmingExpCap(OLDCAP),
+                    NEW < OLDCAP,
+                    retract(playerFarmingEXP(OLD)),
+                    assertz(playerFarmingEXP(NEW)),
+                    addEXP(X), !.
+
+addFarmingEXP(X) :- playerFarmingEXP(OLD),
+                    playerRole(ROLE),
+                    roleName(2, GETROLE),
+                    ROLE = GETROLE,
+                    NEW is OLD+X*2,
+                    farmingExpCap(OLDCAP),
+                    NEW < OLDCAP,
+                    retract(playerFarmingEXP(OLD)),
+                    assertz(playerFarmingEXP(NEW)),
+                    addEXP(X*2), !.
+
+/* addFishingEXP(X) dimana X adalah jumlah Fishing EXP yang ingin ditambahkan*/
+addFishingEXP(X) :- playerFishingEXP(OLD),
+                    playerRole(ROLE),
+                    roleName(1, GETROLE),
+                    ROLE \= GETROLE,
+                    NEW is OLD+X,
+                    fishingExpCap(OLDCAP),
+                    NEW >= OLDCAP,
                     retract(playerFishingEXP(OLD)),
                     assertz(playerFishingEXP(NEW)),
                     addEXP(X),
-                    fishingExpCap(OLDCAP),
-                    (NEW >= OLDCAP) ->
                     (playerFishingLevel(OLDLEVEL),
                     NEWLEVEL is OLDLEVEL+1,
                     retract(playerFishingLevel(OLDLEVEL)),
-                    assertz(playerFishingLevel(NEWLEVEL))),
+                    assertz(playerFishingLevel(NEWLEVEL)),
                     retract(fishingExpCap(OLDCAP)),
                     NEWCAP is OLDCAP+100+(50*(NEWLEVEL)),
-                    assertz(expCap(NEWCAP))), !.
+                    assertz(fishingExpCap(NEWCAP))), !.
 
-/* addRanchingEXP(X) dimana X adalah jumlah Farming EXP yang ingin ditambahkan*/
-addRanchingEXP(X) :- playerRanchingEXP(OLD),
+addFishingEXP(X) :- playerFishingEXP(OLD),
+                    playerRole(ROLE),
+                    roleName(1, GETROLE),
+                    ROLE = GETROLE,
+                    NEW is OLD+X*2,
+                    fishingExpCap(OLDCAP),
+                    NEW >= OLDCAP,
+                    retract(playerFishingEXP(OLD)),
+                    assertz(playerFishingEXP(NEW)),
+                    addEXP(X*2),
+                    (playerFishingLevel(OLDLEVEL),
+                    NEWLEVEL is OLDLEVEL+1,
+                    retract(playerFishingLevel(OLDLEVEL)),
+                    assertz(playerFishingLevel(NEWLEVEL)),
+                    retract(fishingExpCap(OLDCAP)),
+                    NEWCAP is OLDCAP+100+(50*(NEWLEVEL)),
+                    assertz(fishingExpCap(NEWCAP))), !.
+
+addFishingEXP(X) :- playerFishingEXP(OLD),
+                    playerRole(ROLE),
+                    roleName(1, GETROLE),
+                    ROLE \= GETROLE,
                     NEW is OLD+X,
+                    fishingExpCap(OLDCAP),
+                    NEW < OLDCAP,
+                    retract(playerFishingEXP(OLD)),
+                    assertz(playerFishingEXP(NEW)),
+                    addEXP(X), !.
+
+addFishingEXP(X) :- playerFishingEXP(OLD),
+                    playerRole(ROLE),
+                    roleName(1, GETROLE),
+                    ROLE = GETROLE,
+                    NEW is OLD+X*2,
+                    fishingExpCap(OLDCAP),
+                    NEW < OLDCAP,
+                    retract(playerFishingEXP(OLD)),
+                    assertz(playerFishingEXP(NEW)),
+                    addEXP(X*2), !.
+
+/* addRanchingEXP(X) dimana X adalah jumlah Ranching EXP yang ingin ditambahkan*/
+
+addRanchingEXP(X) :-playerRanchingEXP(OLD),
+                    playerRole(ROLE),
+                    roleName(3, GETROLE),
+                    ROLE \= GETROLE,
+                    NEW is OLD+X,
+                    ranchingExpCap(OLDCAP),
+                    NEW >= OLDCAP,
                     retract(playerRanchingEXP(OLD)),
                     assertz(playerRanchingEXP(NEW)),
                     addEXP(X),
-                    RanchingExpCap(OLDCAP),
-                    (NEW >= OLDCAP) ->
                     (playerRanchingLevel(OLDLEVEL),
                     NEWLEVEL is OLDLEVEL+1,
                     retract(playerRanchingLevel(OLDLEVEL)),
-                    assertz(playerRanchingLevel(NEWLEVEL)))
+                    assertz(playerRanchingLevel(NEWLEVEL)),
                     retract(ranchingExpCap(OLDCAP)),
                     NEWCAP is OLDCAP+100+(50*(NEWLEVEL)),
-                    assertz(expCap(NEWCAP))), !.
+                    assertz(ranchingExpCap(NEWCAP))), !.
+
+addRanchingEXP(X) :-playerRanchingEXP(OLD),
+                    playerRole(ROLE),
+                    roleName(3, GETROLE),
+                    ROLE = GETROLE,
+                    NEW is OLD+X*2,
+                    ranchingExpCap(OLDCAP),
+                    NEW >= OLDCAP,
+                    retract(playerRanchingEXP(OLD)),
+                    assertz(playerRanchingEXP(NEW)),
+                    addEXP(X*2),
+                    (playerRanchingLevel(OLDLEVEL),
+                    NEWLEVEL is OLDLEVEL+1,
+                    retract(playerRanchingLevel(OLDLEVEL)),
+                    assertz(playerRanchingLevel(NEWLEVEL)),
+                    retract(ranchingExpCap(OLDCAP)),
+                    NEWCAP is OLDCAP+100+(50*(NEWLEVEL)),
+                    assertz(ranchingExpCap(NEWCAP))), !.
+
+addRanchingEXP(X) :-playerRanchingEXP(OLD),
+                    playerRole(ROLE),
+                    roleName(3, GETROLE),
+                    ROLE \= GETROLE,
+                    NEW is OLD+X,
+                    ranchingExpCap(OLDCAP),
+                    NEW < OLDCAP,
+                    retract(playerRanchingEXP(OLD)),
+                    assertz(playerRanchingEXP(NEW)),
+                    addEXP(X), !.
+
+addRanchingEXP(X) :-playerRanchingEXP(OLD),
+                    playerRole(ROLE),
+                    roleName(3, GETROLE),
+                    ROLE = GETROLE,
+                    NEW is OLD+X*2,
+                    ranchingExpCap(OLDCAP),
+                    NEW < OLDCAP,
+                    retract(playerRanchingEXP(OLD)),
+                    assertz(playerRanchingEXP(NEW)),
+                    addEXP(X*2), !.
 
 /* Gold */
 /* addGold(X) dimana X adalah jumlah Gold yang ingin ditambahkan */
-addGold(X) :- gold(OLD), NEW is OLD+X, retract(gold(OLD)), assertz(gold(NEW)), !.
+addGold(X) :- gold(OLD), NEW is OLD+X, retract(gold(OLD)), assertz(gold(NEW)).
 
 
 /* Print player status */
@@ -155,7 +284,7 @@ write('Level: '), write(LEVEL), nl,
 write('Level farming: '), write(FARMINGLEVEL), nl,
 write('Exp farming: '), write(FARMINGEXP), nl,
 write('Level fishing: '), write(FISHINGLEVEL), nl,
-write('Exp farming: '), write(FISHINGEXP), nl,
+write('Exp fishing: '), write(FISHINGEXP), nl,
 write('Level ranching: '), write(RANCHINGLEVEL), nl,
 write('Exp ranching: '), write(RANCHINGEXP), nl,
 write('Exp: '), write(EXP), nl,
