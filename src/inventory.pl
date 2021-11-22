@@ -57,7 +57,6 @@ initInv :- retractall(inventory(_)),
             assertz(inventory(
 
                 [
-                ['TEST', 3],
                 ['Dung', 3],
                 ['Egg', 0],
                 ['Milk', 11],

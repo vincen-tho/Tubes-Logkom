@@ -54,12 +54,11 @@ sellItem(Opt, Qty) :-
     inventory(I),
     Idx is Opt-1,
     getItemNoZero(Idx, I, [ResN, ResQ]),
-    write(ResN), nl, write(ResQ).
-   /* member([ResN, ResQ], I),
+   member([ResN, ResQ], I),
             NewQ is (ResQ - Qty),
             delete(I, [ResN, ResQ], TempI),
             append(TempI, [[ResN, NewQ]], NewI),
-            changeInv(NewI). */
+            changeInv(NewI).
 
 /* buy item */
 buy :- initShop, itemShop(IS), write('Items: '), nl, displayItemShop(IS, 1), nl, write('Equipments: '), nl, eqShop(EQS), displayEQShop(EQS, 1),

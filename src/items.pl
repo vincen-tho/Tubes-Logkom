@@ -2,7 +2,6 @@
 % items(X, Y, Z), X adalah nama item, Y adalah harga item, Z adalah kategori item
 
 /* FARMING */
-items('TEST', 125, 'F').
 items('Reed', 0, 'F').
 items('Wheat', 100, 'F').
 items('Corn', 150, 'F').
@@ -12,6 +11,7 @@ items('Potato', 300, 'F').
 items('Magic Mushroom', 1850, 'F').
 
 items('Rice Seed', 150, 'F').
+items('Tomato Seed', 125, 'F').
 
 
 /* RANCH */
