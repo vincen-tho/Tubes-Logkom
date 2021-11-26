@@ -289,4 +289,5 @@ write('Level ranching: '), write(RANCHINGLEVEL), nl,
 write('Exp ranching: '), write(RANCHINGEXP), nl,
 write('Exp: '), write(EXP), nl,
 write('Gold: '), write(GOLD), nl,
-write('Minimum exp needed for next level: '), write(CAP), nl.
+write('Minimum exp needed for next level: '), write(CAP), nl,
+printTime.

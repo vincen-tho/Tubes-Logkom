@@ -24,3 +24,14 @@ help :-
     write(' # 3. printProgress  : Show your quest progress                                 #'),nl,
     write(' # 4. questFinished  : Claim your rewards                                       #'),nl,   
     write(' ################################################################################'), !.
+
+help :- 
+    playerPos(X, Y),
+    specialTile(X, Y, 'H'),
+    write(' ################################################################################'),nl,
+    write(' #                                   ~HOUSE~                                    #'),nl,
+    write(' # 1.        : Get your quest                                           #'),nl,
+    write(' # 2.      : Show quest details                                       #'),nl,
+    write(' # 3.   : Show your quest progress                                 #'),nl,
+    write(' # 4.   : Claim your rewards                                       #'),nl,   
+    write(' ################################################################################'), !.

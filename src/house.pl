@@ -1,3 +1,8 @@
 
-/* tinggal sleep add time 24 jam */
-sleep :- addTime(24).
+
+
+sleep :- 
+    (playerPos(X, Y),
+    specialTile(X, Y, 'H')),
+    addTime(24),
+    write("You went to sleep.").
