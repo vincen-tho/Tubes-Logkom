@@ -110,7 +110,7 @@ fishing :-
     write('You got '), write(Y), write('!'), nl, 
     gainedExpFish(Z), 
     write('You gained '), write(Z), write(' fishing exp!')),
-    addFishingEXP(Z), addEXP(Z), !.
+    addFishingEXP(Z), addEXP(Z), addFishToInv(Y), !.
 fishing :-
     checkPos,
     isNearWater(false),
