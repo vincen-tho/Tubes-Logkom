@@ -16,8 +16,10 @@
 :- include('selector.pl').
 :- include('plant.pl').
 
+:- dynamic(isStarted/1).
 
 startGame :- 
+    \+isStarted(_), assertz(isStarted(true)), 
     write('                                                          '),nl,
     write(' :::::::::     :::     ::::    ::: :::::::::: ::::    ::: '),nl,
     write(' :+:    :+:  :+: :+:   :+:+:   :+: :+:        :+:+:   :+: '),nl,
@@ -40,18 +42,21 @@ startGame :-
     write(' # 6. d      : move right 1 step                                                #'),nl,
     write(' # 7. a      : move left 1 step                                                 #'),nl,
     write(' # 8. help   : show command list                                                #'),nl,
-    write(' ################################################################################').
+    write(' ################################################################################'), !.
+
+startGame :- isStarted(_) -> write('You already started the game.'), !.
 
 :- dynamic(isRunning/1).
 
-start :- isRunning(_) -> write('You already started your adventure!').
-start :- \+isRunning(_), 
+start :- \+isStarted(_) -> write('You need to start the game first!'), !.
+start :- isStarted(_), isRunning(_) -> write('You already started your adventure!'), !.
+start :- isStarted(_), \+isRunning(_), 
     assertz(isRunning(true)), 
     resetPlayerPos, 
     initializeTime, 
     initQuest,
     printTime, nl,
-    initializePlayer.
+    initializePlayer, !.
 
 map :- isRunning(_), createMap.
 map :- \+isRunning(_) -> write('Start the game first!').

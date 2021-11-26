@@ -6,7 +6,7 @@
 % quest(QuestId, HasilFarming, HasilFishing, HasilRanching, Exp, Gold)
 
 % sample quest
-quest(1,1,0,0,25,25).
+quest(1,1,1,1,25,25).
 quest(2,1,2,3,50,50).
 quest(3,2,3,4,100,75).
 quest(4,3,4,5,125,100).
@@ -29,10 +29,10 @@ questFinished :-
     progressQuest(QuestId, CFarm, CFish, CRanch),
     quest(QuestId, HasilFarm, HasilFish, HasilRanch, Exp, Gold),
     CFarm >= HasilFarm, CFish >= HasilFish, CRanch >= HasilRanch) ->
-    (addEXP(Exp), addGold(Gold),
+    (addFarmingEXP(Exp), addFishingEXP(Exp), addRanchingEXP(Exp), addGold(Gold),
     write('You have completed your quest.'),
     write('Exp reward: '), print(Exp), nl,
-    write('Gold reward: '), print(Gold) );
+    write('Gold reward: '), print(Gold));
     isQuest(Z), Z =:= 1 -> write('Complete your quest first!');
     isQuest(Z), Z =:= 0 -> write('Get your quest first!'), !.
     
