@@ -94,6 +94,7 @@ choice([_|Xs], [P|Ps], Cumul, Rand, Y) :-
     choice(Xs, Ps, Cumul1, Rand, Y).
 choice([X], [P], Cumul, Rand, X) :-
     Rand < Cumul + P.
+
 choice(Xs, Ps, Y) :- random(R), choice(Xs, Ps, 0, R, Y).
 
 /* Fishing */
@@ -102,7 +103,7 @@ fishing :-
     isNearWater(true),
     initFishing, 
     fishProbability(_X),
-    choice(['none', 'bottle', 'catfish', 'cod', 'salmon', 'tuna', 'puffer fish'], _X, Y),
+    choice(['none', 'Bottle', 'Catfish', 'Cod', 'Salmon', 'Tuna', 'Puffer Fish'], _X, Y),
     (Y = 'none' -> write('You didn\'t get anything!'), nl, 
     gainedExpNoFish(Z), 
     write('You gained '), write(Z), write(' fishing exp!');
@@ -115,4 +116,19 @@ fishing :-
     isNearWater(false),
     write('You aren\'t near water!').
 
-/* TODO: menambah hasil tangkapan ke inventory */
+/* Menambah hasil tangkapan ke inventory */
+addFishToInv([], Fish, [[Name, Qty]|_]) :-
+    Name = Fish,
+    Qty is 1, !.
+addFishToInv([[Name, Qty]|_], Fish, [Name, Qty1|_]) :-
+    Fish = Name,
+    Qty1 is Qty+1, !.
+addFishToInv([[Name, Qty]|Tail], Fish, [_|Tail1]) :-
+    Fish \= Name,
+    addFishToInv(Tail, Fish, Tail1).
+
+addFishToInv(Fish) :-
+    inventory(Inv),
+    addFishToInv(Inv, Fish, Inv1),
+    retractall(inventory(_)),
+    assertz(inventory(Inv1)).
