@@ -25,12 +25,12 @@ items('Beef', 400, 'R').
 items('Golden Egg', 1550, 'R').
 
 /* FISHING */
-items('Bottle', 10, 'F').
-items('Catfish', 80, 'F').
-items('Cod', 170, 'F').
-items('Salmon', 270, 'F').
-items('Tuna', 450, 'F').
-items('Puffer Fish', 1750, 'F').
+items('Bottle', 10, 'H').
+items('Catfish', 80, 'H').
+items('Cod', 170, 'H').
+items('Salmon', 270, 'H').
+items('Tuna', 450, 'H').
+items('Puffer Fish', 1750, 'H').
 
 
 /* EQUIPMENT */
@@ -45,8 +45,8 @@ equipment('Shearer', 'R').
 equipment('Bucket', 'R').
 
 /* FISHING */
-equipment('Fishing Rod', 'F').
-equipment('Bait', 'F').
+equipment('Fishing Rod', 'H').
+equipment('Bait', 'H').
 
 
 

@@ -72,7 +72,7 @@ buyItem(X, Q) :-
     itemShop(IS),
     inventory(I),
     Idx is X-1,
-    getElmt(Idx, IS, [ResN, ResP]),
+    getElmt(Idx, IS, [ResN, _]),
 
     (member([ResN, ResQ], I) ->
             NewQ is (ResQ + Q),
@@ -118,6 +118,6 @@ displayEQShop([[Name, Level, Price]|Tail], Num) :-
     NewNum is (1+Num),
     displayEQShop(Tail, NewNum), !.
 
-test :- initInv, inventory(X), showInventory(X), initShop.
+test :- initInv, showInventory, initShop.
 
-disInv :- inventory(X), showInventory(X).
+disInv :- showInventory.
