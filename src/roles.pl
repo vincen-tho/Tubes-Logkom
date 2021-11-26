@@ -1,6 +1,6 @@
-/* DEKLARASI SEMUA ROLES DAN ABILITYNYA */
+/* DEKLARASI SEMUA ROLES */
 
-/* Index dan role*/
+/* Index dan role */
 roleName(1, fisherman).
 roleName(2, farmer).
 roleName(3, rancher).

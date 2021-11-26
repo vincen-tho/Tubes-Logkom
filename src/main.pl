@@ -14,6 +14,7 @@
 % :- include('ranching.pl').
 :- include('roles.pl').
 :- include('selector.pl').
+:- include('plant.pl').
 
 
 startGame :- 

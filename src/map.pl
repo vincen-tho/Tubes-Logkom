@@ -126,6 +126,16 @@ writeTile(X, Y) :- map_size(W, H),
                     NewX is X+1,
                     writeTile(NewX, Y).
 
+/* render planted tile */
+writeTile(X, Y) :- map_size(W, H),
+                    X > 1, X < W, Y > 1, Y < H,
+                    specialTile(X, Y, P),
+                    plantedLetter(_, P),
+                    \+ playerPos(X, Y),
+                    write(P),
+                    NewX is X+1,
+                    writeTile(NewX, Y).
+
 /* render player tile */
 writeTile(X, Y) :- map_size(W, H),
                     X > 1, X < W, Y > 1, Y < H,

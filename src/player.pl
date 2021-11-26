@@ -45,7 +45,7 @@ startingEXPCap(100).
 /* RULES */
 /* Inisialisasi pemain */
 initializePlayer :- \+ playerInitialized(1),
-                    write('Welcome to panen, please select your job:'), nl,
+                    write('Welcome to Panen, please select your job:'), nl,
                     write('1. fisherman'), nl,
                     write('2. farmer'), nl,
                     write('3. rancher'), nl,
@@ -72,7 +72,7 @@ initializePlayer :- \+ playerInitialized(1),
 /* Ini jangan lupa dibikin loop idenya gimana */
 setRole(X) :-   roleName(X, ROLE) -> 
                 (assertz(playerRole(ROLE)), write('You are now a '), write(ROLE), write('!'));
-                (write('Input salah, ulangi:'), nl, 
+                (write('Wrong input, retry:'), nl, 
                 write('> '), read(Y), setRole(Y)), !.
 
 /* Level */
