@@ -5,6 +5,27 @@ getElmt(Idx, [_|Tail], Res) :-
     NewIdx is (Idx-1),
     getElmt(NewIdx, Tail, Res).
 
+/* get element from inventory (barang and equipments) */
+getItemNoZero(_, [], _) :- !.
+getItemNoZero(0, [[_, Qty]|Tail], Res) :-
+    Qty =:= 0,
+    getItemNoZero(0, Tail, Res), !.
+getItemNoZero(0, [[Name, Qty]|_], Res) :-
+    Qty =\= 0,
+    Res = [Name, Qty], !.
+getItemNoZero(Idx, [[Name, Qty]|Tail], Res) :-
+    Idx =\= 0,
+    Qty =\= 0,
+    NewIdx is (Idx-1),
+    getItemNoZero(NewIdx, Tail, Res), !.
+getItemNoZero(Idx, [[Name, Qty]|Tail], Res) :-
+    Qty =:= 0,
+    getItemNoZero(Idx, Tail, Res), !.
+
+
+
+
+
 /* get element from inventory (barang only (barang) and Quantity not 0) */
 getbarangNoZero(_, [], _) :- !.
 getbarangNoZero(0, [[_, Qty]|Tail], Res) :-

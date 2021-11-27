@@ -43,12 +43,7 @@ sell :- !.
 
 
 /* sell barang */
-sell :- inventory(Inv), displayInventorybarang(Inv, 1),
-    write('What barang do you want to sell? '),
-    read(Opt), nl,
-    write('How many barang do you want to sell'), nl,
-    read(Qty), nl,
-    sellbarang(Opt, Qty).
+
 
 sellbarang(Opt, Qty) :- 
     inventory(I),
@@ -118,4 +113,3 @@ displayEQShop([[Name, Level, Price]|Tail], Num) :-
     NewNum is (1+Num),
     displayEQShop(Tail, NewNum), !.
 
-test :- initInv, showInventory, initShop.

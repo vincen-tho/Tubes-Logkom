@@ -7,7 +7,7 @@
 :- include('inventory.pl').
 :- include('items.pl').
 :- include('map.pl').
-:- include('marketplace.pl').
+:- include('newMP.pl').
 :- include('movement.pl').
 :- include('player.pl').
 :- include('quest.pl').

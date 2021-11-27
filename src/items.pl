@@ -3,11 +3,12 @@
 
 /* FARMING */
 barang('Reed', 0, 'F').
-barang('Wheat', 100, 'F').
-barang('Corn', 150, 'F').
+/* barang('Wheat', 100, 'F'). */
+/* barang('Corn', 150, 'F'). */
 barang('Tomato', 200, 'F').
 barang('Rice', 250, 'F').
 barang('Potato', 300, 'F').
+barang('Corn', 300, 'F').
 barang('Magic Mushroom', 1850, 'F').
 
 barang('Rice Seed', 150, 'F').
@@ -19,10 +20,12 @@ barang('Dung', 0, 'R').
 barang('Egg', 110, 'R').
 barang('Milk', 160, 'R').
 barang('Chicken', 210, 'R').
+barang('Sheep', 260, 'R').
 barang('Wool', 250, 'R').
 barang('Sheep Meat', 290, 'R').
 barang('Beef', 400, 'R').
 barang('Golden Egg', 1550, 'R').
+barang('Cow', 800, 'R').
 
 /* FISHING */
 barang('Bottle', 10, 'H').
