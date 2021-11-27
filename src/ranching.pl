@@ -76,6 +76,7 @@ ranch :-
     totalChicken(X),
     totalSheep(Y),
     totalCow(Z),
+    initRanching,
     write('Welcome to the ranch! You have:'), nl,
     write(X), write(' '), write(chicken), nl,    
     write(Y), write(' '), write(sheep), nl,    
@@ -94,8 +95,7 @@ chicken :-
     gainedExpRanch(Z),
     (X > 0 -> write('Your chickens lay '), write(X), write(' eggs!'), nl;
     write('Your chickens didn\'t lay any eggs!'), nl), 
-    (Y >= 1 -> write('You got a poultry!'), nl;
-    Y > 1 -> write('You got '), write(Y), write(' poultries!'), nl;
+    (Y > 0 -> write('You got '), write(Y), write(' poultries!'), nl;
     write('You didn\'t get any poultries'), nl),
     (X =:= 0, Y =:= 0 -> write('Please check again later!');
     write('You gained '), write(Z), write(' ranching exp!'),
@@ -110,8 +110,7 @@ sheep :-
     gainedExpRanch(Z),
     (X > 0 -> write('You got '), write(X), write(' wools!'), nl;
     write('You didn\'t get any wools!'), nl), 
-    (Y >= 1 -> write('You got a sheep meat!'), nl;
-    Y > 1 -> write('You got '), write(Y), write(' sheep meats!'), nl;
+    (Y > 0 -> write('You got '), write(Y), write(' sheep meats!'), nl;
     write('You didn\'t get any sheep meats'), nl),
     (X =:= 0, Y =:= 0 -> write('Please check again later!');
     write('You gained '), write(Z), write(' ranching exp!')
@@ -126,8 +125,7 @@ cow :-
     gainedExpRanch(Z),
     (X > 0 -> write('You got '), write(X), write(' milks!'), nl;
     write('You didn\'t get any milks!'), nl), 
-    (Y >= 1 -> write('You got a beef!'), nl;
-    Y > 1 -> write('You got '), write(Y), write(' beefs!'), nl;
+    (Y > 0 -> write('You got '), write(Y), write(' beefs!'), nl;
     write('You didn\'t get any beefs'), nl),
     (X =:= 0, Y =:= 0 -> write('Please check again later!');
     write('You gained '), write(Z), write(' ranching exp!')
@@ -190,7 +188,7 @@ addItem([H|T],Item) :-
 changeList([],_,[]).
 changeList([H|T],X,[H1|T1]) :-
     H > 0,
-    changeList(T,X,T1),
+    changeList(T,X,T1), !,
     H1 is H.
 changeList([H|T],X,[H1|T1]) :-
     H =:= 0,
@@ -221,8 +219,24 @@ addMilk :-
     retractall(milk(_)), assertz(milk(X1)),
     changeList(M, 30, Z),
     retractall(produceMilk(_)), assertz(produceMilk(Z))).
-
-/* TODO: menambah poultry, sheep meat, dan beef */
+/* Menambah poultry */
+addPoultry :-
+    producePoultry(P), addItem(P,Y),
+    (Y > 0 ->
+    poultry(X), X1 is X+Y,
+    retractall(poultry(_)), assertz(poultry(X1))).
+/* Menambah sheep meat */
+addSheepMeat :-
+    produceSheepMeat(P), addItem(P,Y),
+    (Y > 0 ->
+    sheepMeat(X), X1 is X+Y,
+    retractall(sheepMeat(_)), assertz(sheepMeat(X1))).
+/* Menambah beef */
+addBeef :-
+    produceBeef(P), addItem(P,Y),
+    (Y > 0 ->
+    beef(X), X1 is X+Y,
+    retractall(beef(_)), assertz(beef(X1))).
 
 /* Mengurangi satu satuan waktu tiap element di list produce */
 decOnePerElmt([],[]).
@@ -246,4 +260,19 @@ updateRanch :-
     retractall(produceSheepMeat(_)), retractall(produceMilk(_)), retractall(produceBeef(_)),
     assertz(produceEgg(E1)), assertz(producePoultry(P1)), assertz(produceWool(W1)),
     assertz(produceSheepMeat(SM1)), assertz(produceMilk(M1)), assertz(produceBeef(B1)),
-    
+    addEgg, addWool, addMilk, addPoultry, addSheepMeat, addBeef.
+
+/* 
+TODO: 
+    - menambah hasil ternak ke dalam inventory 
+    - kalo poultry, sheep meat, atau beef diambil, elemen list produce yang nilainya 0 dihapus dan
+      elemen list egg, wool, atau milk juga dihapus di indeks yang berkorepondensi dengan list poultry, 
+      sheep meat, atau beef
+*/
+
+removeAll(_, [], [], 0).
+removeAll(X, [X|T], L, Mark):- 
+    removeAll(X, T, L, Mark1), !,
+    Mark is 1+Mark1.
+removeAll(X, [H|T], [H|L], Mark):- 
+    removeAll(X, T, L, Mark).
