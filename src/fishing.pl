@@ -5,7 +5,7 @@
 
 /* RULES */ 
 /* Cek posisi player, berada di dekat tile air atau tidak */
-checkPos :-
+checkPosWater :-
     playerPos(X, Y),
     X1 is X+1, X2 is X-1, Y1 is Y+1, Y2 is Y-1,
     (specialTile(X1,Y,'W'); specialTile(X2,Y,'W'); specialTile(X,Y1,'W'); specialTile(X,Y2,'W');
@@ -53,7 +53,7 @@ choice(Xs, Ps, Y) :- random(R), choice(Xs, Ps, 0, R, Y).
 
 /* Fishing */
 fishing :- 
-    checkPos,
+    checkPosWater,
     initFishing, 
     fishProbability(_X),
     choice(['none', 'Bottle', 'Catfish', 'Cod', 'Salmon', 'Tuna', 'Puffer Fish'], _X, Y),
