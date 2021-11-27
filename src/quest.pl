@@ -77,9 +77,9 @@ printQuest :-
     isQuest(Z), Z =:= 1, 
     quest(QuestId, HasilFarm, HasilFish, HasilRanch, Exp, Gold),
     write('Quest details:'), nl,
-    write('Harvest items: '), print(HasilFarm), nl,
+    write('Harvest barang: '), print(HasilFarm), nl,
     write('Fish: '), print(HasilFish), nl,
-    write('Ranch item: '), print(HasilRanch), nl,
+    write('Ranch barang: '), print(HasilRanch), nl,
     write('Exp reward: '), print(Exp), nl,
     write('Gold reward: '), print(Gold), !.
 
@@ -94,9 +94,9 @@ printProgress :-
     isQuest(Z), Z =:= 1,  
     progressQuest(QuestId, CFarm, CFish, CRanch),
     write('Your progress:'),nl,
-    write('Harvest items: '), print(CFarm), nl,
+    write('Harvest barang: '), print(CFarm), nl,
     write('Fish: '), print(CFish), nl,
-    write('Ranch item: '), print(CRanch), !.
+    write('Ranch barang: '), print(CRanch), !.
 
 printProgress :-
     playerPos(X, Y),

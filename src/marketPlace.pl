@@ -2,12 +2,12 @@
 /* equipmentShop(X, Y, Z), X adalah nama eq, Y adalah level upgrade, Z adalah harga */
 :- dynamic(eqShop/1). 
 
-/* itemShop(X, Y), X adalah nama item, Y adalah Price */
-itemShop([['Rice Seed', 200], ['Tomato Seed', 150], ['Potato', 350]]).
+/* baranghop(X, Y), X adalah nama barang, Y adalah Price */
+baranghop([['Rice Seed', 200], ['Tomato Seed', 150], ['Potato', 350]]).
 eqShop([]).
 
 
-% displayItemShop([['Rice Seed', 200], ['Tomato Seed', 150], ['Potato', 350]]).
+% displaybaranghop([['Rice Seed', 200], ['Tomato Seed', 150], ['Potato', 350]]).
 
 
 /* Create EQ Shop based on equipments in inventory */
@@ -42,34 +42,34 @@ sell :- !.
 */
 
 
-/* sell item */
-sell :- inventory(Inv), displayInventoryItems(Inv, 1),
-    write('What item do you want to sell? '),
+/* sell barang */
+sell :- inventory(Inv), displayInventorybarang(Inv, 1),
+    write('What barang do you want to sell? '),
     read(Opt), nl,
-    write('How many items do you want to sell'), nl,
+    write('How many barang do you want to sell'), nl,
     read(Qty), nl,
-    sellItem(Opt, Qty).
+    sellbarang(Opt, Qty).
 
-sellItem(Opt, Qty) :- 
+sellbarang(Opt, Qty) :- 
     inventory(I),
     Idx is Opt-1,
-    getItemNoZero(Idx, I, [ResN, ResQ]),
+    getbarangNoZero(Idx, I, [ResN, ResQ]),
    member([ResN, ResQ], I),
             NewQ is (ResQ - Qty),
             delete(I, [ResN, ResQ], TempI),
             append(TempI, [[ResN, NewQ]], NewI),
             changeInv(NewI).
 
-/* buy item */
-buy :- initShop, itemShop(IS), write('Items: '), nl, displayItemShop(IS, 1), nl, write('Equipments: '), nl, eqShop(EQS), displayEQShop(EQS, 1),
+/* buy barang */
+buy :- initShop, baranghop(IS), write('barang: '), nl, displaybaranghop(IS, 1), nl, write('Equipments: '), nl, eqShop(EQS), displayEQShop(EQS, 1),
     nl, write('What do you want to buy (0 to cancel)? '),
     read(X),
-    nl, write('How many items do you want to buy? '),
+    nl, write('How many barang do you want to buy? '),
     read(Q),
-    buyItem(X, Q).
+    buybarang(X, Q).
 
-buyItem(X, Q) :- 
-    itemShop(IS),
+buybarang(X, Q) :- 
+    baranghop(IS),
     inventory(I),
     Idx is X-1,
     getElmt(Idx, IS, [ResN, _]),
@@ -102,13 +102,13 @@ initShop :- retractall(eqShop(_)), assertz(eqShop([])), inventory(Inv), createEQ
 
 
 
-displayItemShop([], _) :- !.
+displaybaranghop([], _) :- !.
 
-displayItemShop([[Name, Price]|Tail], Num) :-
+displaybaranghop([[Name, Price]|Tail], Num) :-
     write(Num), write('. '),
     write(Name), write(', Price: '), write(Price), write(' Gold'), nl, 
     NewNum is (1+Num),
-    displayItemShop(Tail, NewNum), !.
+    displaybaranghop(Tail, NewNum), !.
 
 displayEQShop([], _) :- !.
 

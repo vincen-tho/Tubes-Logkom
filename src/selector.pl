@@ -5,97 +5,97 @@ getElmt(Idx, [_|Tail], Res) :-
     NewIdx is (Idx-1),
     getElmt(NewIdx, Tail, Res).
 
-/* get element from inventory (items only and Quantity not 0) */
-getItemNoZero(_, [], _) :- !.
-getItemNoZero(0, [[_, Qty]|Tail], Res) :-
+/* get element from inventory (barang only (barang) and Quantity not 0) */
+getbarangNoZero(_, [], _) :- !.
+getbarangNoZero(0, [[_, Qty]|Tail], Res) :-
     Qty =:= 0,
-    getItemNoZero(0, Tail, Res), !.
-getItemNoZero(0, [[Name, Qty]|_], Res) :-
+    getbarangNoZero(0, Tail, Res), !.
+getbarangNoZero(0, [[Name, Qty]|_], Res) :-
     Qty =\= 0,
-    items(Name, _, _),
+    barang(Name, _, _),
     Res = [Name, Qty], !.
-getItemNoZero(Idx, [[Name, Qty]|Tail], Res) :-
+getbarangNoZero(Idx, [[Name, Qty]|Tail], Res) :-
     Idx =\= 0,
     Qty =\= 0,
-    items(Name, _, _),
+    barang(Name, _, _),
     NewIdx is (Idx-1),
-    getItemNoZero(NewIdx, Tail, Res), !.
-getItemNoZero(Idx, [[Name, Qty]|Tail], Res) :-
-    items(Name, _, _),
+    getbarangNoZero(NewIdx, Tail, Res), !.
+getbarangNoZero(Idx, [[Name, Qty]|Tail], Res) :-
+    barang(Name, _, _),
     Qty =:= 0,
-    getItemNoZero(Idx, Tail, Res), !.
-getItemNoZero(Idx, [[Name, _]|Tail], Res) :-
-    \+ items(Name, _, _),
-    getItemNoZero(Idx, Tail, Res), !.
+    getbarangNoZero(Idx, Tail, Res), !.
+getbarangNoZero(Idx, [[Name, _]|Tail], Res) :-
+    \+ barang(Name, _, _),
+    getbarangNoZero(Idx, Tail, Res), !.
 
-/* get element from inventory (farming item only) */
-getFarmingItem(_, [], _) :- !.
-getFarmingItem(0, [[_, Qty]|Tail], Res) :-
+/* get element from inventory (farming barang (barang) only) */
+getFarmingbarang(_, [], _) :- !.
+getFarmingbarang(0, [[_, Qty]|Tail], Res) :-
     Qty =:= 0,
-    getFarmingItem(0, Tail, Res), !.
-getFarmingItem(0, [[Name, Qty]|_], Res) :-
+    getFarmingbarang(0, Tail, Res), !.
+getFarmingbarang(0, [[Name, Qty]|_], Res) :-
     Qty =\= 0,
-    items(Name, _, 'F'),
+    barang(Name, _, 'F'),
     Res = [Name, Qty], !.
-getFarmingItem(Idx, [[Name, Qty]|Tail], Res) :-
+getFarmingbarang(Idx, [[Name, Qty]|Tail], Res) :-
     Idx =\= 0,
     Qty =\= 0,
-    items(Name, _, 'F'),
+    barang(Name, _, 'F'),
     NewIdx is (Idx-1),
-    getFarmingItem(NewIdx, Tail, Res), !.
-getFarmingItem(Idx, [[Name, Qty]|Tail], Res) :-
-    items(Name, _, 'F'),
+    getFarmingbarang(NewIdx, Tail, Res), !.
+getFarmingbarang(Idx, [[Name, Qty]|Tail], Res) :-
+    barang(Name, _, 'F'),
     Qty =:= 0,
-    getFarmingItem(Idx, Tail, Res), !.
-getFarmingItem(Idx, [[Name, _]|Tail], Res) :-
-    \+ items(Name, _, 'F'),
-    getFarmingItem(Idx, Tail, Res), !.
+    getFarmingbarang(Idx, Tail, Res), !.
+getFarmingbarang(Idx, [[Name, _]|Tail], Res) :-
+    \+ barang(Name, _, 'F'),
+    getFarmingbarang(Idx, Tail, Res), !.
 
-/* get element from inventory (ranching item only) */
-getRanchingItem(_, [], _) :- !.
-getRanchingItem(0, [[_, Qty]|Tail], Res) :-
+/* get element from inventory (ranching (barang)  barang only) */
+getRanchingbarang(_, [], _) :- !.
+getRanchingbarang(0, [[_, Qty]|Tail], Res) :-
     Qty =:= 0,
-    getRanchingItem(0, Tail, Res), !.
-getRanchingItem(0, [[Name, Qty]|_], Res) :-
+    getRanchingbarang(0, Tail, Res), !.
+getRanchingbarang(0, [[Name, Qty]|_], Res) :-
     Qty =\= 0,
-    items(Name, _, 'R'),
+    barang(Name, _, 'R'),
     Res = [Name, Qty], !.
-getRanchingItem(Idx, [[Name, Qty]|Tail], Res) :-
+getRanchingbarang(Idx, [[Name, Qty]|Tail], Res) :-
     Idx =\= 0,
     Qty =\= 0,
-    items(Name, _, 'R'),
+    barang(Name, _, 'R'),
     NewIdx is (Idx-1),
-    getRanchingItem(NewIdx, Tail, Res), !.
-getRanchingItem(Idx, [[Name, Qty]|Tail], Res) :-
-    items(Name, _, 'R'),
+    getRanchingbarang(NewIdx, Tail, Res), !.
+getRanchingbarang(Idx, [[Name, Qty]|Tail], Res) :-
+    barang(Name, _, 'R'),
     Qty =:= 0,
-    getRanchingItem(Idx, Tail, Res), !.
-getRanchingItem(Idx, [[Name, _]|Tail], Res) :-
-    \+ items(Name, _, 'R'),
-    getRanchingItem(Idx, Tail, Res), !.
+    getRanchingbarang(Idx, Tail, Res), !.
+getRanchingbarang(Idx, [[Name, _]|Tail], Res) :-
+    \+ barang(Name, _, 'R'),
+    getRanchingbarang(Idx, Tail, Res), !.
 
-/* get element from inventory (fishing item only) */
-getFishingItem(_, [], _) :- !.
-getFishingItem(0, [[_, Qty]|Tail], Res) :-
+/* get element from inventory (fishing barang only) */
+getFishingbarang(_, [], _) :- !.
+getFishingbarang(0, [[_, Qty]|Tail], Res) :-
     Qty =:= 0,
-    getFishingItem(0, Tail, Res), !.
-getFishingItem(0, [[Name, Qty]|_], Res) :-
+    getFishingbarang(0, Tail, Res), !.
+getFishingbarang(0, [[Name, Qty]|_], Res) :-
     Qty =\= 0,
-    items(Name, _, 'H'),
+    barang(Name, _, 'H'),
     Res = [Name, Qty], !.
-getFishingItem(Idx, [[Name, Qty]|Tail], Res) :-
+getFishingbarang(Idx, [[Name, Qty]|Tail], Res) :-
     Idx =\= 0,
     Qty =\= 0,
-    items(Name, _, 'H'),
+    barang(Name, _, 'H'),
     NewIdx is (Idx-1),
-    getFishingItem(NewIdx, Tail, Res), !.
-getFishingItem(Idx, [[Name, Qty]|Tail], Res) :-
-    items(Name, _, 'H'),
+    getFishingbarang(NewIdx, Tail, Res), !.
+getFishingbarang(Idx, [[Name, Qty]|Tail], Res) :-
+    barang(Name, _, 'H'),
     Qty =:= 0,
-    getFishingItem(Idx, Tail, Res), !.
-getFishingItem(Idx, [[Name, _]|Tail], Res) :-
-    \+ items(Name, _, 'H'),
-    getFishingItem(Idx, Tail, Res), !.
+    getFishingbarang(Idx, Tail, Res), !.
+getFishingbarang(Idx, [[Name, _]|Tail], Res) :-
+    \+ barang(Name, _, 'H'),
+    getFishingbarang(Idx, Tail, Res), !.
 
 
 

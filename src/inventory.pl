@@ -17,25 +17,25 @@ changeInv(Inv) :- retractall(inventory(_)),
 /* show all inventory */
 showInventory :- inventory(Inv), showInventoryFunction(Inv), !.
 showInventoryFunction([]) :- !.
-showInventoryFunction(Inv) :- write('Items: '), nl,
-                displayInventoryItems(Inv, 1), nl,
+showInventoryFunction(Inv) :- write('barang: '), nl,
+                displayInventorybarang(Inv, 1), nl,
                 write('Equipments: '), nl,                
                 displayInventoryEquipments(Inv, 1), !.
-% ITEMS
-displayInventoryItems([], _) :- !.
-displayInventoryItems([[Name, Qty]|Tail], Num) :-
+% barang
+displayInventorybarang([], _) :- !.
+displayInventorybarang([[Name, Qty]|Tail], Num) :-
     NewNum is Num + 1,
-    items(Name, Price, _),
+    barang(Name, Price, _),
     Qty =\= 0,
     write(Num), write('. '),
     write(Name), write('('), write(Qty), write(')'), write(', Price: '), write(Price), write(' Gold'), nl, 
-    displayInventoryItems(Tail, NewNum), !.
-displayInventoryItems([[Name, _]|Tail], Num) :-
-    (\+ items(Name, _, _)),
-    displayInventoryItems(Tail, Num), !.
-displayInventoryItems([[Name, Qty]|Tail], Num) :-
-    (items(Name, _, _)), Qty =:= 0,
-    displayInventoryItems(Tail, Num), !.
+    displayInventorybarang(Tail, NewNum), !.
+displayInventorybarang([[Name, _]|Tail], Num) :-
+    (\+ barang(Name, _, _)),
+    displayInventorybarang(Tail, Num), !.
+displayInventorybarang([[Name, Qty]|Tail], Num) :-
+    (barang(Name, _, _)), Qty =:= 0,
+    displayInventorybarang(Tail, Num), !.
 
 % EQUIPMENTS
 displayInventoryEquipments([], _) :- !.
@@ -54,11 +54,11 @@ displayInventoryEquipments([[Name, _]|Tail], Num) :-
     (\+ equipment(Name, _)),
     displayInventoryEquipments(Tail, Num), !.
 
-/* show items only */
-showItems :- inventory(Inv), showItemsFunction(Inv), !.
-showItemsFunction([]) :- !.
-showItemsFunction(Inv) :- write('Items: '), nl,
-                displayInventoryItems(Inv, 1), nl, !.
+/* show barang only */
+showbarang :- inventory(Inv), showbarangFunction(Inv), !.
+showbarangFunction([]) :- !.
+showbarangFunction(Inv) :- write('barang: '), nl,
+                displayInventorybarang(Inv, 1), nl, !.
 
 /* show equipment only */
 showEquipments :- inventory(Inv), showEquipmentsFunction(Inv), !.
@@ -69,8 +69,8 @@ showEquipmentsFunction(Inv) :- write('Equipments: '), nl,
 /* show farming inventory */
 showFarmingInventory :- inventory(Inv), showFarmingInventoryFunction(Inv), !.
 showFarmingInventoryFunction([]) :- !.
-showFarmingInventoryFunction(Inv) :- write('Farming Items: '), nl,
-                displayFarmingItems(Inv, 1), nl. 
+showFarmingInventoryFunction(Inv) :- write('Farming barang: '), nl,
+                displayFarmingbarang(Inv, 1), nl. 
                 /*
                 write('Farming Equipments: '), nl,                
                 displayInventoryEquipments(Inv), !.
@@ -78,20 +78,20 @@ showFarmingInventoryFunction(Inv) :- write('Farming Items: '), nl,
                 
 
 /* display farming item and equipments */
-displayFarmingItems([], _) :- !.
-displayFarmingItems([[Name, Qty]|Tail], Num) :-
+displayFarmingbarang([], _) :- !.
+displayFarmingbarang([[Name, Qty]|Tail], Num) :-
     NewNum is Num + 1,
-    items(Name, Price, 'F'),
+    barang(Name, Price, 'F'),
     Qty =\= 0,
     write(Num), write('. '),
     write(Name), write('('), write(Qty), write(')'), write(', Price: '), write(Price), write(' Gold'), nl, 
-    displayFarmingItems(Tail, NewNum), !.
-displayFarmingItems([[Name, _]|Tail], Num) :-
-    (\+ items(Name, _, 'F')),
-    displayFarmingItems(Tail, Num), !.
-displayInventoryItems([[Name, Qty]|Tail], Num) :-
-    (items(Name, _, 'F')), Qty =:= 0,
-    displayFarmingItems(Tail, Num), !.
+    displayFarmingbarang(Tail, NewNum), !.
+displayFarmingbarang([[Name, _]|Tail], Num) :-
+    (\+ barang(Name, _, 'F')),
+    displayFarmingbarang(Tail, Num), !.
+displayInventorybarang([[Name, Qty]|Tail], Num) :-
+    (barang(Name, _, 'F')), Qty =:= 0,
+    displayFarmingbarang(Tail, Num), !.
 
 
 

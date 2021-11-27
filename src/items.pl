@@ -1,36 +1,36 @@
-/* ITEMS */
-% items(X, Y, Z), X adalah nama item, Y adalah harga item, Z adalah kategori item
+/* barang */
+% barang(X, Y, Z), X adalah nama item, Y adalah harga item, Z adalah kategori item
 
 /* FARMING */
-items('Reed', 0, 'F').
-items('Wheat', 100, 'F').
-items('Corn', 150, 'F').
-items('Tomato', 200, 'F').
-items('Rice', 250, 'F').
-items('Potato', 300, 'F').
-items('Magic Mushroom', 1850, 'F').
+barang('Reed', 0, 'F').
+barang('Wheat', 100, 'F').
+barang('Corn', 150, 'F').
+barang('Tomato', 200, 'F').
+barang('Rice', 250, 'F').
+barang('Potato', 300, 'F').
+barang('Magic Mushroom', 1850, 'F').
 
-items('Rice Seed', 150, 'F').
-items('Tomato Seed', 125, 'F').
+barang('Rice Seed', 150, 'F').
+barang('Tomato Seed', 125, 'F').
 
 
 /* RANCH */
-items('Dung', 0, 'R').
-items('Egg', 110, 'R').
-items('Milk', 160, 'R').
-items('Chicken', 210, 'R').
-items('Wool', 250, 'R').
-items('Sheep Meat', 290, 'R').
-items('Beef', 400, 'R').
-items('Golden Egg', 1550, 'R').
+barang('Dung', 0, 'R').
+barang('Egg', 110, 'R').
+barang('Milk', 160, 'R').
+barang('Chicken', 210, 'R').
+barang('Wool', 250, 'R').
+barang('Sheep Meat', 290, 'R').
+barang('Beef', 400, 'R').
+barang('Golden Egg', 1550, 'R').
 
 /* FISHING */
-items('Bottle', 10, 'H').
-items('Catfish', 80, 'H').
-items('Cod', 170, 'H').
-items('Salmon', 270, 'H').
-items('Tuna', 450, 'H').
-items('Puffer Fish', 1750, 'H').
+barang('Bottle', 10, 'H').
+barang('Catfish', 80, 'H').
+barang('Cod', 170, 'H').
+barang('Salmon', 270, 'H').
+barang('Tuna', 450, 'H').
+barang('Puffer Fish', 1750, 'H').
 
 
 /* EQUIPMENT */
