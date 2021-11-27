@@ -10,7 +10,7 @@ checkPosWater :-
     X1 is X+1, X2 is X-1, Y1 is Y+1, Y2 is Y-1,
     (specialTile(X1,Y,'W'); specialTile(X2,Y,'W'); specialTile(X,Y1,'W'); specialTile(X,Y2,'W');
     specialTile(X1,Y1,'W'); specialTile(X1,Y2,'W'); specialTile(X2,Y1,'W'); specialTile(X2,Y2,'W');
-    write('You aren\'t near water'), fail).
+    write('You aren\'t near water!'), fail).
 
 /* Inisialisasi kondisi fishing */
 /* Fish probability bergantung pada level fishing player */
@@ -66,15 +66,20 @@ fishing :-
     addFishingEXP(Z), addEXP(Z), addFishToInv(Y), !.
 
 /* Menambah hasil tangkapan ke inventory */
-addFishToInv([], Fish, [[Name, Qty]|_]) :-
+addFishToInv([],_,[]).
+addFishToInv([], Fish, [[Name, Qty]|[]]) :-
     Name = Fish,
     Qty is 1, !.
-addFishToInv([[Name, Qty]|_], Fish, [Name, Qty1|_]) :-
+addFishToInv([[Name, Qty]|Tail], Fish, [[Name1, Qty1]|Tail1]) :-
     Fish = Name,
-    Qty1 is Qty+1, !.
-addFishToInv([[Name, Qty]|Tail], Fish, [_|Tail1]) :-
+    addFishToInv(Tail, Fish, Tail1),
+    Name1 = Name,
+    Qty1 is Qty+1.
+addFishToInv([[Name, Qty]|Tail], Fish, [[Name1, Qty1]|Tail1]) :-
     Fish \= Name,
-    addFishToInv(Tail, Fish, Tail1).
+    addFishToInv(Tail, Fish, Tail1),
+    Name1 = Name,
+    Qty1 is Qty.
 
 addFishToInv(Fish) :-
     inventory(Inv),
