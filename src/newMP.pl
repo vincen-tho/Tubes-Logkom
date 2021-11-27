@@ -68,15 +68,95 @@ addEQtoShop([[Name, _]|Tail]) :-
 
 
 /* sell items */
-sell :- showInventoryBarang,
+sellMarket :- showInventoryBarang,
         write('What do you want to sell'), nl,
         read(Opt), nl,
         write('How many items do you want to sell'), nl,
-        read(Qty), nl.
+        read(Qty), nl,
+        sellaction(Opt, Qty).
 
-sellaction(Opt, Qty) :- !.
+sellaction(Opt, Qty) :-
+    Idx is Opt - 1,
+    inventory(Inv),
+    getbarangNoZero(Idx, Inv, [Name, _]),
+    addBarang(Name, -Qty),
+    write(Name), write(' (x'), write(Qty),
+    write(') Have been sold'), nl,
+    barang(Name, Price, _),
+    AddGold is Price * Qty,
+    addGold(AddGold),
+    write(AddGold), write(' Gold has been added').
         
 
 
 /* buy items */
-buy :- createShop, displayShop, !.
+market :- 
+    write('Welcome to the marketplace!!'), nl,
+    write('What do you want to do?'), nl,
+    write('1. buy'), nl,
+    write('2. sell'), nl,
+    write('3. leave'), nl,
+    read(Command),
+    ((Command == 'buy') -> buyMarket, fail;
+    (Command == 'sell') -> sellMarket, fail;
+    (Command == 'leave') -> !, fail;
+    write('Wrong command')).
+
+buyMarket :- createShop, displayShop,
+        write('What do you want to buy'), nl,
+        read(Opt), nl,
+        Idx is Opt - 1,
+        shop(S),
+        getElmt(Idx, S, [Name | _]),
+        (barang(Name, _, _) ->
+        write('How many items do you want to buy'), nl,
+        read(Qty);
+        !
+        ),
+        buyaction(Opt, Qty).
+        
+
+buyaction(Opt, Qty) :-
+    Idx is Opt -1,
+    shop(S),
+    getElmt(Idx, S, [Name, Price]),
+    barang(Name, _, _),
+    MinGold is Price*Qty,
+    gold(G),
+    ((G >= MinGold) -> 
+    addGold(-MinGold),
+    addBarang(Name, Qty),
+    write(Name), write(' (x'), write(Qty),
+    write(') have been added to your inventory'), nl,
+    write(MinGold), write(' Gold has been deducted');
+
+    write('Insufficient gold'), nl
+    ), !.
+    
+
+buyaction(Opt, Qty) :-
+    Idx is Opt -1,
+    shop(S),
+    getElmt(Idx, S, [Name, UpLvl, Price]),
+    equipment(Name, _),
+    MinGold is Price,
+
+    gold(G),
+    ((G >= MinGold) ->
+    upgradeEquipment(Name),
+    addGold(-MinGold),
+    write(Name), write(' lv.'), write(UpLvl),
+    write(' has been upgraded'), nl,
+    write(MinGold), write(' Gold has been deducted');
+
+    write('Insufficient gold'), nl
+    ), !.
+
+
+
+
+
+
+
+
+/* debug only */
