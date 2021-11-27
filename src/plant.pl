@@ -1,17 +1,19 @@
 /* DEKLARASI SEMUA TANAMAN */
 
 /* STATIS */
-/* Tanaman dan huruf */
-plantedLetter('Reed', 'x ').
-plantedLetter('Wheat', 'w ').
-plantedLetter('Corn', 'c ').
-plantedLetter('Tomato', 'x ').
-plantedLetter('Rice', 'x ').
-plantedLetter('Potato', 'p ').
-plantedLetter('Magic Mushroom', 'm ').
-plantedLetter('Rice Seed', 'r ').
-plantedLetter('Tomato Seed', 't ').
+/* Tanaman, huruf, dan waktu untuk panen */
+plantedLetter('Reed', 'x ', 0).
+plantedLetter('Wheat', 'w ', 72).
+plantedLetter('Corn', 'c ', 168).
+plantedLetter('Tomato', 'x ', 0).
+plantedLetter('Rice', 'x ', 0).
+plantedLetter('Potato', 'p ', 96).
+plantedLetter('Magic Mushroom', 'm ', 120).
+plantedLetter('Rice Seed', 'r ', 144).
+plantedLetter('Tomato Seed', 't ', 48).
 
+illegalLetter('x  ').
 /* DINAMIS */
-/* plantTime(X, Y, PLANTEDTIME) */
-:- dynamic(plantTime/3).
+/* plantTime digunakan untuk menyimpan data kapan tanaman ditanam dan lama waktu untuk dapat dipanen */
+/* plantTime(X, Y, PLANTEDTIME, TIMETOHARVEST) */
+:- dynamic(plantTime/4).
