@@ -119,5 +119,3 @@ displayEQShop([[Name, Level, Price]|Tail], Num) :-
     displayEQShop(Tail, NewNum), !.
 
 test :- initInv, showInventory, initShop.
-
-disInv :- showInventory.

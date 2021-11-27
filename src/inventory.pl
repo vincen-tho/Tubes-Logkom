@@ -2,6 +2,8 @@
 
 :- dynamic(inventory/1).
 
+inventory :- showInventory.
+
 
 
 
