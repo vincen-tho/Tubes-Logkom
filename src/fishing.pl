@@ -2,61 +2,15 @@
 :- dynamic(fishProbability/1).
 :- dynamic(gainedExpNoFish/1).
 :- dynamic(gainedExpFish/1).
-:- dynamic(isNearWater/1).
 
 /* RULES */ 
 /* Cek posisi player, berada di dekat tile air atau tidak */
 checkPos :-
-    retractall(isNearWater(_)),
-    playerPos(X,Y),
-    X1 is X+1,
-    specialTile(X1,Y,'W'),
-    assertz(isNearWater(true)), !.
-checkPos :-
-    retractall(isNearWater(_)),
-    playerPos(X,Y),
-    X1 is X-1,
-    specialTile(X1,Y,'W'),
-    assertz(isNearWater(true)), !.
-checkPos :-
-    retractall(isNearWater(_)),
-    playerPos(X,Y),
-    Y1 is Y+1,
-    specialTile(X,Y1,'W'),
-    assertz(isNearWater(true)), !.
-checkPos :-
-    retractall(isNearWater(_)),
-    playerPos(X,Y),
-    Y1 is Y-1,
-    specialTile(X,Y1,'W'),
-    assertz(isNearWater(true)), !.
-checkPos :-
-    retractall(isNearWater(_)),
-    playerPos(X,Y),
-    X1 is X+1, Y1 is Y+1,
-    specialTile(X1,Y1,'W'),
-    assertz(isNearWater(true)), !.
-checkPos :-
-    retractall(isNearWater(_)),
-    playerPos(X,Y),
-    X1 is X+1, Y1 is Y-1,
-    specialTile(X1,Y1,'W'),
-    assertz(isNearWater(true)), !.
-checkPos :-
-    retractall(isNearWater(_)),
-    playerPos(X,Y),
-    X1 is X-1, Y1 is Y+1,
-    specialTile(X1,Y1,'W'),
-    assertz(isNearWater(true)), !.
-checkPos :-
-    retractall(isNearWater(_)),
-    playerPos(X,Y),
-    X1 is X-1, Y1 is Y-1,
-    specialTile(X1,Y1,'W'),
-    assertz(isNearWater(true)), !.
-checkPos :-
-    retractall(isNearWater(_)),
-    assertz(isNearWater(false)).
+    playerPos(X, Y),
+    X1 is X+1, X2 is X-1, Y1 is Y+1, Y2 is Y-1,
+    (specialTile(X1,Y,'W'); specialTile(X2,Y,'W'); specialTile(X,Y1,'W'); specialTile(X,Y2,'W');
+    specialTile(X1,Y1,'W'); specialTile(X1,Y2,'W'); specialTile(X2,Y1,'W'); specialTile(X2,Y2,'W');
+    write('You aren\'t near water'), fail).
 
 /* Inisialisasi kondisi fishing */
 /* Fish probability bergantung pada level fishing player */
@@ -100,7 +54,6 @@ choice(Xs, Ps, Y) :- random(R), choice(Xs, Ps, 0, R, Y).
 /* Fishing */
 fishing :- 
     checkPos,
-    isNearWater(true),
     initFishing, 
     fishProbability(_X),
     choice(['none', 'Bottle', 'Catfish', 'Cod', 'Salmon', 'Tuna', 'Puffer Fish'], _X, Y),
@@ -111,10 +64,6 @@ fishing :-
     gainedExpFish(Z), 
     write('You gained '), write(Z), write(' fishing exp!')),
     addFishingEXP(Z), addEXP(Z), addFishToInv(Y), !.
-fishing :-
-    checkPos,
-    isNearWater(false),
-    write('You aren\'t near water!').
 
 /* Menambah hasil tangkapan ke inventory */
 addFishToInv([], Fish, [[Name, Qty]|_]) :-
