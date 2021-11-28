@@ -92,7 +92,7 @@ help :-
     specialTile(X,Y,'M'),
     write(' ################################################################################'),nl,
     write(' #                          ~MARKETPLACE MENU~                                  #'),nl,
-    write(' # 1. market   : Interact with marketplace                                     #'),nl,
+    write(' # 1. market   : Interact with marketplace                                      #'),nl,
     write(' ################################################################################'), !.
     
 
