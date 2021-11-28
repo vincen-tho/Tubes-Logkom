@@ -271,7 +271,7 @@ appendXElmt(X, L1, L2, L3) :-
 /* Konfigurasi apabila ada ayam baru */
 newChicken(X) :-
     retractall(totalChicken(PrevTotal)),
-    NewTotal is PrevTotal+1,
+    NewTotal is PrevTotal+X,
     assertz(totalChicken(NewTotal)),
     retractall(produceEgg(PrevList1)),
     /* Asumsi ayam butuh waktu 20 hari buat bertelur (sample belum fix) */
@@ -279,13 +279,13 @@ newChicken(X) :-
     assertz(produceEgg(NewList1)),
     retractall(producePoultry(PrevList2)),
     /* Asumsi ayam siap panen di umur 40 hari (sample belum fix) */
-    append(PrevList2,[40],NewList2),
+    appendXElmt(X,PrevList2,[40],NewList2),
     assertz(producePoultry(NewList2)).
 
 /* Konfigurasi apabila ada domba baru */
 newSheep(X) :-
     retractall(totalSheep(PrevTotal)),
-    NewTotal is PrevTotal+1,
+    NewTotal is PrevTotal+X,
     assertz(totalSheep(NewTotal)),
     retractall(produceWool(PrevList1)),
     /* Asumsi domba butuh waktu 60 hari sampai bulunya siap dicukur (sample belum fix) */
@@ -293,13 +293,13 @@ newSheep(X) :-
     assertz(produceWool(NewList1)),
     retractall(produceSheepMeat(PrevList2)),
     /* Asumsi domba siap panen di umur 80 hari (sample belum fix) */
-    append(PrevList2,[80],NewList2),
+    appendXElmt(X,PrevList2,[80],NewList2),
     assertz(produceSheepMeat(NewList2)).
 
 /* Konfigurasi apabila ada sapi baru */
 newCow(X) :-
     retractall(totalCow(PrevTotal)),
-    NewTotal is PrevTotal+1,
+    NewTotal is PrevTotal+X,
     assertz(totalCow(NewTotal)),
     retractall(produceMilk(PrevList1)),
     /* Asumsi sapi butuh waktu 30 hari sampai susunya siap diperah (sample belum fix) */
@@ -307,5 +307,55 @@ newCow(X) :-
     assertz(produceMilk(NewList1)),
     retractall(produceBeef(PrevList2)),
     /* Asumsi sapi siap panen di umur 100 hari (sample belum fix) */
-    append(PrevList2,[100],NewList2),
+    appendXElmt(X,PrevList2,[100],NewList2),
     assertz(produceBeef(NewList2)).
+
+/* Hewan dijual */
+/* Jual chicken */
+sellChicken(X) :-
+    retractall(totalChicken(PrevTotal)),
+    NewTotal is PrevTotal-X,
+    assertz(totalChicken(NewTotal)),
+    retractall(produceEgg(PrevList1)),
+    /* Asumsi ayam butuh waktu 20 hari buat bertelur (sample belum fix) */
+    removeXElmt(X,PrevList1,NewList1),
+    assertz(produceEgg(NewList1)),
+    retractall(producePoultry(PrevList2)),
+    /* Asumsi ayam siap panen di umur 40 hari (sample belum fix) */
+    removeXElmt(X,PrevList2,NewList2),
+    assertz(producePoultry(NewList2)).
+    
+/* Jual sheep */
+sellSheep(X) :-
+    retractall(totalSheep(PrevTotal)),
+    NewTotal is PrevTotal+X,
+    assertz(totalSheep(NewTotal)),
+    retractall(produceWool(PrevList1)),
+    /* Asumsi domba butuh waktu 60 hari sampai bulunya siap dicukur (sample belum fix) */
+    removeXElmt(X,PrevList1,NewList1),
+    assertz(produceWool(NewList1)),
+    retractall(produceSheepMeat(PrevList2)),
+    /* Asumsi domba siap panen di umur 80 hari (sample belum fix) */
+    removeXElmt(X,PrevList2,NewList2),
+    assertz(produceSheepMeat(NewList2)).
+    
+/* Jual cow */
+sellCow(X) :-
+    retractall(totalCow(PrevTotal)),
+    NewTotal is PrevTotal+X,
+    assertz(totalCow(NewTotal)),
+    retractall(produceMilk(PrevList1)),
+    /* Asumsi sapi butuh waktu 30 hari sampai susunya siap diperah (sample belum fix) */
+    removeXElmt(X,PrevList1,NewList1),
+    assertz(produceMilk(NewList1)),
+    retractall(produceBeef(PrevList2)),
+    /* Asumsi sapi siap panen di umur 100 hari (sample belum fix) */
+    removeXElmt(X,PrevList2,NewList2),
+    assertz(produceBeef(NewList2)).
+
+/* 
+TODO:
+    - handle golden egg
+    - kalo jual/beli ayam, domba, atau sapi, kondisi di ranch harus diupdate
+    Overall: perlu adjusting antara ranching, items, buy, dan sell
+*/
