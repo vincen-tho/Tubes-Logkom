@@ -148,15 +148,12 @@ initInv :- retractall(inventory(_)),
                 ['Dung', 3],
                 ['Egg', 0],
                 ['Milk', 11],
-                ['Water Sprinkler', 1],
                 ['Shovel', 1],
                 ['Rice Seed', 5],
                 ['Potato', 15],
 
-                ['Shearer', 0],
                 ['Bucket', 0],
-                ['Fishing Rod', 0],
-                ['Bait', 0]    
+                ['Fishing Rod', 0] 
                 ]
                 
                 )).

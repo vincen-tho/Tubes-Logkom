@@ -150,4 +150,4 @@ createMap :- !.
 
 /* debug only */
 startD :- resetPlayerPos,
-        createMap.
+        createMap, !.
