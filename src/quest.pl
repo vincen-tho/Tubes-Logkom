@@ -12,30 +12,37 @@ quest(3,2,3,4,100,75).
 quest(4,3,4,5,125,100).
 
 initQuest :- 
-    assertz(progressQuest(1,0,0,0)),
+    assertz(progressQuest(0,0,0,0)),
     assertz(isQuest(0)).
 
 resetQuest :-
     retract(isQuest(X)),
     assertz(isQuest(0)),
     progressQuest(QuestId, CFarm, CFish, CRanch),
+    TempQuestId is QuestId,
     retract(progressQuest(QuestId, CFarm, CFish, CRanch)),
-    assertz(progressQuest(_, 0, 0, 0)).
+    assertz(progressQuest(TempQuestId, 0, 0, 0)).
 
 questFinished :- 
-    (playerPos(X, Y),
+    playerPos(X, Y),
     specialTile(X, Y, 'Q'),
     isQuest(Z), Z =:= 1,
     progressQuest(QuestId, CFarm, CFish, CRanch),
     quest(QuestId, HasilFarm, HasilFish, HasilRanch, Exp, Gold),
     CFarm >= HasilFarm, CFish >= HasilFish, CRanch >= HasilRanch,
-    resetQuest) ->
     (addFarmingEXP(Exp), addFishingEXP(Exp), addRanchingEXP(Exp), addGold(Gold),
-    write('You have completed your quest.'),
+    write('You have completed your quest.'), nl,
     write('Exp reward: '), print(Exp), nl,
-    write('Gold reward: '), print(Gold));
-    isQuest(Z), Z =:= 1 -> write('Complete your quest first!');
-    isQuest(Z), Z =:= 0 -> write('Get your quest first!'), !.
+    write('Gold reward: '), print(Gold)),
+    retract(isQuest(Z)),
+    assertz(isQuest(0)), !.
+
+questFinished :-
+    (isQuest(Z), Z =:= 1,     
+    progressQuest(QuestId, CFarm, CFish, CRanch),
+    quest(QuestId, HasilFarm, HasilFish, HasilRanch, Exp, Gold))
+    -> write('Complete your quest first!');
+    write('Get your quest first!'), !.
     
 getQuest :-
     playerPos(X, Y),
@@ -75,7 +82,8 @@ addCountRanch(X) :-
 printQuest :-
     playerPos(X, Y),
     specialTile(X, Y, 'Q'),
-    isQuest(Z), Z =:= 1, 
+    isQuest(Z), Z =:= 1,
+    progressQuest(QuestId, _, _, _),
     quest(QuestId, HasilFarm, HasilFish, HasilRanch, Exp, Gold),
     write('Quest details:'), nl,
     write('Harvest item: '), print(HasilFarm), nl,
@@ -104,10 +112,9 @@ printProgress :-
     specialTile(X, Y, 'Q'),
     isQuest(Z), Z =:= 0, write('You are currently not doing any quest.'), !.
 
-/* belum di test 
-   TODO :
-     - satuin dengan farming, fishing, ranching
-     - save Exp dan gold reward to player */
-
+/* for debugging purposes
+addCountAll(X):-
+    addCountFarm(X), addCountFish(X), addCountRanch(X). 
+*/
 
 
