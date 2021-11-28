@@ -140,35 +140,7 @@ buyaction(Opt, Qty) :-
     ;
 
     write('Insufficient gold'), nl
-    ), !.
-
-isNewRanch(Name, Qty) :-
-    Name == 'Sheep',
-    newSheep(Qty), !.
-isNewRanch(Name, Qty) :-
-    Name == 'Cow',
-    newCow(Qty), !.
-isNewRanch(Name, Qty) :-
-    Name == 'Chicken',
-    newChicken(Qty), !.
-isNewRanch(Name, Qty).
-
-isSellRanch(Name, Qty) :-
-    Name == 'Sheep',
-    sellSheep(Qty), !.
-isSellRanch(Name, Qty) :-
-    Name == 'Cow',
-    sellCow(Qty), !.
-isSellRanch(Name, Qty) :-
-    Name == 'Chicken',
-    sellChicken(Qty), !.
-isSellRanch(Name, Qty).
-
-
-
-
-
-    
+    ), !.    
 
 buyaction(Opt, _) :-
     Idx is Opt -1,
@@ -188,6 +160,28 @@ buyaction(Opt, _) :-
     write('Insufficient gold'), nl
     ), !.
 
+
+isNewRanch(Name, Qty) :-
+    Name == 'Sheep',
+    newSheep(Qty), !.
+isNewRanch(Name, Qty) :-
+    Name == 'Cow',
+    newCow(Qty), !.
+isNewRanch(Name, Qty) :-
+    Name == 'Chicken',
+    newChicken(Qty), !.
+isNewRanch(_, _).
+
+isSellRanch(Name, Qty) :-
+    Name == 'Sheep',
+    sellSheep(Qty), !.
+isSellRanch(Name, Qty) :-
+    Name == 'Cow',
+    sellCow(Qty), !.
+isSellRanch(Name, Qty) :-
+    Name == 'Chicken',
+    sellChicken(Qty), !.
+isSellRanch(_, _).
 
 
 

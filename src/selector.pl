@@ -13,12 +13,12 @@ getItemNoZero(0, [[_, Qty]|Tail], Res) :-
 getItemNoZero(0, [[Name, Qty]|_], Res) :-
     Qty =\= 0,
     Res = [Name, Qty], !.
-getItemNoZero(Idx, [[Name, Qty]|Tail], Res) :-
+getItemNoZero(Idx, [[_, Qty]|Tail], Res) :-
     Idx =\= 0,
     Qty =\= 0,
     NewIdx is (Idx-1),
     getItemNoZero(NewIdx, Tail, Res), !.
-getItemNoZero(Idx, [[Name, Qty]|Tail], Res) :-
+getItemNoZero(Idx, [[_, Qty]|Tail], Res) :-
     Qty =:= 0,
     getItemNoZero(Idx, Tail, Res), !.
 
