@@ -94,7 +94,7 @@ showEquipmentsFunction(Inv) :- write('Equipments: '), nl,
 /* show farming inventory */
 showFarmingInventory :- inventory(Inv), showFarmingInventoryFunction(Inv), !.
 showFarmingInventoryFunction([]) :- !.
-showFarmingInventoryFunction(Inv) :- write('Farming barang: '), nl,
+showFarmingInventoryFunction(Inv) :- write('You have: '), nl,
                 displayFarmingbarang(Inv, 1), nl. 
                 /*
                 write('Farming Equipments: '), nl,                
@@ -168,11 +168,11 @@ inventory(I),
         ;
     append(I, [[Name, AddQty]], NewI),
     changeInv(NewI)
-    ).
+    ), !.
 
 /* remove barang sepenuhnya */
 removeBarang(Name) :-
-    changeBarang(Name, 0).
+    changeBarang(Name, 0), !.
 
 /* mengganti level equipment */
 changeEquipment(Name, NewLvl) :-

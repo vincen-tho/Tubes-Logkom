@@ -72,6 +72,20 @@ getFarmingbarang(Idx, [[Name, _]|Tail], Res) :-
     \+ barang(Name, _, 'F'),
     getFarmingbarang(Idx, Tail, Res), !.
 
+/* count farming barang */
+countFarmingBarang([], 0) :- !.
+countFarmingBarang([[Name, Qty]|Tail], Res) :-
+    (Qty =\= 0), barang(Name, _, 'F'),
+    countFarmingBarang(Tail, Res2),
+    Res is Res2 + 1, !.
+countFarmingBarang([[Name, Qty]|Tail], Res) :-
+    ((Qty =:= 0); \+ barang(Name, _, 'F')),
+    countFarmingBarang(Tail, Res2),
+    Res is Res2, !.
+
+
+
+
 /* get element from inventory (ranching (barang)  barang only) */
 getRanchingbarang(_, [], _) :- !.
 getRanchingbarang(0, [[_, Qty]|Tail], Res) :-
@@ -117,6 +131,8 @@ getFishingbarang(Idx, [[Name, Qty]|Tail], Res) :-
 getFishingbarang(Idx, [[Name, _]|Tail], Res) :-
     \+ barang(Name, _, 'H'),
     getFishingbarang(Idx, Tail, Res), !.
+
+
 
 
 
