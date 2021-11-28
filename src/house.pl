@@ -1,8 +1,6 @@
 
 house :- help.
 
-
-
 sleep :- 
     (playerPos(X, Y),
     specialTile(X, Y, 'H')),

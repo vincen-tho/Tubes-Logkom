@@ -110,5 +110,6 @@ quit :-
     retractall(wool(_)),
     retractall(sheepMeat(_)),
     retractall(milk(_)),
-    retractall(beef(_)).
+    retractall(beef(_)),
+    write('Exited the game.').
 

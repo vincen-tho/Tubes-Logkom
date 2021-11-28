@@ -67,18 +67,19 @@ checkPosRanch :-
     (specialTile(X,Y,'R');
     write('You aren\'t at the ranch!'), fail), !.
 
+ranch :- help.
+
 /* Ranching */
-ranch :- 
+ranchStatus :- 
     checkPosRanch,
     totalChicken(X),
     totalSheep(Y),
     totalCow(Z),
     initRanching,
-    write('Welcome to the ranch! You have:'), nl,
+    write('You have:'), nl,
     write(X), write(' '), write(chicken), nl,    
     write(Y), write(' '), write(sheep), nl,    
-    write(Z), write(' '), write(cow), nl, nl,
-    write('What do you want to do?'), !.
+    write(Z), write(' '), write(cow), nl, !.
 
 /* Menghapus semua elemen yang bernilai X */  
 removeAllX(_, [], [], 0).
