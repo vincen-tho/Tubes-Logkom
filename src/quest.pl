@@ -1,5 +1,23 @@
 :- dynamic(progressQuest/4).
 :- dynamic(isQuest/1).
+:- dynamic(CFarm/1).
+:- dynamic(CFish/1).
+:- dynamic(CRanch/1).
+
+addCFarm(X) :- CFarm(OLD), 
+    NEW is OLD+X, 
+    retract(CFarm(OLD)), 
+    assertz(CFarm(NEW)).
+
+addCFish(X) :- CFish(OLD), 
+    NEW is OLD+X, 
+    retract(CFish(OLD)), 
+    assertz(CFish(NEW)).
+
+addCRanch(X) :- CRanch(OLD), 
+    NEW is OLD+X, 
+    retract(CRanch(OLD)), 
+    assertz(CRanch(NEW)).
 
 % isQuest untuk melihat apakah sedang menjalankan quest
 % progressQuest(QuestId, CountFarming, CountFishing, CountRanching)
@@ -20,7 +38,7 @@ resetQuest :-
     assertz(isQuest(0)),
     progressQuest(QuestId, CFarm, CFish, CRanch),
     retract(progressQuest(QuestId, CFarm, CFish, CRanch)),
-    assertz(progressQuest(0, 0, 0, 0)).
+    assertz(progressQuest(_, 0, 0, 0)).
 
 questFinished :- 
     (playerPos(X, Y),
@@ -28,7 +46,8 @@ questFinished :-
     isQuest(Z), Z =:= 1,
     progressQuest(QuestId, CFarm, CFish, CRanch),
     quest(QuestId, HasilFarm, HasilFish, HasilRanch, Exp, Gold),
-    CFarm >= HasilFarm, CFish >= HasilFish, CRanch >= HasilRanch) ->
+    CFarm >= HasilFarm, CFish >= HasilFish, CRanch >= HasilRanch,
+    resetQuest) ->
     (addFarmingEXP(Exp), addFishingEXP(Exp), addRanchingEXP(Exp), addGold(Gold),
     write('You have completed your quest.'),
     write('Exp reward: '), print(Exp), nl,
@@ -77,9 +96,9 @@ printQuest :-
     isQuest(Z), Z =:= 1, 
     quest(QuestId, HasilFarm, HasilFish, HasilRanch, Exp, Gold),
     write('Quest details:'), nl,
-    write('Harvest barang: '), print(HasilFarm), nl,
+    write('Harvest item: '), print(HasilFarm), nl,
     write('Fish: '), print(HasilFish), nl,
-    write('Ranch barang: '), print(HasilRanch), nl,
+    write('Ranch item: '), print(HasilRanch), nl,
     write('Exp reward: '), print(Exp), nl,
     write('Gold reward: '), print(Gold), !.
 
@@ -94,9 +113,9 @@ printProgress :-
     isQuest(Z), Z =:= 1,  
     progressQuest(QuestId, CFarm, CFish, CRanch),
     write('Your progress:'),nl,
-    write('Harvest barang: '), print(CFarm), nl,
+    write('Harvest item: '), print(CFarm), nl,
     write('Fish: '), print(CFish), nl,
-    write('Ranch barang: '), print(CRanch), !.
+    write('Ranch item: '), print(CRanch), !.
 
 printProgress :-
     playerPos(X, Y),
