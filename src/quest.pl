@@ -5,11 +5,43 @@
 % progressQuest(QuestId, CountFarming, CountFishing, CountRanching)
 % quest(QuestId, HasilFarming, HasilFishing, HasilRanching, Exp, Gold)
 
-% sample quest
-quest(1,1,1,1,25,25).
-quest(2,1,2,3,50,50).
-quest(3,2,3,4,100,75).
-quest(4,3,4,5,125,100).
+% quest list
+quest(1,1,0,0,25,25).
+quest(2,0,1,0,25,25).
+quest(3,0,0,1,25,25).
+quest(4,1,2,0,50,50).
+quest(5,0,2,1,50,50).
+quest(6,1,1,1,50,50).
+quest(7,0,1,2,50,50).
+quest(8,2,1,0,50,50).
+quest(9,2,1,0,75,75).
+quest(10,2,2,1,75,75).
+quest(11,1,1,3,75,75).
+quest(12,4,1,0,75,75).
+quest(13,3,0,2,75,75).
+quest(14,2,1,2,75,75).
+quest(15,4,1,1,100,125).
+quest(16,3,2,1,100,125).
+quest(17,3,2,2,100,125).
+quest(18,3,3,1,100,125).
+quest(19,1,4,1,100,125).
+quest(20,2,3,2,100,125).
+quest(21,4,2,1,100,125).
+quest(22,3,2,3,115,155).
+quest(23,3,3,3,115,155).
+quest(24,3,4,2,115,155).
+quest(25,1,5,4,115,155).
+quest(26,4,4,1,115,155).
+quest(27,0,4,5,115,155).
+quest(28,3,8,2,155,200).
+quest(29,9,1,4,155,200).
+quest(30,1,2,11,155,200).
+quest(31,4,4,6,155,200).
+quest(32,7,2,5,155,200).
+quest(33,7,2,5,155,200).
+quest(34,7,2,5,155,200).
+quest(35,7,2,5,155,200).
+
 
 initQuest :- 
     assertz(progressQuest(0,0,0,0)),
@@ -85,7 +117,7 @@ printQuest :-
     quest(QuestId, HasilFarm, HasilFish, HasilRanch, Exp, Gold),
     write('Quest details:'), nl,
     write('Harvest item: '), print(HasilFarm), nl,
-    write('Fish: '), print(HasilFish), nl,
+    write('Fish item: '), print(HasilFish), nl,
     write('Ranch item: '), print(HasilRanch), nl,
     write('Exp reward: '), print(Exp), nl,
     write('Gold reward: '), print(Gold), !.
@@ -102,7 +134,7 @@ printProgress :-
     progressQuest(_, CFarm, CFish, CRanch),
     write('Your progress:'),nl,
     write('Harvest item: '), print(CFarm), nl,
-    write('Fish: '), print(CFish), nl,
+    write('Fish item: '), print(CFish), nl,
     write('Ranch item: '), print(CRanch), !.
 
 printProgress :-
