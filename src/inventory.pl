@@ -1,6 +1,6 @@
 
-
 :- dynamic(inventory/1).
+inventory([]).
 
 inventory :- showInventory, !.
 
