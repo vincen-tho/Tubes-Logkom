@@ -141,11 +141,11 @@ haveShovel :-
 
 haveFishingRod :-
     inventory(Inv),
-    member(['Fishing Rod' | _], Inv), !.
+    member(['Fishing Rod', Level], Inv), Level =\= 0, !.
 
 haveBucket :-
     inventory(Inv),
-    member(['Bucket' | _], Inv), !.
+    member(['Bucket', Level], Inv), Level =\= 0, !.
 
 
 /* number valid inklusif */
