@@ -16,7 +16,7 @@ checkPosWater :-
 /* Fish probability bergantung pada level fishing player */
 /* Semakin tinggi levelnya, kesempatan mendapatkan ikan yang langka/mahal meningkat. */
 initFishing :- 
-    (haveFishingRod ->
+    haveFishingRod,
     retractall(fishProbability(_)), retractall(gainedExpNoFish(_)), retractall(gainedExpFish(_)),
     playerFishingLevel(X), fishingRodLevel(Level),
     L1 is X*0.0005, L2 is Level*0.0005,
@@ -33,10 +33,9 @@ initFishing :-
     Z1 is 5+Z, Z2 is 10+Z),
     assertz(fishProbability([Y1, Y2, Y3, 0.14, Y4, Y5, Y6])),
     assertz(gainedExpNoFish(Z1)),
-    assertz(gainedExpFish(Z2));
-    write('You don\'t have fishing rod!'), fail), !.
+    assertz(gainedExpFish(Z2)), !.
 initFishing :- 
-    (haveFishingRod ->
+    haveFishingRod, 
     retractall(fishProbability(_)), retractall(gainedExpNoFish(_)), retractall(gainedExpFish(_)),
     playerFishingLevel(X), fishingRodLevel(Level),
     L1 is X*0.0005, L2 is Level*0.0005,
@@ -49,8 +48,9 @@ initFishing :-
     Z1 is 5+Z, Z2 is 10+Z),
     assertz(fishProbability([Y1, Y2, Y3, 0.14, Y4, Y5, Y6])),
     assertz(gainedExpNoFish(Z1)),
-    assertz(gainedExpFish(Z2));
-    write('You don\'t have fishing rod!'), fail), !.
+    assertz(gainedExpFish(Z2)), !.
+initFishing :-
+    write('You don\'t have fishing rod!'), !.
 
 /* Random pick element list */
 /* Source: https://stackoverflow.com/questions/50250234/prolog-how-to-non-uniformly-randomly-select-a-element-from-a-list */

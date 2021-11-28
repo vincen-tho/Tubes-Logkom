@@ -148,8 +148,8 @@ buyaction(Opt, Qty) :-
     MinGold is Price*Qty,
     gold(G),
     ((G >= MinGold) -> 
-    addGold(-MinGold),
     addBarang(Name, Qty),
+    addGold(-MinGold),
     write(Name), write(' (x'), write(Qty),
     write(') have been added to your inventory'), nl,
     write(MinGold), write(' Gold has been deducted'),

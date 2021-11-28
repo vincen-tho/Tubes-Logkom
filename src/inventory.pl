@@ -2,14 +2,23 @@
 :- dynamic(inventory/1).
 inventory([]).
 
-inventory :- showInventory, throwInventory, !.
+inventory :- 
+showInventory, 
+write('Total items: '),
+inventory(Inv),
+countInv(Inv, Res),
+write(Res), nl,
+throwInventory, !.
 
 throwInventory :- 
-    write('What do you want to throw?'), nl,
+    write('What do you want to throw (0 to cancel)?'), nl,
     read(Opt), nl,
+    (Opt =\= 0) ->
     write('How many items do you want to throw?'), nl,
     read(Qty), nl,
-    throwaction(Opt, Qty).
+    throwaction(Opt, Qty);
+    fail
+    .
 
 throwaction(Opt, Qty) :-
     Idx is Opt - 1,
@@ -177,6 +186,7 @@ changeBarang(Name, NewQty) :-
 
 /* menambahkan barang, negatif untuk mengurangkan */
 addBarang(Name, AddQty) :- 
+(isAddedFull(AddQty) -> write('Inventory Full'), fail;
 inventory(I),
     (member([Name, Qty], I) ->
         NewQty is AddQty + Qty,
@@ -184,7 +194,7 @@ inventory(I),
         ;
     append(I, [[Name, AddQty]], NewI),
     changeInv(NewI)
-    ), !.
+    )), !.
 
 /* remove barang sepenuhnya */
 removeBarang(Name) :-
@@ -208,6 +218,13 @@ upgradeEquipment(Name) :-
 /* remove equipment (set to lv.0) */
 removeEquipment(Name) :-
     changeEquipment(Name, 0), !.
+
+/* is full inventory */
+isFull :- inventory(X), countInv(X, Cnt), Cnt >= 100, !. 
+
+/* bila ditambahkan akan overcapacity */
+isAddedFull(AddQty) :- inventory(X), countInv(X, Cnt),
+    Compared is (AddQty + Cnt), Compared > 100, !.
 
 
 
