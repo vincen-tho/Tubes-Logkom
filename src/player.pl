@@ -273,7 +273,7 @@ addRanchingEXP(X) :-playerRanchingEXP(OLD),
 
 /* Gold */
 /* addGold(X) dimana X adalah jumlah Gold yang ingin ditambahkan */
-addGold(X) :- gold(OLD), NEW is OLD+X, retract(gold(OLD)), assertz(gold(NEW)).
+addGold(X) :- gold(OLD), NEW is OLD+X, retract(gold(OLD)), assertz(gold(NEW)), checkWinCondition.
 
 
 /* Print player status */

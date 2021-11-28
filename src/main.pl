@@ -55,6 +55,8 @@ start :- isStarted(_), \+isRunning(_),
     resetPlayerPos, 
     initializeTime, 
     initQuest,
+    assertz(win(0)),
+    assertz(lose(0)),
     /* initFishing,
     initRanching, */
     printTime, nl,
