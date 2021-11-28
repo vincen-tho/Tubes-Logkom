@@ -168,11 +168,11 @@ inventory(I),
         ;
     append(I, [[Name, AddQty]], NewI),
     changeInv(NewI)
-    ).
+    ), !.
 
 /* remove barang sepenuhnya */
 removeBarang(Name) :-
-    changeBarang(Name, 0).
+    changeBarang(Name, 0), !.
 
 /* mengganti level equipment */
 changeEquipment(Name, NewLvl) :-
