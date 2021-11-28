@@ -12,10 +12,11 @@ addTime(X) :- time(OLD),
     NEW is OLD+X,
     retract(time(OLD)), 
     assertz(time(NEW)),
-    checkLoseCondition.
-/* check lose condition, jika sudah 8766 jam dan gold belum 20000, kalah */
+    checkLoseCondition,
+    checkIfUpdateRanch, !.
+/* check lose condition, jika sudah 1200 jam dan gold belum 20000, kalah */
 checkLoseCondition :-   time(CURRENTTIME),
-                        CURRENTTIME >= 8766,
+                        CURRENTTIME >= 1200,
                         win(WINSTATUS),
                         lose(LOSESTATUS),
                         gold(GOLD),
@@ -39,7 +40,12 @@ checkWinCondition :-    win(WINSTATUS),
                         write('Congratulations! You have finally collected 20000 golds!'), nl, !.
 checkWinCondition :-    !.
 
-
+/* ini untuk ngecek ranching */
+checkIfUpdateRanch :-   time(X),
+                        CHECK is X mod 24,
+                        CHECK =:= 0,
+                        updateRanch, !.
+checkIfUpdateRanch :-   !.
 printTime :- 
     time(X),
     Day is X//24,

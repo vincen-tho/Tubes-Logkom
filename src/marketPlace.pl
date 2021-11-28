@@ -8,10 +8,10 @@ shop([]).
 createShop :- retractall(shop(_)),
                 assertz(shop(
                 [
-                    ['Tomato Seed', 200],
-                    ['Rice Seed', 200],
-                    ['Potato', 200],
-                    ['Corn', 200],
+                    ['Tomato Seed', 75],
+                    ['Rice Seed', 50],
+                    ['Potato', 75],
+                    ['Corn', 250],
                     ['Chicken', 200],
                     ['Sheep', 200],
                     ['Cow', 200]

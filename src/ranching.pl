@@ -123,7 +123,7 @@ chicken :-
     (X =:= 0, X1 =:= 0, Y =:= 0 -> write('Please check again later!');
     (playerRole(rancher) -> Z1 is Z*2; Z1 is Z),
     write('You gained '), write(Z1), write(' ranching exp!'),
-    addRanchingEXP(Z), addEXP(Z), addBarang('Egg', X), addBarang('Poultry', Y), addBarang('Golden Egg', X1)), !.
+    addRanchingEXP(Z), addEXP(Z), addBarang('Egg', X), addBarang('Poultry', Y), addBarang('Golden Egg', X1)), addCountFarm(X), addCountFarm(Y), addCountFarm(X1), !.
 
 /* Command sheep mengecek apakah domba siap panen (domba diambil untuk kemudian dikonsumsi) atau bulunya siap dicukur (wool) */
 sheep :-
@@ -142,7 +142,7 @@ sheep :-
     (X =:= 0, Y =:= 0 -> write('Please check again later!');
     (playerRole(rancher) -> Z1 is Z*2; Z1 is Z),
     write('You gained '), write(Z1), write(' ranching exp!'),
-    addRanchingEXP(Z), addEXP(Z), addBarang('Wool', X), addBarang('Sheep Meat', Y)), !.
+    addRanchingEXP(Z), addEXP(Z), addBarang('Wool', X), addBarang('Sheep Meat', Y)), addCountFarm(X), addCountFarm(Y), !.
 
 /* Command cow mengecek apakah sapi siap panen (sapi diambil untuk kemudian dikonsumsi) atau siap diperah susunya */
 cow :-
@@ -161,7 +161,7 @@ cow :-
     (X =:= 0, Y =:= 0 -> write('Please check again later!');
     (playerRole(rancher) -> Z1 is Z*2; Z1 is Z),
     write('You gained '), write(Z1), write(' ranching exp!'),
-    addRanchingEXP(Z), addEXP(Z), addBarang('Milk', X), addBarang('Beef', Y)), !.
+    addRanchingEXP(Z), addEXP(Z), addBarang('Milk', X), addBarang('Beef', Y)), addCountFarm(X), addCountFarm(Y), !.
 
 /* Menghasilkan jumlah item yang nilainya adalah 0 */
 addItemRanch1([],0).

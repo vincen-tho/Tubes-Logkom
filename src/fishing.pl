@@ -78,4 +78,4 @@ fishing :-
     gainedExpFish(Z), 
     (playerRole(fisherman) -> Z1 is Z*2; Z1 is Z),
     write('You gained '), write(Z1), write(' fishing exp!')),
-    addFishingEXP(Z), addBarang(Y,1), addTime(1), !.
+    addFishingEXP(Z), addBarang(Y,1), addTime(1), addCountFish(1), !.
