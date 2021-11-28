@@ -10,6 +10,7 @@
 :- dynamic(produceMilk/1).
 :- dynamic(produceBeef/1).
 :- dynamic(egg/1).
+:- dynamic(goldenEgg/1).
 :- dynamic(poultry/1).
 :- dynamic(wool/1).
 :- dynamic(sheepMeat/1).
@@ -38,6 +39,8 @@ produceMilk([]).
 produceBeef([]).
 /* egg(X), X berarti jumlah telur yang dihasilkan */
 egg(0).
+/* goldenEgg(X), X berarti jumlah telur emas yang dihasilkan */
+goldenEgg(0).
 /* poultry(X), X berarti jumlah ayam yang sudah dipanen */
 poultry(0).
 /* wool(X), X berarti jumlah wool yang dihasilkan */
@@ -68,11 +71,11 @@ checkPosRanch :-
 /* Ranching */
 ranch :-
     checkPosRanch,
-    isAtTheRanch(_),
+    isAtTheRanch(true),
     write('You already at the ranch!'), !.
 ranch :- 
     checkPosRanch,
-    \+isAtTheRanch(_),
+    \+isAtTheRanch(true),
     totalChicken(X),
     totalSheep(Y),
     totalCow(Z),
@@ -82,6 +85,7 @@ ranch :-
     write(Y), write(' '), write(sheep), nl,    
     write(Z), write(' '), write(cow), nl, nl,
     write('What do you want to do?'),
+    retractall(isAtTheRanch(_)),
     assertz(isAtTheRanch(true)). 
 
 /* Menghapus semua elemen yang bernilai X */  
@@ -105,14 +109,15 @@ count([_|T],Count) :-
 /* Cek kondisi hewan ternak */
 /* Command chicken mengecek apakah ayam bertelur atau sudah siap panen (ayam diambil untuk kemudian dikonsumsi) */
 chicken :-
-    \+isAtTheRanch(_),
+    \+isAtTheRanch(true),
     write('Enter inside the ranch first!'), !.
 chicken :-
-    isAtTheRanch(_),
-    egg(X), chicken(Y),
+    isAtTheRanch(true),
+    egg(X), goldenEgg(X1), chicken(Y),
     gainedExpRanch(Z),
     (X > 0 -> write('Your chickens lay '), write(X), write(' eggs!'), nl;
     write('Your chickens didn\'t lay any eggs!'), nl), 
+    X1 > 0 -> write('Congrats! Your chicken lay '), write(X1), write(' golden eggs!'), nl,
     (Y > 0 -> write('You got '), write(Y), write(' poultries!'), nl,
     retractall(producePoultry(P)), removeAllX(0,P,P1,Mark), assertz(producePoultry(P1)),
     retractall(produceEgg(E)), removeXElmt(Mark,E,E1), assertz(produceEgg(E1)),
@@ -120,13 +125,14 @@ chicken :-
     write('You didn\'t get any poultries'), nl),
     (X =:= 0, Y =:= 0 -> write('Please check again later!');
     write('You gained '), write(Z), write(' ranching exp!'),
-    addRanchingEXP(Z), addEXP(Z)), addBarang('Egg', X), addBarang('Poultry', Y).
+    addRanchingEXP(Z), addEXP(Z)), addBarang('Egg', X), addBarang('Poultry', Y), addBarang('Golden Egg', X1).
 
 /* Command sheep mengecek apakah domba siap panen (domba diambil untuk kemudian dikonsumsi) atau bulunya siap dicukur (wool) */
 sheep :-
-    \+isAtTheRanch(_),
+    \+isAtTheRanch(true),
     write('Enter inside the ranch first!'), !.
 sheep :-
+    isAtTheRanch(true),
     wool(X), sheepMeat(Y),
     gainedExpRanch(Z),
     (X > 0 -> write('You got '), write(X), write(' wools!'), nl;
@@ -142,9 +148,10 @@ sheep :-
 
 /* Command cow mengecek apakah sapi siap panen (sapi diambil untuk kemudian dikonsumsi) atau siap diperah susunya */
 cow :-
-    \+isAtTheRanch(_),
+    \+isAtTheRanch(true),
     write('Enter inside the ranch first!'), !.
 cow :-
+    isAtTheRanch(true),
     milk(X), beef(Y),
     gainedExpRanch(Z),
     (X > 0 -> write('You got '), write(X), write(' milks!'), nl;
@@ -158,27 +165,6 @@ cow :-
     write('You gained '), write(Z), write(' ranching exp!')
     addRanchingEXP(Z), addEXP(Z)), addBarang('Milk', X), addBarang('Beef', Y).
 
-/* Menambah hasil ternak ke inventory */
-addRanchProdToInv([],_,[]).
-addRanchProdToInv([], RP, [[Name, Qty]|[]]) :-
-    Name = RP,
-    Qty is 1, !.
-addRanchProdToInv([[Name, Qty]|Tail], RP, [[Name1, Qty1]|Tail1]) :-
-    RP = Name,
-    addRanchProdToInv(Tail, RP, Tail1),
-    Name1 = Name,
-    Qty1 is Qty+1.
-addRanchProdToInv([[Name, Qty]|Tail], RP, [[Name1, Qty1]|Tail1]) :-
-    RP \= Name,
-    addRanchProdToInv(Tail, RP, Tail1),
-    Name1 = Name,
-    Qty1 is Qty.
-
-addRanchProdToInv(RP) :-
-    retractall(inventory(Inv)),
-    addRanchProdToInv(Inv, RP, Inv1),
-    assertz(inventory(Inv1)).
-
 /* Menghasilkan jumlah item yang waktunya sudah menyentuh angka 0*/
 addItemRanch([],0).
 addItemRanch([H|T],Item) :-
@@ -188,6 +174,33 @@ addItemRanch([H|T],Item) :-
     H =:= 0,
     addItemRanch(T,Item1),
     Item is 1+Item1.
+
+/* Random pick element list */
+/* Source: https://stackoverflow.com/questions/50250234/prolog-how-to-non-uniformly-randomly-select-a-element-from-a-list */
+choice([X|_], [P|_], Cumul, Rand, X) :-
+    Rand < Cumul + P.
+choice([_|Xs], [P|Ps], Cumul, Rand, Y) :-
+    Cumul1 is Cumul + P,
+    Rand >= Cumul1,
+    choice(Xs, Ps, Cumul1, Rand, Y).
+choice([X], [P], Cumul, Rand, X) :-
+    Rand < Cumul + P.
+
+choice(Xs, Ps, Y) :- random(R), choice(Xs, Ps, 0, R, Y).
+
+/* Menghasilkan jumlah telur atau telur emas yang waktunya sudah menyentuh angka 0*/
+addEggOrGoldEgg([],0,0).
+addEggOrGoldEgg([H|T],Egg,GoldEgg) :-
+    H > 0,
+    addEggOrGoldEgg(T,Egg,GoldEgg), !.
+addEggOrGoldEgg([H|T],Egg,GoldEgg) :-
+    H =:= 0,
+    choice(['Egg', 'Golden Egg'], [0.8, 0.2], X),
+    (X = 'Egg' -> 
+    addEggOrGoldEgg(T,Egg1,GoldEgg),
+    Egg is 1+Egg1;
+    addEggOrGoldEgg(T,Egg,GoldEgg1),
+    GoldEgg is 1+GoldEgg1).
 
 /* Menghasilkan list dengan elemen yang sama dengan 0 diganti dengan X*/
 changeList([],_,[]).
@@ -202,9 +215,10 @@ changeList([H|T],X,[H1|T1]) :-
 
 /* Menambah egg */
 addEgg :-
-    retractall(produceEgg(E)), addItemRanch(E,Y),
-    retractall(egg(X)), X1 is X+Y, 
-    assertz(egg(X1)),
+    retractall(produceEgg(E)), addEggOrGoldEgg(E,Y1,Y2),
+    retractall(egg(X1)), X2 is X1+Y1, 
+    retractall(goldenEgg(X3)), X4 is X3+Y2, 
+    assertz(egg(X2)), assertz(goldenEgg(X4)),
     changeList(E, 20, Z),
     assertz(produceEgg(Z)).
 /* Menambah wool */
@@ -338,7 +352,7 @@ sellSheep(X) :-
     /* Asumsi domba siap panen di umur 80 hari (sample belum fix) */
     removeXElmt(X,PrevList2,NewList2),
     assertz(produceSheepMeat(NewList2)).
-    
+
 /* Jual cow */
 sellCow(X) :-
     retractall(totalCow(PrevTotal)),
@@ -355,7 +369,6 @@ sellCow(X) :-
 
 /* 
 TODO:
-    - handle golden egg
+    - kalo udah gak di tile ranch lagi, isAtTheRanch-nya di retract
     - kalo jual/beli ayam, domba, atau sapi, kondisi di ranch harus diupdate
-    Overall: perlu adjusting antara ranching, items, buy, dan sell
 */
