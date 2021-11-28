@@ -5,14 +5,14 @@
 barang('Reed', 0, 'F').
 /* barang('Wheat', 100, 'F'). */
 /* barang('Corn', 150, 'F'). */
-barang('Tomato', 200, 'F').
-barang('Rice', 250, 'F').
-barang('Potato', 300, 'F').
-barang('Corn', 300, 'F').
+barang('Tomato', 150, 'F').
+barang('Rice', 125, 'F').
+barang('Potato', 75, 'F').
+barang('Corn', 250, 'F').
 barang('Magic Mushroom', 1850, 'F').
 
-barang('Rice Seed', 150, 'F').
-barang('Tomato Seed', 125, 'F').
+barang('Rice Seed', 50, 'F').
+barang('Tomato Seed', 75, 'F').
 
 
 /* RANCH */
