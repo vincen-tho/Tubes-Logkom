@@ -120,7 +120,7 @@ chicken :-
     write('You didn\'t get any poultries'), nl),
     (X =:= 0, Y =:= 0 -> write('Please check again later!');
     write('You gained '), write(Z), write(' ranching exp!'),
-    addRanchingEXP(Z), addEXP(Z)), addRanchProdToInv(X), addRanchProdToInv(Y).
+    addRanchingEXP(Z), addEXP(Z)), addBarang('Egg', X), addBarang('Poultry', Y).
 
 /* Command sheep mengecek apakah domba siap panen (domba diambil untuk kemudian dikonsumsi) atau bulunya siap dicukur (wool) */
 sheep :-
@@ -138,7 +138,7 @@ sheep :-
     write('You didn\'t get any sheep meats'), nl),
     (X =:= 0, Y =:= 0 -> write('Please check again later!');
     write('You gained '), write(Z), write(' ranching exp!')
-    addRanchingEXP(Z), addEXP(Z)), addRanchProdToInv(X), addRanchProdToInv(Y).
+    addRanchingEXP(Z), addEXP(Z)), addBarang('Wool', X), addBarang('Sheep Meat', Y).
 
 /* Command cow mengecek apakah sapi siap panen (sapi diambil untuk kemudian dikonsumsi) atau siap diperah susunya */
 cow :-
@@ -156,7 +156,7 @@ cow :-
     write('You didn\'t get any beefs'), nl),
     (X =:= 0, Y =:= 0 -> write('Please check again later!');
     write('You gained '), write(Z), write(' ranching exp!')
-    addRanchingEXP(Z), addEXP(Z)), addRanchProdToInv(X), addRanchProdToInv(Y).
+    addRanchingEXP(Z), addEXP(Z)), addBarang('Milk', X), addBarang('Beef', Y).
 
 /* Menambah hasil ternak ke inventory */
 addRanchProdToInv([],_,[]).
@@ -178,7 +178,7 @@ addRanchProdToInv(RP) :-
     retractall(inventory(Inv)),
     addRanchProdToInv(Inv, RP, Inv1),
     assertz(inventory(Inv1)).
-    
+
 /* Menghasilkan jumlah item yang waktunya sudah menyentuh angka 0*/
 addItemRanch([],0).
 addItemRanch([H|T],Item) :-

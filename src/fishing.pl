@@ -63,10 +63,10 @@ fishing :-
     write('You got '), write(Y), write('!'), nl, 
     gainedExpFish(Z), 
     write('You gained '), write(Z), write(' fishing exp!')),
-    addFishingEXP(Z), addEXP(Z), addFishToInv(Y).
+    addFishingEXP(Z), addEXP(Z), addBarang(Y,1).
 
 /* Menambah hasil tangkapan ke inventory */
-addFishToInv([],_,[]).
+/*addFishToInv([],_,[]).
 addFishToInv([], Fish, [[Name, Qty]|[]]) :-
     Name = Fish,
     Qty is 1, !.
@@ -84,4 +84,4 @@ addFishToInv([[Name, Qty]|Tail], Fish, [[Name1, Qty1]|Tail1]) :-
 addFishToInv(Fish) :-
     retractall(inventory(Inv)),
     addFishToInv(Inv, Fish, Inv1),
-    assertz(inventory(Inv1)).
+    assertz(inventory(Inv1)). */
