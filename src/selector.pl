@@ -153,6 +153,28 @@ isNumValid(Num, Min, Max) :-
     Num >= Min, Num =< Max, !.
 
 
+/* menghitung total item dalam inventory */
+totalItems(Total) :- inventory(Inv), countInv(Inv, Total), !.
+
+
+countInv([], 0).
+countInv([[Name, QtyLvl]|T], Res) :-
+    countInv(T, R2),
+    barang(Name, _, _),
+    Res is (R2 + QtyLvl).
+countInv([[Name, Level]|T], Res) :-
+    countInv(T, R2),
+    equipment(Name, _), Level =\= 0,
+    Res is (R2 + 1).
+countInv([[Name, Level]|T], Res) :-
+    countInv(T, R2),
+    equipment(Name, _), Level =:= 0,
+    Res is (R2).
+
+
+
+
+
 
 
 
