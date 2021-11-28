@@ -82,7 +82,6 @@ addFishToInv([[Name, Qty]|Tail], Fish, [[Name1, Qty1]|Tail1]) :-
     Qty1 is Qty.
 
 addFishToInv(Fish) :-
-    inventory(Inv),
+    retractall(inventory(Inv)),
     addFishToInv(Inv, Fish, Inv1),
-    retractall(inventory(_)),
     assertz(inventory(Inv1)).

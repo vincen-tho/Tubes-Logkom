@@ -120,7 +120,7 @@ chicken :-
     write('You didn\'t get any poultries'), nl),
     (X =:= 0, Y =:= 0 -> write('Please check again later!');
     write('You gained '), write(Z), write(' ranching exp!'),
-    addRanchingEXP(Z), addEXP(Z)).
+    addRanchingEXP(Z), addEXP(Z)), addRanchProdToInv(X), addRanchProdToInv(Y).
 
 /* Command sheep mengecek apakah domba siap panen (domba diambil untuk kemudian dikonsumsi) atau bulunya siap dicukur (wool) */
 sheep :-
@@ -138,7 +138,7 @@ sheep :-
     write('You didn\'t get any sheep meats'), nl),
     (X =:= 0, Y =:= 0 -> write('Please check again later!');
     write('You gained '), write(Z), write(' ranching exp!')
-    addRanchingEXP(Z), addEXP(Z)).
+    addRanchingEXP(Z), addEXP(Z)), addRanchProdToInv(X), addRanchProdToInv(Y).
 
 /* Command cow mengecek apakah sapi siap panen (sapi diambil untuk kemudian dikonsumsi) atau siap diperah susunya */
 cow :-
@@ -156,8 +156,29 @@ cow :-
     write('You didn\'t get any beefs'), nl),
     (X =:= 0, Y =:= 0 -> write('Please check again later!');
     write('You gained '), write(Z), write(' ranching exp!')
-    addRanchingEXP(Z), addEXP(Z)).
+    addRanchingEXP(Z), addEXP(Z)), addRanchProdToInv(X), addRanchProdToInv(Y).
 
+/* Menambah hasil ternak ke inventory */
+addRanchProdToInv([],_,[]).
+addRanchProdToInv([], RP, [[Name, Qty]|[]]) :-
+    Name = RP,
+    Qty is 1, !.
+addRanchProdToInv([[Name, Qty]|Tail], RP, [[Name1, Qty1]|Tail1]) :-
+    RP = Name,
+    addRanchProdToInv(Tail, RP, Tail1),
+    Name1 = Name,
+    Qty1 is Qty+1.
+addRanchProdToInv([[Name, Qty]|Tail], RP, [[Name1, Qty1]|Tail1]) :-
+    RP \= Name,
+    addRanchProdToInv(Tail, RP, Tail1),
+    Name1 = Name,
+    Qty1 is Qty.
+
+addRanchProdToInv(RP) :-
+    retractall(inventory(Inv)),
+    addRanchProdToInv(Inv, RP, Inv1),
+    assertz(inventory(Inv1)).
+    
 /* Menghasilkan jumlah item yang waktunya sudah menyentuh angka 0*/
 addItemRanch([],0).
 addItemRanch([H|T],Item) :-
@@ -238,15 +259,23 @@ updateRanch :-
     assertz(produceSheepMeat(SM1)), assertz(produceMilk(M1)), assertz(produceBeef(B1)),
     addEgg, addWool, addMilk, addPoultry, addSheepMeat, addBeef.
 
+/* Append L2 ke L1 sebanyak X kali */
+appendXElmt(0, L, _, L).
+appendXElmt(X, L1, L2, L3) :-
+    append(L1, L2, Res),
+    X1 is X-1,  
+    appendXElmt(X1, Res, L2, L3).
+
 /* Hewan baru */
+/* newAnimal(X), X berarti banyak hewan baru */
 /* Konfigurasi apabila ada ayam baru */
-newChicken :-
+newChicken(X) :-
     retractall(totalChicken(PrevTotal)),
     NewTotal is PrevTotal+1,
     assertz(totalChicken(NewTotal)),
     retractall(produceEgg(PrevList1)),
     /* Asumsi ayam butuh waktu 20 hari buat bertelur (sample belum fix) */
-    append(PrevList1,[20],NewList1),
+    appendXElmt(X,PrevList1,[20],NewList1),
     assertz(produceEgg(NewList1)),
     retractall(producePoultry(PrevList2)),
     /* Asumsi ayam siap panen di umur 40 hari (sample belum fix) */
@@ -254,13 +283,13 @@ newChicken :-
     assertz(producePoultry(NewList2)).
 
 /* Konfigurasi apabila ada domba baru */
-newSheep :-
+newSheep(X) :-
     retractall(totalSheep(PrevTotal)),
     NewTotal is PrevTotal+1,
     assertz(totalSheep(NewTotal)),
     retractall(produceWool(PrevList1)),
     /* Asumsi domba butuh waktu 60 hari sampai bulunya siap dicukur (sample belum fix) */
-    append(PrevList1,[60],NewList1),
+    appendXElmt(X,PrevList1,[60],NewList1),
     assertz(produceWool(NewList1)),
     retractall(produceSheepMeat(PrevList2)),
     /* Asumsi domba siap panen di umur 80 hari (sample belum fix) */
@@ -268,21 +297,15 @@ newSheep :-
     assertz(produceSheepMeat(NewList2)).
 
 /* Konfigurasi apabila ada sapi baru */
-newCow :-
+newCow(X) :-
     retractall(totalCow(PrevTotal)),
     NewTotal is PrevTotal+1,
     assertz(totalCow(NewTotal)),
     retractall(produceMilk(PrevList1)),
     /* Asumsi sapi butuh waktu 30 hari sampai susunya siap diperah (sample belum fix) */
-    append(PrevList1,[30],NewList1),
+    appendXElmt(X,PrevList1,[30],NewList1),
     assertz(produceMilk(NewList1)),
     retractall(produceBeef(PrevList2)),
     /* Asumsi sapi siap panen di umur 100 hari (sample belum fix) */
     append(PrevList2,[100],NewList2),
     assertz(produceBeef(NewList2)).
-
-/* 
-TODO: 
-    - menambah hasil ternak ke dalam inventory 
-    - adjust hewan baru
-*/
