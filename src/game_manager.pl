@@ -26,7 +26,7 @@ checkLoseCondition :-   time(CURRENTTIME),
                         retract(lose(LOSESTATUS)),
                         assertz(lose(1)),
                         write('You have worked hard, but in the end result is all that matters.'), nl, write('May God bless you in the future with kind people!'), nl,
-                        gameOverScene, [main].
+                        gameOverScene, [main], !.
 checkLoseCondition :-   !.
 
 /* check win condition, jika gold sudah 20000, menang */
@@ -39,7 +39,7 @@ checkWinCondition :-    win(WINSTATUS),
                         retract(win(WINSTATUS)),
                         assertz(win(1)),
                         write('Congratulations! You have finally collected 20000 golds!'), nl, 
-                        creditScene, [main].
+                        creditScene, [main], !.
 checkWinCondition :-    !.
 
 /* menampilkan credit scene */
