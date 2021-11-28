@@ -148,6 +148,12 @@ writeTile(X, Y) :- map_size(W, H),
 createMap :- writeTile(1, 1), !.
 createMap :- !.
 
+
+/* check position */
+isInMarket :- 
+    playerPos(X, Y),
+    specialTile(X, Y, 'M'), !.
+
 /* debug only */
 startD :- resetPlayerPos,
         createMap, !.

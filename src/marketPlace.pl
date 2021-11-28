@@ -115,6 +115,7 @@ sellaction(Opt, Qty) :-
 
 /* buy items */
 market :- 
+    isInMarket,
     write('Welcome to the marketplace!!'), nl,
     write('What do you want to do?'), nl,
     write('1. buy'), nl,
@@ -125,6 +126,9 @@ market :-
     (Command == 'sell') -> sellMarket, fail;
     (Command == 'leave') -> !, fail;
     write('Wrong command')).
+market :-
+    \+ isInMarket,
+    write('You are currently not in marketplace'), nl, !.
 
 buyMarket :- createShop, displayShop,
         write('What do you want to buy'), nl,
