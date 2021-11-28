@@ -19,6 +19,7 @@ barang('Tomato Seed', 125, 'F').
 barang('Dung', 0, 'R').
 barang('Egg', 110, 'R').
 barang('Milk', 160, 'R').
+barang('Poultry', 200, 'R').
 barang('Chicken', 210, 'R').
 barang('Sheep', 260, 'R').
 barang('Wool', 250, 'R').
