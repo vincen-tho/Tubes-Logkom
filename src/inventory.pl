@@ -94,7 +94,7 @@ showEquipmentsFunction(Inv) :- write('Equipments: '), nl,
 /* show farming inventory */
 showFarmingInventory :- inventory(Inv), showFarmingInventoryFunction(Inv), !.
 showFarmingInventoryFunction([]) :- !.
-showFarmingInventoryFunction(Inv) :- write('Farming barang: '), nl,
+showFarmingInventoryFunction(Inv) :- write('You have: '), nl,
                 displayFarmingbarang(Inv, 1), nl. 
                 /*
                 write('Farming Equipments: '), nl,                
