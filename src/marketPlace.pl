@@ -12,9 +12,9 @@ createShop :- retractall(shop(_)),
                     ['Rice Seed', 50],
                     ['Potato', 75],
                     ['Corn', 250],
-                    ['Chicken', 200],
-                    ['Sheep', 200],
-                    ['Cow', 200]
+                    ['Chicken', 210],
+                    ['Sheep', 260],
+                    ['Cow', 800]
                 ]
 
 

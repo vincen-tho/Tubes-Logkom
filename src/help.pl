@@ -47,10 +47,11 @@ help :-
     write(' ################################################################################'),nl,nl, 
     write(' ################################################################################'),nl,
     write(' #                             ~FARMING MENU~                                   #'),nl,
-    write(' # 1. dig       : Dig a tile to plant crops                                     #'),nl,
-    write(' # 2. plant     : Plant crops                                                   #'),nl,
-    write(' # 3. harvest   : Harvest your crops                                            #'),nl,
-    write(' ################################################################################'), !.
+    write(' # 1. dig            : Dig a tile to plant crops                                #'),nl,
+    write(' # 2. plant          : Plant crops                                              #'),nl,
+    write(' # 3. harvest        : Harvest your crops                                       #'),nl,
+    write(' # 4. farmingGuide   : Read the farming guide                                   #'),nl,
+    write(' ################################################################################'),nl,!.
 
 help :- 
     playerPos(X, Y),
