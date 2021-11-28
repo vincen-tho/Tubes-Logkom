@@ -1,6 +1,6 @@
 /* include files */
 :- include('farming.pl').
-% :- include('fishing.pl').
+:- include('fishing.pl').
 :- include('game_manager.pl').
 :- include('help.pl').
 :- include('house.pl').
@@ -11,7 +11,7 @@
 :- include('movement.pl').
 :- include('player.pl').
 :- include('quest.pl').
-% :- include('ranching.pl').
+:- include('ranching.pl').
 :- include('roles.pl').
 :- include('selector.pl').
 :- include('plant.pl').
@@ -66,7 +66,7 @@ map :- \+isRunning(_) -> write('Start the game first!'), !.
 
 quit :-
     retractall(isRunning(_)),
-    retracall(isStarted(_)),
+    retractall(isStarted(_)),
     retractall(playerInitialized(_)),
     retractall(fishProbability(_)), 
     retractall(gainedExpNoFish(_)), 

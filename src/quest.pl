@@ -16,7 +16,7 @@ initQuest :-
     assertz(isQuest(0)).
 
 resetQuest :-
-    retract(isQuest(X)),
+    retract(isQuest(_)),
     assertz(isQuest(0)),
     progressQuest(QuestId, CFarm, CFish, CRanch),
     TempQuestId is QuestId,
@@ -38,9 +38,7 @@ questFinished :-
     assertz(isQuest(0)), !.
 
 questFinished :-
-    (isQuest(Z), Z =:= 1,     
-    progressQuest(QuestId, CFarm, CFish, CRanch),
-    quest(QuestId, HasilFarm, HasilFish, HasilRanch, Exp, Gold))
+    (isQuest(Z), Z =:= 1)
     -> write('Complete your quest first!');
     write('Get your quest first!'), !.
     
@@ -101,7 +99,7 @@ printProgress :-
     playerPos(X, Y),
     specialTile(X, Y, 'Q'),
     isQuest(Z), Z =:= 1,  
-    progressQuest(QuestId, CFarm, CFish, CRanch),
+    progressQuest(_, CFarm, CFish, CRanch),
     write('Your progress:'),nl,
     write('Harvest item: '), print(CFarm), nl,
     write('Fish: '), print(CFish), nl,
@@ -111,6 +109,8 @@ printProgress :-
     playerPos(X, Y),
     specialTile(X, Y, 'Q'),
     isQuest(Z), Z =:= 0, write('You are currently not doing any quest.'), !.
+
+quest :- help.
 
 /* for debugging purposes
 addCountAll(X):-

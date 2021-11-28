@@ -12,8 +12,16 @@ help :-
     write(' # 7. d         : Move right 1 step                                             #'),nl,
     write(' # 8. a         : Move left 1 step                                              #'),nl,
     write(' # 9. help      : Show command list                                             #'),nl,
-    write(' # 10. quit      : Quit the game                                                #'),nl,
-    write(' ################################################################################'), !.
+    write(' # 10. quit     : Quit the game                                                #'),nl,
+    write(' ################################################################################'),nl,nl, 
+    write(' ################################################################################'),nl,
+    write(' #                             ~FARMING MENU~                                    #'),nl,
+    write(' # 1. dig       : Dig a tile to plant crops                                      #'),nl,
+    write(' # 2. plant     : Plant crops                                                    #'),nl,
+    write(' # 3. harvest   : Harvest your crops                                             #'),nl,
+    write(' ################################################################################'),
+    
+    !.
 
 help :- 
     playerPos(X, Y),
@@ -36,3 +44,4 @@ help :-
     write(' # 3.   : Show your quest progress                                 #'),nl,
     write(' # 4.   : Claim your rewards                                       #'),nl,   
     write(' ################################################################################'), !.
+
