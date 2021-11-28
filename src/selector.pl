@@ -134,6 +134,13 @@ getFishingbarang(Idx, [[Name, _]|Tail], Res) :-
 
 
 
+/* have shovel */
+haveShovel :-
+    inventory(Inv),
+    member(['Shovel' | _], Inv), !.
+
+
+
 
 
 
