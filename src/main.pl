@@ -44,6 +44,7 @@ startGame :-
     write(' # 6. d      : move right 1 step                                                #'),nl,
     write(' # 7. a      : move left 1 step                                                 #'),nl,
     write(' # 8. help   : show command list                                                #'),nl,
+    write(' # 9. quit   : Quit the game                                                    #'),nl,
     write(' ################################################################################'), !.
 
 startGame :- isStarted(_) -> write('You already started the game.'), !.
@@ -113,5 +114,6 @@ quit :-
     retractall(sheepMeat(_)),
     retractall(milk(_)),
     retractall(beef(_)),
-    write('Exited the game.').
+    write('Exited the game.'), nl,
+    [main].
 
