@@ -62,8 +62,8 @@ start :- isStarted(_), \+isRunning(_),
     printTime, nl,
     initializePlayer, !.
 
-map :- isRunning(_), createMap.
-map :- \+isRunning(_) -> write('Start the game first!').
+map :- isRunning(_), createMap, !.
+map :- \+isRunning(_) -> write('Start the game first!'), !.
 
 quit :-
     retractall(playerInitialized(_)).
