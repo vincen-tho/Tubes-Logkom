@@ -67,19 +67,18 @@ checkPosRanch :-
     (specialTile(X,Y,'R');
     write('You aren\'t at the ranch!'), fail), !.
 
-ranch :- help.
-
 /* Ranching */
-ranchStatus :- 
+ranch :- 
     checkPosRanch,
     totalChicken(X),
     totalSheep(Y),
     totalCow(Z),
     initRanching,
-    write('You have:'), nl,
+    write('Welcome to the ranch! You have:'), nl,
     write(X), write(' '), write(chicken), nl,    
     write(Y), write(' '), write(sheep), nl,    
-    write(Z), write(' '), write(cow), nl, !.
+    write(Z), write(' '), write(cow), nl, nl,
+    write('What do you want to do?'), !.
 
 /* Menghapus semua elemen yang bernilai X */  
 removeAllX(_, [], [], 0).
@@ -104,6 +103,7 @@ count([_|T],Count) :-
 /* Command chicken mengecek apakah ayam bertelur atau sudah siap panen (ayam diambil untuk kemudian dikonsumsi) */
 chicken :-
     egg(X), goldenEgg(X1), poultry(Y),
+    write(X), write(X1), write(Y),
     gainedExpRanch(Z),
     (X > 0, X1 =:= 0 -> write('Your chickens lay '), write(X), write(' eggs!'), nl,
     X2 is 0, retractall(egg(_)), assertz(egg(X2));
@@ -123,7 +123,7 @@ chicken :-
     (X =:= 0, X1 =:= 0, Y =:= 0 -> write('Please check again later!');
     (playerRole(rancher) -> Z1 is Z*2; Z1 is Z),
     write('You gained '), write(Z1), write(' ranching exp!'),
-    addRanchingEXP(Z), addEXP(Z), addBarang('Egg', X), addBarang('Poultry', Y), addBarang('Golden Egg', X1), addCountFarm(X), addCountFarm(Y), addCountFarm(X1)), !.
+    addRanchingEXP(Z), addEXP(Z), addBarang('Egg', X), addBarang('Poultry', Y), addBarang('Golden Egg', X1)), !.
 
 /* Command sheep mengecek apakah domba siap panen (domba diambil untuk kemudian dikonsumsi) atau bulunya siap dicukur (wool) */
 sheep :-
@@ -142,7 +142,7 @@ sheep :-
     (X =:= 0, Y =:= 0 -> write('Please check again later!');
     (playerRole(rancher) -> Z1 is Z*2; Z1 is Z),
     write('You gained '), write(Z1), write(' ranching exp!'),
-    addRanchingEXP(Z), addEXP(Z), addBarang('Wool', X), addBarang('Sheep Meat', Y), addCountFarm(X), addCountFarm(Y)), !.
+    addRanchingEXP(Z), addEXP(Z), addBarang('Wool', X), addBarang('Sheep Meat', Y)), !.
 
 /* Command cow mengecek apakah sapi siap panen (sapi diambil untuk kemudian dikonsumsi) atau siap diperah susunya */
 cow :-
@@ -161,7 +161,7 @@ cow :-
     (X =:= 0, Y =:= 0 -> write('Please check again later!');
     (playerRole(rancher) -> Z1 is Z*2; Z1 is Z),
     write('You gained '), write(Z1), write(' ranching exp!'),
-    addRanchingEXP(Z), addEXP(Z), addBarang('Milk', X), addBarang('Beef', Y), addCountFarm(X), addCountFarm(Y)), !.
+    addRanchingEXP(Z), addEXP(Z), addBarang('Milk', X), addBarang('Beef', Y)), !.
 
 /* Menghasilkan jumlah item yang nilainya adalah 0 */
 addItemRanch1([],0).

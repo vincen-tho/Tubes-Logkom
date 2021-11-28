@@ -23,10 +23,26 @@ throwInventory :-
 throwaction(Opt, Qty) :-
     Idx is Opt - 1,
     inventory(Inv),
-    getbarangNoZero(Idx, Inv, [Name, OldQty]),
+    getItemNoZero(Idx, Inv, [Name, OldQty]),
+    barang(Name, _, _),
     (   isNumValid(Qty, 1, OldQty) ->
         addBarang(Name, -Qty),
         write(Name), write(' (x'), write(Qty),
+        write(') Have been thrown'), nl,
+        isSellRanch(Name, Qty);
+
+        write('You don\'t have that many')
+
+    ), !.
+
+throwaction(Opt, Qty) :-
+    Idx is Opt - 1,
+    inventory(Inv),
+    getItemNoZero(Idx, Inv, [Name, _]),
+    equipment(Name, _),
+    (   isNumValid(Qty, 1, 100) ->
+        removeEquipment(Name),
+        write(Name),
         write(') Have been thrown'), nl,
         isSellRanch(Name, Qty);
 
