@@ -63,7 +63,7 @@ fishing :-
     write('You got '), write(Y), write('!'), nl, 
     gainedExpFish(Z), 
     write('You gained '), write(Z), write(' fishing exp!')),
-    addFishingEXP(Z), addEXP(Z), addFishToInv(Y), !.
+    addFishingEXP(Z), addEXP(Z), addFishToInv(Y).
 
 /* Menambah hasil tangkapan ke inventory */
 addFishToInv([],_,[]).

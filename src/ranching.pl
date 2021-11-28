@@ -82,20 +82,41 @@ ranch :-
     write(Y), write(' '), write(sheep), nl,    
     write(Z), write(' '), write(cow), nl, nl,
     write('What do you want to do?'),
-    assertz(isAtTheRanch(true)).   
+    assertz(isAtTheRanch(true)). 
 
+/* Menghapus semua elemen yang bernilai X */  
+removeAllX(_, [], [], 0).
+removeAllX(X, [X|T], L, Mark):- 
+    removeAllX(X, T, L, Mark1), !,
+    Mark is 1+Mark1.
+removeAllX(X, [H|T], [H|L], Mark):- 
+    removeAllX(X, T, L, Mark).
+/* Menghapus X elemen yang berada di awal list */ 
+removeXElmt(0,L,L).
+removeXElmt(X, [_|T], L) :-
+    X1 is X-1,
+    removeXElmt(X1, T, L).
+/* Mencari jumlah elemen pada list */
+count([_|[]],1).
+count([_|T],Count) :- 
+    count(T,Count1), 
+    Count is 1+Count1.
+    
 /* Cek kondisi hewan ternak */
 /* Command chicken mengecek apakah ayam bertelur atau sudah siap panen (ayam diambil untuk kemudian dikonsumsi) */
 chicken :-
     \+isAtTheRanch(_),
-    write('Enter to the ranch first!'), !.
+    write('Enter inside the ranch first!'), !.
 chicken :-
     isAtTheRanch(_),
     egg(X), chicken(Y),
     gainedExpRanch(Z),
     (X > 0 -> write('Your chickens lay '), write(X), write(' eggs!'), nl;
     write('Your chickens didn\'t lay any eggs!'), nl), 
-    (Y > 0 -> write('You got '), write(Y), write(' poultries!'), nl;
+    (Y > 0 -> write('You got '), write(Y), write(' poultries!'), nl,
+    retractall(producePoultry(P)), removeAllX(0,P,P1,Mark), assertz(producePoultry(P1)),
+    retractall(produceEgg(E)), removeXElmt(Mark,E,E1), assertz(produceEgg(E1)),
+    retractall(totalChicken(_)), count(producePoultry,Count), assertz(totalChicken(Count));
     write('You didn\'t get any poultries'), nl),
     (X =:= 0, Y =:= 0 -> write('Please check again later!');
     write('You gained '), write(Z), write(' ranching exp!'),
@@ -104,13 +125,16 @@ chicken :-
 /* Command sheep mengecek apakah domba siap panen (domba diambil untuk kemudian dikonsumsi) atau bulunya siap dicukur (wool) */
 sheep :-
     \+isAtTheRanch(_),
-    write('Enter to the ranch first!'), !.
+    write('Enter inside the ranch first!'), !.
 sheep :-
     wool(X), sheepMeat(Y),
     gainedExpRanch(Z),
     (X > 0 -> write('You got '), write(X), write(' wools!'), nl;
     write('You didn\'t get any wools!'), nl), 
-    (Y > 0 -> write('You got '), write(Y), write(' sheep meats!'), nl;
+    (Y > 0 -> write('You got '), write(Y), write(' sheep meats!'), nl,
+    retractall(produceSheepMeat(SM)), removeAllX(0,SM,SM1,Mark), assertz(produceSheepMeat(SM1)),
+    retractall(produceWool(W)), removeXElmt(Mark,W,W1), assertz(produceWool(W1)),
+    retractall(totalSheep(_)), count(produceSheepMeat,Count), assertz(totalSheep(Count));
     write('You didn\'t get any sheep meats'), nl),
     (X =:= 0, Y =:= 0 -> write('Please check again later!');
     write('You gained '), write(Z), write(' ranching exp!')
@@ -119,17 +143,100 @@ sheep :-
 /* Command cow mengecek apakah sapi siap panen (sapi diambil untuk kemudian dikonsumsi) atau siap diperah susunya */
 cow :-
     \+isAtTheRanch(_),
-    write('Enter to the ranch first!'), !.
+    write('Enter inside the ranch first!'), !.
 cow :-
     milk(X), beef(Y),
     gainedExpRanch(Z),
     (X > 0 -> write('You got '), write(X), write(' milks!'), nl;
     write('You didn\'t get any milks!'), nl), 
-    (Y > 0 -> write('You got '), write(Y), write(' beefs!'), nl;
+    (Y > 0 -> write('You got '), write(Y), write(' beefs!'), nl,
+    retractall(produceBeef(B)), removeAllX(0,B,B1,Mark), assertz(produceBeef(B1)),
+    retractall(produceMilk(M)), removeXElmt(Mark,M,M1), assertz(produceMilk(M1)),
+    retractall(totalCow(_)), count(produceBeef,Count), assertz(totalCow(Count));
     write('You didn\'t get any beefs'), nl),
     (X =:= 0, Y =:= 0 -> write('Please check again later!');
     write('You gained '), write(Z), write(' ranching exp!')
     addRanchingEXP(Z), addEXP(Z)).
+
+/* Menghasilkan jumlah item yang waktunya sudah menyentuh angka 0*/
+addItemRanch([],0).
+addItemRanch([H|T],Item) :-
+    H > 0,
+    addItemRanch(T,Item), !.
+addItemRanch([H|T],Item) :-
+    H =:= 0,
+    addItemRanch(T,Item1),
+    Item is 1+Item1.
+
+/* Menghasilkan list dengan elemen yang sama dengan 0 diganti dengan X*/
+changeList([],_,[]).
+changeList([H|T],X,[H1|T1]) :-
+    H > 0,
+    changeList(T,X,T1), !,
+    H1 is H.
+changeList([H|T],X,[H1|T1]) :-
+    H =:= 0,
+    changeList(T,X,T1),
+    H1 is X.
+
+/* Menambah egg */
+addEgg :-
+    retractall(produceEgg(E)), addItemRanch(E,Y),
+    retractall(egg(X)), X1 is X+Y, 
+    assertz(egg(X1)),
+    changeList(E, 20, Z),
+    assertz(produceEgg(Z)).
+/* Menambah wool */
+addWool :-
+    retractall(produceWool(W)), addItemRanch(W,Y),
+    retractall(wool(X)), X1 is X+Y,
+    assertz(egg(X1)),
+    changeList(W, 60, Z),
+    assertz(produceWool(Z)).
+/* Menambah milk */
+addMilk :-
+    retractall(produceMilk(M)), addItemRanch(M,Y),
+    retractall(milk(X)), X1 is X+Y,
+    assertz(milk(X1)),
+    changeList(M, 30, Z),
+    assertz(produceMilk(Z)).
+/* Menambah poultry */
+addPoultry :-
+    producePoultry(P), addItemRanch(P,Y),
+    retractall(poultry(X)), X1 is X+Y,
+    assertz(poultry(X1)).
+/* Menambah sheep meat */
+addSheepMeat :-
+    produceSheepMeat(P), addItemRanch(P,Y),
+    retractall(sheepMeat(X)), X1 is X+Y,
+    assertz(sheepMeat(X1)).
+/* Menambah beef */
+addBeef :-
+    produceBeef(P), addItemRanch(P,Y),
+    retractall(beef(X)), X1 is X+Y,
+    assertz(beef(X1)).
+
+/* Mengurangi satu satuan waktu tiap element di list produce */
+decOnePerElmt([],[]).
+decOnePerElmt([H|T],[H1|T1]) :-
+    H =:= 0,
+    decOnePerElmt(T,T1),
+    H1 is H.
+decOnePerElmt([H|T], [H1|T1]) :-
+    H > 0,
+    decOnePerElmt(T,T1),
+    H1 is H-1.
+
+/* Update kondisi ranch tiap hari */
+/* Rule ini harus dipanggil tiap pergantian hari */
+updateRanch :-
+    retractall(produceEgg(E)), retractall(producePoultry(P)), retractall(produceWool(W)),
+    retractall(produceSheepMeat(SM)), retractall(produceMilk(M)), retractall(produceBeef(B)),
+    decOnePerElmt(E,E1), decOnePerElmt(P,P1), decOnePerElmt(W,W1), 
+    decOnePerElmt(SM,SM1), decOnePerElmt(M,M1), decOnePerElmt(B,B1),
+    assertz(produceEgg(E1)), assertz(producePoultry(P1)), assertz(produceWool(W1)),
+    assertz(produceSheepMeat(SM1)), assertz(produceMilk(M1)), assertz(produceBeef(B1)),
+    addEgg, addWool, addMilk, addPoultry, addSheepMeat, addBeef.
 
 /* Hewan baru */
 /* Konfigurasi apabila ada ayam baru */
@@ -174,105 +281,8 @@ newCow :-
     append(PrevList2,[100],NewList2),
     assertz(produceBeef(NewList2)).
 
-/* Menghasilkan jumlah item yang waktunya sudah menyentuh angka 0*/
-addItem([],0).
-addItem([H|T],Item) :-
-    H > 0,
-    addItem(T,Item), !.
-addItem([H|T],Item) :-
-    H =:= 0,
-    addItem(T,Item1),
-    Item is 1+Item1.
-
-/* Menghasilkan list dengan elemen yang sama dengan 0 diganti dengan X*/
-changeList([],_,[]).
-changeList([H|T],X,[H1|T1]) :-
-    H > 0,
-    changeList(T,X,T1), !,
-    H1 is H.
-changeList([H|T],X,[H1|T1]) :-
-    H =:= 0,
-    changeList(T,X,T1),
-    H1 is X.
-
-/* Menambah egg */
-addEgg :-
-    produceEgg(E), addItem(E,Y),
-    (Y > 0 ->
-    egg(X), X1 is X+Y, 
-    retractall(egg(_)), assertz(egg(X1)),
-    changeList(E, 20, Z),
-    retractall(produceEgg(_)), assertz(produceEgg(Z))).
-/* Menambah wool */
-addWool :-
-    produceWool(W), addItem(W,Y),
-    (Y > 0 ->
-    wool(X), X1 is X+Y,
-    retractall(wool(_)), assertz(egg(X1)),
-    changeList(W, 60, Z),
-    retractall(produceWool(_)), assertz(produceWool(Z))).
-/* Menambah milk */
-addMilk :-
-    produceMilk(M), addItem(M,Y),
-    (Y > 0 ->
-    milk(X), X1 is X+Y,
-    retractall(milk(_)), assertz(milk(X1)),
-    changeList(M, 30, Z),
-    retractall(produceMilk(_)), assertz(produceMilk(Z))).
-/* Menambah poultry */
-addPoultry :-
-    producePoultry(P), addItem(P,Y),
-    (Y > 0 ->
-    poultry(X), X1 is X+Y,
-    retractall(poultry(_)), assertz(poultry(X1))).
-/* Menambah sheep meat */
-addSheepMeat :-
-    produceSheepMeat(P), addItem(P,Y),
-    (Y > 0 ->
-    sheepMeat(X), X1 is X+Y,
-    retractall(sheepMeat(_)), assertz(sheepMeat(X1))).
-/* Menambah beef */
-addBeef :-
-    produceBeef(P), addItem(P,Y),
-    (Y > 0 ->
-    beef(X), X1 is X+Y,
-    retractall(beef(_)), assertz(beef(X1))).
-
-/* Mengurangi satu satuan waktu tiap element di list produce */
-decOnePerElmt([],[]).
-decOnePerElmt([H|T],[H1|T1]) :-
-    H =:= 0,
-    decOnePerElmt(T,T1),
-    H1 is H.
-decOnePerElmt([H|T], [H1|T1]) :-
-    H > 0,
-    decOnePerElmt(T,T1),
-    H1 is H-1.
-
-/* Update kondisi ranch tiap hari */
-/* Rule ini harus dipanggil tiap pergantian hari */
-updateRanch :-
-    produceEgg(E), producePoultry(P), produceWool(W), 
-    produceSheepMeat(SM), produceMilk(M), produceBeef(B),
-    decOnePerElmt(E,E1), decOnePerElmt(P,P1), decOnePerElmt(W,W1), 
-    decOnePerElmt(SM,SM1), decOnePerElmt(M,M1), decOnePerElmt(B,B1),
-    retractall(produceEgg(_)), retractall(producePoultry(_)), retractall(produceWool(_)),
-    retractall(produceSheepMeat(_)), retractall(produceMilk(_)), retractall(produceBeef(_)),
-    assertz(produceEgg(E1)), assertz(producePoultry(P1)), assertz(produceWool(W1)),
-    assertz(produceSheepMeat(SM1)), assertz(produceMilk(M1)), assertz(produceBeef(B1)),
-    addEgg, addWool, addMilk, addPoultry, addSheepMeat, addBeef.
-
 /* 
 TODO: 
     - menambah hasil ternak ke dalam inventory 
-    - kalo poultry, sheep meat, atau beef diambil, elemen list produce yang nilainya 0 dihapus dan
-      elemen list egg, wool, atau milk juga dihapus di indeks yang berkorepondensi dengan list poultry, 
-      sheep meat, atau beef
+    - adjust hewan baru
 */
-
-removeAll(_, [], [], 0).
-removeAll(X, [X|T], L, Mark):- 
-    removeAll(X, T, L, Mark1), !,
-    Mark is 1+Mark1.
-removeAll(X, [H|T], [H|L], Mark):- 
-    removeAll(X, T, L, Mark).
