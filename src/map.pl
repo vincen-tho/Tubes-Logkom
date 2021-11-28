@@ -41,28 +41,28 @@ writeTile(X, Y) :- map_size(_, H),
                     Y =< H,
                     write('# '),
 					NewX is X+1,
-					writeTile(NewX, Y).
+					writeTile(NewX, Y), !.
 
 /* render right */
 writeTile(X, Y) :- map_size(W, H),
                     X =:= W, Y =< H,
                     write('# '), nl,
                     NewY is Y+1,
-                    writeTile(1, NewY).
+                    writeTile(1, NewY), !.
 
 /* render top */
 writeTile(X, Y) :- map_size(W, _),
                     X > 1, X < W, Y =:= 1,
                     write('# '),
                     NewX is X+1,
-                    writeTile(NewX, Y).
+                    writeTile(NewX, Y), !.
 
 /* render bottom */
 writeTile(X, Y) :- map_size(W, H),
                     X > 1, X < W, Y =:= H,
                     write('# '),
                     NewX is X+1,
-                    writeTile(NewX, Y).
+                    writeTile(NewX, Y), !.
 
 /* render regular tile */
 writeTile(X, Y) :- map_size(W, H),
@@ -71,7 +71,7 @@ writeTile(X, Y) :- map_size(W, H),
                     \+ playerPos(X, Y),
                     write('- '),
                     NewX is X+1,
-                    writeTile(NewX, Y).
+                    writeTile(NewX, Y), !.
 
 /* render water tile */
 writeTile(X, Y) :- map_size(W, H),
@@ -79,7 +79,7 @@ writeTile(X, Y) :- map_size(W, H),
                     specialTile(X, Y, 'W'),
                     write('o '),
                     NewX is X+1,
-                    writeTile(NewX, Y).
+                    writeTile(NewX, Y), !.
 
 /* render house tile */
 writeTile(X, Y) :- map_size(W, H),
@@ -88,7 +88,7 @@ writeTile(X, Y) :- map_size(W, H),
                     \+ playerPos(X, Y),
                     write('H '),
                     NewX is X+1,
-                    writeTile(NewX, Y).
+                    writeTile(NewX, Y), !.
 
 /* render ranch tile */
 writeTile(X, Y) :- map_size(W, H),
@@ -97,7 +97,7 @@ writeTile(X, Y) :- map_size(W, H),
                     \+ playerPos(X, Y),
                     write('R '),
                     NewX is X+1,
-                    writeTile(NewX, Y).
+                    writeTile(NewX, Y), !.
 
 /* render quest tile */
 writeTile(X, Y) :- map_size(W, H),
@@ -106,7 +106,7 @@ writeTile(X, Y) :- map_size(W, H),
                     \+ playerPos(X, Y),
                     write('Q '),
                     NewX is X+1,
-                    writeTile(NewX, Y).
+                    writeTile(NewX, Y), !.
 
 /* render marketplace tile */
 writeTile(X, Y) :- map_size(W, H),
@@ -115,7 +115,7 @@ writeTile(X, Y) :- map_size(W, H),
                     \+ playerPos(X, Y),
                     write('M '),
                     NewX is X+1,
-                    writeTile(NewX, Y).
+                    writeTile(NewX, Y), !.
 
 /* render digged tile */
 writeTile(X, Y) :- map_size(W, H),
@@ -124,7 +124,7 @@ writeTile(X, Y) :- map_size(W, H),
                     \+ playerPos(X, Y),
                     write('= '),
                     NewX is X+1,
-                    writeTile(NewX, Y).
+                    writeTile(NewX, Y), !.
 
 /* render planted tile */
 writeTile(X, Y) :- map_size(W, H),
@@ -134,7 +134,7 @@ writeTile(X, Y) :- map_size(W, H),
                     \+ playerPos(X, Y),
                     write(P),
                     NewX is X+1,
-                    writeTile(NewX, Y).
+                    writeTile(NewX, Y), !.
 
 /* render player tile */
 writeTile(X, Y) :- map_size(W, H),
@@ -142,10 +142,10 @@ writeTile(X, Y) :- map_size(W, H),
                     playerPos(X, Y),
                     write('P '),
                     NewX is X+1,
-                    writeTile(NewX, Y).
+                    writeTile(NewX, Y), !.
 
 
-createMap :- writeTile(1, 1).
+createMap :- writeTile(1, 1), !.
 
 /* debug only */
 startD :- resetPlayerPos,
