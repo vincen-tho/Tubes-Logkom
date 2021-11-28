@@ -257,7 +257,7 @@ addMilk :-
 addPoultry :-
     producePoultry(P), poultry(X), addItemRanch2(P,Y),
     retractall(poultry(_)), X1 is X+Y,
-    assertz(poultry(X1)).
+    assertz(poultry(X1)),
     retractall(producePoultry(_)),
     changeList2(P,1,Z),
     assertz(producePoultry(Z)).
@@ -273,7 +273,7 @@ addSheepMeat :-
 addBeef :-
     produceBeef(B), beef(X), addItemRanch2(B,Y),
     retractall(beef(_)), X1 is X+Y,
-    assertz(beef(X1)).
+    assertz(beef(X1)),
     retractall(produceBeef(_)),
     changeList2(B,1,Z),
     assertz(produceBeef(Z)).
