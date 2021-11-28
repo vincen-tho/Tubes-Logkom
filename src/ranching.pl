@@ -232,9 +232,12 @@ addEgg :-
     retractall(egg(_)), X2 is X1+Y1, 
     retractall(goldenEgg(_)), X4 is X3+Y2, 
     assertz(egg(X2)), assertz(goldenEgg(X4)),
+    playerRanchingLevel(Level),
     (playerRole(rancher) ->
-    changeList1(E, 15, Z);
-    changeList1(E, 20, Z)),
+    Time1 is 15-Level,
+    changeList1(E, Time1, Z);
+    Time1 is 20-Level,
+    changeList1(E, Time1, Z)),
     assertz(produceEgg(Z)), !.
 /* Menambah wool */
 addWool :-
@@ -242,19 +245,26 @@ addWool :-
     retractall(produceWool(W)), addItemRanch1(W,Y),
     retractall(wool(_)), X1 is X+Y,
     assertz(wool(X1)),
+    playerRanchingLevel(Level),
     (playerRole(rancher) ->
-    changeList1(W, 50, Z);
-    changeList1(W, 60, Z)),
+    Time1 is 50-Level,
+    changeList1(W, Time1, Z);
+    Time1 is 60-Level,
+    changeList1(W, Time1, Z)),
     assertz(produceWool(Z)), !.
 /* Menambah milk */
 addMilk :-
+    bucketLevel(Level),
     produceMilk(M), milk(X),
     retractall(produceMilk(_)), addItemRanch1(M,Y),
-    retractall(milk(_)), X1 is X+Y,
+    retractall(milk(_)), X1 is Level+X+Y,
     assertz(milk(X1)),
+    playerRanchingLevel(Level),
     (playerRole(rancher) ->
-    changeList1(M, 25, Z);
-    changeList1(M, 30, Z)),
+    Time1 is 25-Level,
+    changeList1(M, Time1, Z);
+    Time1 is 30-Level,
+    changeList1(M, Time1, Z)),
     assertz(produceMilk(Z)), !.
 /* Menambah poultry */
 addPoultry :-
@@ -333,17 +343,20 @@ newChicken(X) :-
     assertz(totalChicken(NewTotal)),
     produceEgg(PrevList1),
     retractall(produceEgg(_)),
-    /* Asumsi ayam butuh waktu 20 hari buat bertelur (sample belum fix) */
+    playerRanchingLevel(Level),
     (playerRole(rancher) ->
-    appendXElmt(X,PrevList1,[15],NewList1);
+    Time1 is 15-Level,
+    appendXElmt(X,PrevList1,[Time1],NewList1);
+    Time1 is 20-Level,
     appendXElmt(X,PrevList1,[20],NewList1)),
     assertz(produceEgg(NewList1)),
     producePoultry(PrevList2),
     retractall(producePoultry(_)),
-    /* Asumsi ayam siap panen di umur 40 hari (sample belum fix) */
     (playerRole(rancher) ->
-    appendXElmt(X,PrevList2,[[35,0]],NewList2);
-    appendXElmt(X,PrevList2,[[40,0]],NewList2)),
+    Time2 is 35-Level,
+    appendXElmt(X,PrevList2,[[Time2,0]],NewList2);
+    Time2 is 40-Level,
+    appendXElmt(X,PrevList2,[[Time2,0]],NewList2)),
     assertz(producePoultry(NewList2)), !.
 
 /* Konfigurasi apabila ada domba baru */
@@ -354,17 +367,20 @@ newSheep(X) :-
     assertz(totalSheep(NewTotal)),
     produceWool(PrevList1),
     retractall(produceWool(_)),
-    /* Asumsi domba butuh waktu 60 hari sampai bulunya siap dicukur (sample belum fix) */
+    playerRanchingLevel(Level),
     (playerRole(rancher) ->
-    appendXElmt(X,PrevList1,[50],NewList1);
-    appendXElmt(X,PrevList1,[60],NewList1)),
+    Time1 is 50-Level,
+    appendXElmt(X,PrevList1,[Time1],NewList1);
+    Time1 is 60-Level,
+    appendXElmt(X,PrevList1,[Time1],NewList1)),
     assertz(produceWool(NewList1)),
     produceSheepMeat(PrevList2),
     retractall(produceSheepMeat(_)),
-    /* Asumsi domba siap panen di umur 80 hari (sample belum fix) */
     (playerRole(rancher) ->
-    appendXElmt(X,PrevList2,[[70,0]],NewList2),
-    appendXElmt(X,PrevList2,[[80,0]],NewList2)),
+    Time2 is 70-Level,
+    appendXElmt(X,PrevList2,[[Time2,0]],NewList2),
+    Time2 is 80-Level,
+    appendXElmt(X,PrevList2,[[Time2,0]],NewList2)),
     assertz(produceSheepMeat(NewList2)), !.
 
 /* Konfigurasi apabila ada sapi baru */
@@ -375,17 +391,20 @@ newCow(X) :-
     assertz(totalCow(NewTotal)),
     produceMilk(PrevList1),
     retractall(produceMilk(_)),
-    /* Asumsi sapi butuh waktu 30 hari sampai susunya siap diperah (sample belum fix) */
+    playerRanchingLevel(Level),
     (playerRole(rancher) ->
-    appendXElmt(X,PrevList1,[25],NewList1);
-    appendXElmt(X,PrevList1,[30],NewList1)),
+    Time1 is 25-Level,
+    appendXElmt(X,PrevList1,[Time1],NewList1);
+    Time1 is 30-Level,
+    appendXElmt(X,PrevList1,[Time1],NewList1)),
     assertz(produceMilk(NewList1)),
     produceBeef(PrevList2),
     retractall(produceBeef(_)),
-    /* Asumsi sapi siap panen di umur 100 hari (sample belum fix) */
     (playerRole(rancher) ->
-    appendXElmt(X,PrevList2,[[90,0]],NewList2);
-    appendXElmt(X,PrevList2,[[100,0]],NewList2)),
+    Time2 is 90-Level,
+    appendXElmt(X,PrevList2,[[Time2,0]],NewList2);
+    Time2 is 100-Level,
+    appendXElmt(X,PrevList2,[[Time2,0]],NewList2)),
     assertz(produceBeef(NewList2)), !.
 
 /* Hewan dijual */
@@ -397,12 +416,10 @@ sellChicken(X) :-
     assertz(totalChicken(NewTotal)),
     produceEgg(PrevList1),
     retractall(produceEgg(_)),
-    /* Asumsi ayam butuh waktu 20 hari buat bertelur (sample belum fix) */
     removeXElmt(X,PrevList1,NewList1),
     assertz(produceEgg(NewList1)),
     producePoultry(PrevList2),
     retractall(producePoultry(_)),
-    /* Asumsi ayam siap panen di umur 40 hari (sample belum fix) */
     removeXElmt(X,PrevList2,NewList2),
     assertz(producePoultry(NewList2)), !.
     
@@ -414,12 +431,10 @@ sellSheep(X) :-
     assertz(totalSheep(NewTotal)),
     produceWool(PrevList1),
     retractall(produceWool(_)),
-    /* Asumsi domba butuh waktu 60 hari sampai bulunya siap dicukur (sample belum fix) */
     removeXElmt(X,PrevList1,NewList1),
     assertz(produceWool(NewList1)),
     produceSheepMeat(PrevList2),
     retractall(produceSheepMeat(_)),
-    /* Asumsi domba siap panen di umur 80 hari (sample belum fix) */
     removeXElmt(X,PrevList2,NewList2),
     assertz(produceSheepMeat(NewList2)), !.
 
@@ -431,11 +446,9 @@ sellCow(X) :-
     assertz(totalCow(NewTotal)),
     produceMilk(PrevList1),
     retractall(produceMilk(_)),
-    /* Asumsi sapi butuh waktu 30 hari sampai susunya siap diperah (sample belum fix) */
     removeXElmt(X,PrevList1,NewList1),
     assertz(produceMilk(NewList1)),
     produceBeef(PrevList2),
     retractall(produceBeef(_)),
-    /* Asumsi sapi siap panen di umur 100 hari (sample belum fix) */
     removeXElmt(X,PrevList2,NewList2),
     assertz(produceBeef(NewList2)), !.
