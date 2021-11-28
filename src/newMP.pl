@@ -78,15 +78,20 @@ sellMarket :- showInventoryBarang,
 sellaction(Opt, Qty) :-
     Idx is Opt - 1,
     inventory(Inv),
-    getbarangNoZero(Idx, Inv, [Name, _]),
-    addBarang(Name, -Qty),
-    write(Name), write(' (x'), write(Qty),
-    write(') Have been sold'), nl,
-    barang(Name, Price, _),
-    isSellRanch(Name, Qty),
-    AddGold is Price * Qty,
-    addGold(AddGold),
-    write(AddGold), write(' Gold has been added').
+    getbarangNoZero(Idx, Inv, [Name, OldQty]),
+    (   isNumValid(Qty, 1, OldQty) ->
+        addBarang(Name, -Qty),
+        write(Name), write(' (x'), write(Qty),
+        write(') Have been sold'), nl,
+        barang(Name, Price, _),
+        isSellRanch(Name, Qty),
+        AddGold is Price * Qty,
+        addGold(AddGold),
+        write(AddGold), write(' Gold has been added');
+
+        write('You don\'t have that many')
+
+    ), !.
         
 
 
