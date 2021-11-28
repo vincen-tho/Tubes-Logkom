@@ -6,7 +6,12 @@
 /* RULES */
 dig :-  playerPos(X, Y),
         \+ (specialTile(X, Y, _)),
+        haveShovel,
         assertz(specialTile(X, Y, 'D')), !.
+dig :-  playerPos(X, Y),
+        \+ (specialTile(X, Y, _)),
+        \+ haveShovel,
+        write('You don\'t have shovel!'), !.
 dig :-  playerPos(X, Y),
         specialTile(X, Y, _),
         write('You can\'t dig here!'), !.
@@ -26,7 +31,7 @@ plant :-    playerPos(X, Y),
             NUM =< COUNT,
             NUM > 0,
             INDEXED is NUM - 1,
-            getFarmingbarang(INDEXED, INV, [NAME, QUANTITY]),
+            getFarmingbarang(INDEXED, INV, [NAME, _]),
             plantedLetter(NAME, LETTER, TIMETOHARVEST),
             illegalLetter(ILLEGALLETTER),
             LETTER \= ILLEGALLETTER,
