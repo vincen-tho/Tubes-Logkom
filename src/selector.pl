@@ -140,6 +140,12 @@ haveShovel :-
     member(['Shovel' | _], Inv), !.
 
 
+/* number valid inklusif */
+isNumValid(Num, Min, Max) :-
+    Num >= Min, Num =< Max, !.
+
+
+
 
 
 

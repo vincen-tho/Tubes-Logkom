@@ -2,7 +2,29 @@
 :- dynamic(inventory/1).
 inventory([]).
 
-inventory :- showInventory, !.
+inventory :- showInventory, throwInventory, !.
+
+throwInventory :- 
+    write('What do you want to throw?'), nl,
+    read(Opt), nl,
+    write('How many items do you want to throw?'), nl,
+    read(Qty), nl,
+    throwaction(Opt, Qty).
+
+throwaction(Opt, Qty) :-
+    Idx is Opt - 1,
+    inventory(Inv),
+    getbarangNoZero(Idx, Inv, [Name, OldQty]),
+    (   isNumValid(Qty, 1, OldQty) ->
+        addBarang(Name, -Qty),
+        write(Name), write(' (x'), write(Qty),
+        write(') Have been thrown'), nl,
+        isSellRanch(Name, Qty);
+
+        write('You don\'t have that many')
+
+    ), !.
+
 
 
 
