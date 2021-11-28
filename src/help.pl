@@ -91,8 +91,8 @@ help :-
     playerPos(X, Y),
     specialTile(X,Y,'M'),
     write(' ################################################################################'),nl,
-    write(' #                             ~RANCHING MENU~                                  #'),nl,
-    write(' # 1. market   : Interact with market place                                     #'),nl,
+    write(' #                          ~MARKETPLACE MENU~                                  #'),nl,
+    write(' # 1. market   : Interact with marketplace                                     #'),nl,
     write(' ################################################################################'), !.
     
 
