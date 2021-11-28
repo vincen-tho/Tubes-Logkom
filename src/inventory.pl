@@ -161,7 +161,7 @@ initInv :- retractall(inventory(_)),
 
 
 
-test :- initInv, assertz(gold(500)), showInventory.
+test :- initInv, addGold(500), showInventory.
 
 
 
