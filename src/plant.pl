@@ -4,13 +4,13 @@
 /* Tanaman, huruf, dan waktu untuk panen */
 plantedLetter('Reed', 'x ', 0).
 plantedLetter('Wheat', 'w ', 72).
-plantedLetter('Corn', 'c ', 168).
+plantedLetter('Corn', 'c ', 216).
 plantedLetter('Tomato', 'x ', 0).
 plantedLetter('Rice', 'x ', 0).
 plantedLetter('Potato', 'p ', 96).
 plantedLetter('Magic Mushroom', 'm ', 120).
 plantedLetter('Rice Seed', 'r ', 144).
-plantedLetter('Tomato Seed', 't ', 48).
+plantedLetter('Tomato Seed', 't ', 192).
 
 /* Tanaman, hasil panen, kuantitas */
 harvestResult('w ', 'Wheat', 3).

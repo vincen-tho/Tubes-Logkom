@@ -97,3 +97,13 @@ harvest :-  playerPos(X, Y),
             write('This crop can\'t be harvested yet!'),
             !.
 harvest :- write('Harvest failed!'), !.
+
+/* farming guide */
+farmingGuide :-
+write(' ################################################################################'),nl,
+write(' #                          ~TIME TO HARVEST EACH CROP~                         #'),nl,
+write(' # 1. Corn      : 9 days                                                        #'),nl,
+write(' # 2. Tomato    : 8 days                                                        #'),nl,
+write(' # 3. Rice      : 6 days                                                        #'),nl,
+write(' # 4. Potato    : 4 days                                                        #'),nl,
+write(' ################################################################################'),
