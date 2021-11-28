@@ -36,7 +36,7 @@ displayInventory([[Name, Lvl]|Tail], Num) :-
     write(Num), write('. '),
     write(Name), write(', Lv.'), write(Lvl), nl, 
     displayInventory(Tail, NewNum), !.
-displayInventory([[Name, QtyLvl]|Tail], Num) :-
+displayInventory([[_, QtyLvl]|Tail], Num) :-
     QtyLvl =:= 0,
     displayInventory(Tail, Num), !.
 
@@ -111,11 +111,8 @@ displayFarmingbarang([[Name, Qty]|Tail], Num) :-
     write(Num), write('. '),
     write(Name), write('('), write(Qty), write(')'), write(', Price: '), write(Price), write(' Gold'), nl, 
     displayFarmingbarang(Tail, NewNum), !.
-displayFarmingbarang([[Name, _]|Tail], Num) :-
-    (\+ barang(Name, _, 'F')),
-    displayFarmingbarang(Tail, Num), !.
-displayInventorybarang([[Name, Qty]|Tail], Num) :-
-    (barang(Name, _, 'F')), Qty =:= 0,
+displayFarmingbarang([[Name, Qty]|Tail], Num) :-
+    ((\+ barang(Name, _, 'F')); (Qty =:= 0)),
     displayFarmingbarang(Tail, Num), !.
 
 

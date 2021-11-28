@@ -73,7 +73,11 @@ buybarang(X, Q) :-
             NewQ is (ResQ + Q),
             delete(I, [ResN, ResQ], TempI),
             append(TempI, [[ResN, NewQ]], NewI),
-            changeInv(NewI)
+            changeInv(NewI),
+            (ResN == 'Cow') -> newCow(Q);
+            (ResN == 'Sheep') -> newSheep(Q);
+            (ResN == 'Chicken') -> newChicken(Q);
+            
         ;
             append(I, [[ResN, Q]], NewI),
             changeInv(NewI)

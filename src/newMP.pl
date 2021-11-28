@@ -83,6 +83,7 @@ sellaction(Opt, Qty) :-
     write(Name), write(' (x'), write(Qty),
     write(') Have been sold'), nl,
     barang(Name, Price, _),
+    isSellRanch(Name, Qty),
     AddGold is Price * Qty,
     addGold(AddGold),
     write(AddGold), write(' Gold has been added').
@@ -128,13 +129,43 @@ buyaction(Opt, Qty) :-
     addBarang(Name, Qty),
     write(Name), write(' (x'), write(Qty),
     write(') have been added to your inventory'), nl,
-    write(MinGold), write(' Gold has been deducted');
+    write(MinGold), write(' Gold has been deducted'),
+    isNewRanch(Name, Qty)
+    
+    ;
 
     write('Insufficient gold'), nl
     ), !.
+
+isNewRanch(Name, Qty) :-
+    Name == 'Sheep',
+    newSheep(Qty), !.
+isNewRanch(Name, Qty) :-
+    Name == 'Cow',
+    newCow(Qty), !.
+isNewRanch(Name, Qty) :-
+    Name == 'Chicken',
+    newChicken(Qty), !.
+isNewRanch(Name, Qty).
+
+isSellRanch(Name, Qty) :-
+    Name == 'Sheep',
+    sellSheep(Qty), !.
+isSellRanch(Name, Qty) :-
+    Name == 'Cow',
+    sellCow(Qty), !.
+isSellRanch(Name, Qty) :-
+    Name == 'Chicken',
+    sellChicken(Qty), !.
+isSellRanch(Name, Qty).
+
+
+
+
+
     
 
-buyaction(Opt, Qty) :-
+buyaction(Opt, _) :-
     Idx is Opt -1,
     shop(S),
     getElmt(Idx, S, [Name, UpLvl, Price]),
