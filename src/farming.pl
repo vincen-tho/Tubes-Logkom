@@ -30,9 +30,11 @@ plant :-    playerPos(X, Y),
             assertz(specialTile(X, Y, LETTER)),
             time(TIME),
             assertz(plantTime(X, Y, TIME, TIMETOHARVEST)),
+            addBarang(NAME, -1),
             write('You planted a '), write(NAME), write('.'), 
             /* disini harusnya untuk mengurangi QUANTITY */
             !.
+
 plant :-    playerPos(X, Y),
             specialTile(X, Y, 'D'),
             write('Planting failed!'), !.
@@ -45,7 +47,8 @@ harvest :-  playerPos(X, Y),
             DIFFERENCE is CURRENTTIME - PLANTTIME,
             DIFFERENCE >= TIMETOHARVEST,
             retract(specialTile(X, Y, LETTER)),
-            write('You harvested '), write(PLANTNAME), 
+            addBarang(PLANTNAME, QUANTITY),
+            write('You harvested '),write(QUANTITY),write(' '), write(PLANTNAME),write('.'), 
             /* disini push ke inventory */
             !.
 harvest :-  playerPos(X, Y),
