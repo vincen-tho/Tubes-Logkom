@@ -48,7 +48,7 @@ harvest :-  playerPos(X, Y),
             DIFFERENCE >= TIMETOHARVEST,
             retract(specialTile(X, Y, LETTER)),
             addBarang(PLANTNAME, QUANTITY),
-            /* add c farm */
+            addCountFarm(QUANTITY),
             write('You harvested '), write(QUANTITY),write(' '), write(PLANTNAME),write('.'), 
             /* disini push ke inventory */
             !.

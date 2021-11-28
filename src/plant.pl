@@ -20,7 +20,7 @@ harvestResult('m ', 'Magic Mushroom', 2).
 harvestResult('r ', 'Rice', 2).
 harvestResult('t ', 'Tomato', 2).
 
-illegalLetter('x  ').
+illegalLetter('x ').
 /* DINAMIS */
 /* plantTime digunakan untuk menyimpan data kapan tanaman ditanam dan lama waktu untuk dapat dipanen */
 /* plantTime(X, Y, PLANTEDTIME, TIMETOHARVEST) */
