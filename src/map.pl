@@ -7,30 +7,62 @@ map_size(20, 15).
 
 /* special tile */
     % water tile
-    specialTile(2, 2, 'W').
-    specialTile(2, 3, 'W').
-    specialTile(2, 4, 'W').
-    specialTile(2, 5, 'W').
-    specialTile(3, 2, 'W').
-    specialTile(3, 3, 'W').
-    specialTile(3, 4, 'W').
-    specialTile(4, 2, 'W').
-    specialTile(4, 3, 'W').
     specialTile(5, 2, 'W').
+    specialTile(6, 2, 'W').
+    specialTile(7, 2, 'W').
 
-    specialTile(13, 10, 'W').
+    specialTile(5, 3, 'W').
+    specialTile(6, 3, 'W').
+    specialTile(7, 3, 'W').
+    specialTile(8, 3, 'W').
+
+    specialTile(6, 4, 'W').
+    specialTile(7, 4, 'W').
+    specialTile(8, 4, 'W').
+
+    specialTile(6, 5, 'W').
+    specialTile(7, 5, 'W').
+    specialTile(8, 5, 'W').
+
+    specialTile(7, 6, 'W').
+    specialTile(8, 6, 'W').
+    specialTile(9, 6, 'W').
+
+    specialTile(7, 7, 'W').
+    specialTile(8, 7, 'W').
+    specialTile(9, 7, 'W').
+
+    specialTile(8, 10, 'W').
+    specialTile(9, 10, 'W').
+    specialTile(10, 10, 'W').
+
+    specialTile(8, 11, 'W').
+    specialTile(9, 11, 'W').
+    specialTile(10, 11, 'W').
+
+    specialTile(9, 12, 'W').
+    specialTile(10, 12, 'W').
+
+    specialTile(9, 13, 'W').
+    specialTile(10, 13, 'W').
+    specialTile(11, 13, 'W').
+
+    specialTile(8, 14, 'W').
+    specialTile(9, 14, 'W').
+    specialTile(10, 14, 'W').
+    specialTile(11, 14, 'W').
 
     % house tile
-    specialTile(7, 7, 'H').
+    specialTile(3, 13, 'H').
 
     % ranch tile
-    specialTile(8, 8, 'R').
+    specialTile(5, 13, 'R').
 
     % quest tile
-    specialTile(9, 9, 'Q').
+    specialTile(3, 11, 'Q').
 
     % marketplace tile
-    specialTile(10, 10, 'M').
+    specialTile(5, 11, 'M').
 
     % digged tile DYNAMIC
 

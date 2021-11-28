@@ -38,7 +38,7 @@ throwaction(Opt, Qty) :-
 throwaction(Opt, Qty) :-
     Idx is Opt - 1,
     inventory(Inv),
-    getItemNoZero(Idx, Inv, [Name, OldQty]),
+    getItemNoZero(Idx, Inv, [Name, _]),
     equipment(Name, _),
     (   isNumValid(Qty, 1, 100) ->
         removeEquipment(Name),
