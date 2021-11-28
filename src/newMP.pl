@@ -53,9 +53,27 @@ addEQtoShop :- inventory(Inv), addEQtoShop(Inv).
 addEQtoShop([]) :- !.
 
 addEQtoShop([[Name, Level]|Tail]) :-
-    equipment(Name, _),
+    Name == 'Shovel',
     UpLv is (Level + 1),
     Price is UpLv*100,
+    shop(S),
+    append(S, [[Name, UpLv, Price]], NewS), !,
+    retractall(shop(_)),
+    assertz(shop(NewS)),
+    addEQtoShop(Tail), !.
+addEQtoShop([[Name, Level]|Tail]) :-
+    Name == 'Bucket',
+    UpLv is (Level + 1),
+    Price is UpLv*200,
+    shop(S),
+    append(S, [[Name, UpLv, Price]], NewS), !,
+    retractall(shop(_)),
+    assertz(shop(NewS)),
+    addEQtoShop(Tail), !.
+addEQtoShop([[Name, Level]|Tail]) :-
+    Name == 'Fishing Rod',
+    UpLv is (Level + 1),
+    Price is UpLv*300,
     shop(S),
     append(S, [[Name, UpLv, Price]], NewS), !,
     retractall(shop(_)),
