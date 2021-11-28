@@ -139,6 +139,14 @@ haveShovel :-
     inventory(Inv),
     member(['Shovel' | _], Inv), !.
 
+haveFishingRod :-
+    inventory(Inv),
+    member(['Fishing Rod' | _], Inv), !.
+
+haveBucket :-
+    inventory(Inv),
+    member(['Bucket' | _], Inv), !.
+
 
 /* number valid inklusif */
 isNumValid(Num, Min, Max) :-

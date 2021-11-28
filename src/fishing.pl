@@ -16,35 +16,41 @@ checkPosWater :-
 /* Fish probability bergantung pada level fishing player */
 /* Semakin tinggi levelnya, kesempatan mendapatkan ikan yang langka/mahal meningkat. */
 initFishing :- 
+    (haveFishingRod ->
     retractall(fishProbability(_)), retractall(gainedExpNoFish(_)), retractall(gainedExpFish(_)),
-    playerFishingLevel(X),
-    Y is X*0.002,
+    playerFishingLevel(X), fishingRodLevel(Level),
+    L1 is X*0.0005, L2 is Level*0.0005,
+    Y is L1+L2,
     Z is X*2,
     (playerRole(fisherman) ->
     Y1 is 0.13-Y, Y2 is 0.3-Y, Y3 is 0.15-Y, Y4 is 0.12+Y, Y5 is 0.09+Y, Y6 is 0.07+Y,
     (Y1 < 0.14; Y2 < 0.14; Y3 < 0.14; Y4 < 0.14; Y5 < 0.14; Y6 < 0.14),
     Y1 is 0.22+Y, Y2 is 0.3+Y, Y3 is 0.17+Y, Y4 is 0.1-Y, Y5 is 0.06-Y, Y6 is 0.01-Y,
-    Z1 is 2*5+Z, Z2 is 2*10+Z;
+    Z1 is 5+Z, Z2 is 10+Z;
     Y1 is 0.22-Y, Y2 is 0.3-Y, Y3 is 0.17-Y, Y4 is 0.1+Y, Y5 is 0.06+Y, Y6 is 0.01+Y,
     (Y1 < 0.14; Y2 < 0.14; Y3 < 0.14; Y4 < 0.14; Y5 < 0.14; Y6 < 0.14),
     Y1 is 0.22+Y, Y2 is 0.3+Y, Y3 is 0.17+Y, Y4 is 0.1-Y, Y5 is 0.06-Y, Y6 is 0.01-Y,
     Z1 is 5+Z, Z2 is 10+Z),
     assertz(fishProbability([Y1, Y2, Y3, 0.14, Y4, Y5, Y6])),
     assertz(gainedExpNoFish(Z1)),
-    assertz(gainedExpFish(Z2)), !.
+    assertz(gainedExpFish(Z2));
+    write('You don\'t have fishing rod!'), fail), !.
 initFishing :- 
+    (haveFishingRod ->
     retractall(fishProbability(_)), retractall(gainedExpNoFish(_)), retractall(gainedExpFish(_)),
-    playerFishingLevel(X),
-    Y is X*0.002,
+    playerFishingLevel(X), fishingRodLevel(Level),
+    L1 is X*0.0005, L2 is Level*0.0005,
+    Y is L1+L2,
     Z is X*2,
     (playerRole(fisherman) ->
     Y1 is 0.13-Y, Y2 is 0.3-Y, Y3 is 0.15-Y, Y4 is 0.12+Y, Y5 is 0.09+Y, Y6 is 0.07+Y,
-    Z1 is 2*5+Z, Z2 is 2*10+Z;
+    Z1 is 5+Z, Z2 is 10+Z;
     Y1 is 0.22-Y, Y2 is 0.3-Y, Y3 is 0.17-Y, Y4 is 0.1+Y, Y5 is 0.06+Y, Y6 is 0.01+Y,
     Z1 is 5+Z, Z2 is 10+Z),
     assertz(fishProbability([Y1, Y2, Y3, 0.14, Y4, Y5, Y6])),
     assertz(gainedExpNoFish(Z1)),
-    assertz(gainedExpFish(Z2)), !.
+    assertz(gainedExpFish(Z2));
+    write('You don\'t have fishing rod!'), fail), !.
 
 /* Random pick element list */
 /* Source: https://stackoverflow.com/questions/50250234/prolog-how-to-non-uniformly-randomly-select-a-element-from-a-list */
@@ -70,5 +76,6 @@ fishing :-
     write('You gained '), write(Z), write(' fishing exp!');
     write('You got '), write(Y), write('!'), nl, 
     gainedExpFish(Z), 
-    write('You gained '), write(Z), write(' fishing exp!')),
-    addFishingEXP(Z), addEXP(Z), addBarang(Y,1), addTime(1), !.
+    (playerRole(fisherman) -> Z1 is Z*2; Z1 is Z),
+    write('You gained '), write(Z1), write(' fishing exp!')),
+    addFishingEXP(Z), addBarang(Y,1), addTime(1), !.

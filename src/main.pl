@@ -1,17 +1,17 @@
 /* include files */
 :- include('farming.pl').
-:- include('fishing.pl').
+% :- include('fishing.pl').
 :- include('game_manager.pl').
 :- include('help.pl').
 :- include('house.pl').
 :- include('inventory.pl').
 :- include('items.pl').
 :- include('map.pl').
-:- include('newMP.pl').
+:- include('marketPlace.pl').
 :- include('movement.pl').
 :- include('player.pl').
 :- include('quest.pl').
-:- include('ranching.pl').
+% :- include('ranching.pl').
 :- include('roles.pl').
 :- include('selector.pl').
 :- include('plant.pl').
@@ -55,10 +55,9 @@ start :- isStarted(_), \+isRunning(_),
     resetPlayerPos, 
     initializeTime, 
     initQuest,
+    initInv,
     assertz(win(0)),
     assertz(lose(0)),
-    /* initFishing,
-    initRanching, */
     printTime, nl,
     initializePlayer, !.
 
@@ -66,4 +65,50 @@ map :- isRunning(_), createMap, !.
 map :- \+isRunning(_) -> write('Start the game first!'), !.
 
 quit :-
-    retractall(playerInitialized(_)).
+    retractall(isRunning(_)),
+    retracall(isStarted(_)),
+    retractall(playerInitialized(_)),
+    retractall(fishProbability(_)), 
+    retractall(gainedExpNoFish(_)), 
+    retractall(gainedExpFish(_)),
+    retractall(time(_)),
+    retractall(lose(_)),
+    retractall(win(_)),
+    retractall(playerPos(_)),
+    retractall(specialTile(_)),
+    retractall(shop(_)),
+    retractall(playerPos(_)),
+    retractall(playerLevel(_)),
+    retractall(playerFarmingLevel(_)),
+    retractall(playerFarmingEXP(_)),
+    retractall(farmingExpCap(_)),
+    retractall(playerFishingLevel(_)),
+    retractall(playerFishingEXP(_)),
+    retractall(fishingExpCap(_)),
+    retractall(playerRanchingLevel(_)),
+    retractall(playerRanchingEXP(_)),
+    retractall(ranchingExpCap(_)),
+    retractall(exp(_)),
+    retractall(expCap(_)),
+    retractall(gold(_)),
+    retractall(playerInitialized(_)),
+    retractall(progressQuest(_)),
+    retractall(isQuest(_)),
+    retractall(totalChicken(_)),
+    retractall(totalSheep(_)),
+    retractall(totalCow(_)),
+    retractall(gainedExpRanch(_)),
+    retractall(produceEgg(_)),
+    retractall(producePoultry(_)),
+    retractall(produceWool(_)),
+    retractall(produceSheepMeat(_)),
+    retractall(produceMilk(_)),
+    retractall(produceBeef(_)),
+    retractall(egg(_)),
+    retractall(goldenEgg(_)),
+    retractall(poultry(_)),
+    retractall(wool(_)),
+    retractall(sheepMeat(_)),
+    retractall(milk(_)),
+    retractall(beef(_)).
+

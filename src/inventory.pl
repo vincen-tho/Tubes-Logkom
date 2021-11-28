@@ -5,11 +5,14 @@ inventory([]).
 inventory :- showInventory, throwInventory, !.
 
 throwInventory :- 
-    write('What do you want to throw?'), nl,
+    write('What do you want to throw (0 to cancel)?'), nl,
     read(Opt), nl,
+    (Opt =\= 0) ->
     write('How many items do you want to throw?'), nl,
     read(Qty), nl,
-    throwaction(Opt, Qty).
+    throwaction(Opt, Qty);
+    fail
+    .
 
 throwaction(Opt, Qty) :-
     Idx is Opt - 1,
