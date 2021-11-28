@@ -42,15 +42,25 @@ barang('Puffer Fish', 1750, 'H').
 
 /* FARMING */
 equipment('Shovel', 'F').
-equipment('Water Sprinkler', 'F').
 
 /* RANCHING */
-equipment('Shearer', 'R').
 equipment('Bucket', 'R').
 
 /* FISHING */
 equipment('Fishing Rod', 'H').
-equipment('Bait', 'H').
+
+shovelLevel(Level) :-
+    inventory(Inv),
+    member(['Shovel', Level], Inv), !.
+
+bucketLevel(Level) :-
+    inventory(Inv),
+    member(['Bucket', Level], Inv), !.
+
+fishingRodLevel(Level) :-
+    inventory(Inv),
+    member(['Fishing Rod', Level], Inv), !.
+
 
 
 
