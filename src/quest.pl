@@ -1,24 +1,6 @@
 :- dynamic(progressQuest/4).
 :- dynamic(isQuest/1).
 
-addCFarm(X) :- 
-    progressQuest(_, CFarm, _, _), 
-    NewCFarm is CFarm+X, 
-    retract(progressQuest(_, CFarm, _, _)), 
-    assertz(progressQuest(_, NewCFarm, _, _)).
-
-addCFish(X) :- 
-    progressQuest(_, CFish, _, _), 
-    NewCFish is CFish+X, 
-    retract(progressQuest(_, CFish, _, _)), 
-    assertz(progressQuest(_, NewCFish, _, _)).
-
-addCRanch(X) :- 
-    progressQuest(_, CRanch, _, _), 
-    NewCRanch is CRanch+X, 
-    retract(progressQuest(_, CRanch, _, _)), 
-    assertz(progressQuest(_, NewCRanch, _, _)).
-
 % isQuest untuk melihat apakah sedang menjalankan quest
 % progressQuest(QuestId, CountFarming, CountFishing, CountRanching)
 % quest(QuestId, HasilFarming, HasilFishing, HasilRanching, Exp, Gold)
