@@ -57,8 +57,11 @@ initRanching :-
     /* Angka di bawah hanya sebagai sample belum fix */
     retractall(gainedExpRanch(_)),
     playerRanchingLevel(X),
+    (playerRole(rancher) ->
     Y is X*2,
-    Y1 is 5+Y,
+    Y1 is 2*5+Y;
+    Y is X*2,
+    Y1 is 5+Y),
     assertz(gainedExpRanch(Y1)).
 
 /* Cek posisi player, berada di tile ranch atau tidak */
@@ -121,7 +124,7 @@ chicken :-
     write('You didn\'t get any poultries!'), nl),
     (X =:= 0, X1 =:= 0, Y =:= 0 -> write('Please check again later!');
     write('You gained '), write(Z), write(' ranching exp!'),
-    addRanchingEXP(Z), addEXP(Z), addBarang('Egg', X), addBarang('Poultry', Y), addBarang('Golden Egg', X1)). 
+    addRanchingEXP(Z), addEXP(Z), addBarang('Egg', X), addBarang('Poultry', Y), addBarang('Golden Egg', X1)).
 
 /* Command sheep mengecek apakah domba siap panen (domba diambil untuk kemudian dikonsumsi) atau bulunya siap dicukur (wool) */
 sheep :-
@@ -179,19 +182,6 @@ addItemRanch2([[X,Y]|T],Item) :-
     addItemRanch2(T,Item1),
     Item is 1+Item1.
 
-/* Random pick element list */
-/* Source: https://stackoverflow.com/questions/50250234/prolog-how-to-non-uniformly-randomly-select-a-element-from-a-list */
-choice([X|_], [P|_], Cumul, Rand, X) :-
-    Rand < Cumul + P.
-choice([_|Xs], [P|Ps], Cumul, Rand, Y) :-
-    Cumul1 is Cumul + P,
-    Rand >= Cumul1,
-    choice(Xs, Ps, Cumul1, Rand, Y).
-choice([X], [P], Cumul, Rand, X) :-
-    Rand < Cumul + P.
-
-choice(Xs, Ps, Y) :- random(R), choice(Xs, Ps, 0, R, Y).
-
 /* Menghasilkan jumlah telur atau telur emas yang waktunya sudah menyentuh angka 0*/
 addEggOrGoldEgg([],0,0).
 addEggOrGoldEgg([H|T],Egg,GoldEgg) :-
@@ -199,12 +189,19 @@ addEggOrGoldEgg([H|T],Egg,GoldEgg) :-
     addEggOrGoldEgg(T,Egg,GoldEgg), !.
 addEggOrGoldEgg([H|T],Egg,GoldEgg) :-
     H =:= 0,
+    (playerRole(rancher) ->
+    choice(['Egg', 'Golden Egg'], [0.75, 0.25], X),
+    (X = 'Egg' -> 
+    addEggOrGoldEgg(T,Egg1,GoldEgg),
+    Egg is 1+Egg1;
+    addEggOrGoldEgg(T,Egg,GoldEgg1),
+    GoldEgg is 1+GoldEgg1);
     choice(['Egg', 'Golden Egg'], [0.8, 0.2], X),
     (X = 'Egg' -> 
     addEggOrGoldEgg(T,Egg1,GoldEgg),
     Egg is 1+Egg1;
     addEggOrGoldEgg(T,Egg,GoldEgg1),
-    GoldEgg is 1+GoldEgg1).
+    GoldEgg is 1+GoldEgg1)).
 
 /* Menghasilkan list dengan elemen yang sama dengan 0 diganti dengan X*/
 changeList1([],_,[]).
@@ -235,7 +232,9 @@ addEgg :-
     retractall(egg(_)), X2 is X1+Y1, 
     retractall(goldenEgg(_)), X4 is X3+Y2, 
     assertz(egg(X2)), assertz(goldenEgg(X4)),
-    changeList1(E, 20, Z),
+    (playerRole(rancher) ->
+    changeList1(E, 15, Z);
+    changeList1(E, 20, Z)),
     assertz(produceEgg(Z)).
 /* Menambah wool */
 addWool :-
@@ -243,7 +242,9 @@ addWool :-
     retractall(produceWool(W)), addItemRanch1(W,Y),
     retractall(wool(_)), X1 is X+Y,
     assertz(wool(X1)),
-    changeList1(W, 60, Z),
+    (playerRole(rancher) ->
+    changeList1(W, 50, Z);
+    changeList1(W, 60, Z)),
     assertz(produceWool(Z)).
 /* Menambah milk */
 addMilk :-
@@ -251,7 +252,9 @@ addMilk :-
     retractall(produceMilk(_)), addItemRanch1(M,Y),
     retractall(milk(_)), X1 is X+Y,
     assertz(milk(X1)),
-    changeList1(M, 30, Z),
+    (playerRole(rancher) ->
+    changeList1(M, 25, Z);
+    changeList1(M, 30, Z)),
     assertz(produceMilk(Z)).
 /* Menambah poultry */
 addPoultry :-
@@ -279,23 +282,34 @@ addBeef :-
     assertz(produceBeef(Z)).
 
 /* Mengurangi satu satuan waktu tiap element di list produce */
-decOnePerElmt([],[]).
-decOnePerElmt([H|T],[H1|T1]) :-
+decOnePerElmt1([],[]).
+decOnePerElmt1([H|T],[H1|T1]) :-
     H =:= 0,
-    decOnePerElmt(T,T1),
+    decOnePerElmt1(T,T1),
     H1 is H.
-decOnePerElmt([H|T], [H1|T1]) :-
+decOnePerElmt1([H|T], [H1|T1]) :-
     H > 0,
-    decOnePerElmt(T,T1),
+    decOnePerElmt1(T,T1),
     H1 is H-1.
+
+/* Mengurangi satu satuan waktu tiap element di list produce */
+decOnePerElmt2([],[]).
+decOnePerElmt2([[X,Y]|T],[[X1,Y1]|T1]) :-
+    X =:= 0,
+    decOnePerElmt2(T,T1),
+    X1 is X, Y1 is Y.
+decOnePerElmt2([[X,Y]|T], [[X1,Y1]|T1]) :-
+    X > 0,
+    decOnePerElmt2(T,T1),
+    X1 is X-1, Y1 is Y.
 
 /* Update kondisi ranch tiap hari */
 /* Rule ini harus dipanggil tiap pergantian hari */
 updateRanch :-
     produceEgg(E), producePoultry(P), produceWool(W), 
     produceSheepMeat(SM), produceMilk(M), produceBeef(B),
-    decOnePerElmt(E,E1), decOnePerElmt(P,P1), decOnePerElmt(W,W1), 
-    decOnePerElmt(SM,SM1), decOnePerElmt(M,M1), decOnePerElmt(B,B1),
+    decOnePerElmt1(E,E1), decOnePerElmt2(P,P1), decOnePerElmt1(W,W1), 
+    decOnePerElmt2(SM,SM1), decOnePerElmt1(M,M1), decOnePerElmt2(B,B1),
     retractall(produceEgg(_)), retractall(producePoultry(_)), retractall(produceWool(_)),
     retractall(produceSheepMeat(_)), retractall(produceMilk(_)), retractall(produceBeef(_)),
     assertz(produceEgg(E1)), assertz(producePoultry(P1)), assertz(produceWool(W1)),
@@ -320,12 +334,16 @@ newChicken(X) :-
     produceEgg(PrevList1),
     retractall(produceEgg(_)),
     /* Asumsi ayam butuh waktu 20 hari buat bertelur (sample belum fix) */
-    appendXElmt(X,PrevList1,[20],NewList1),
+    (playerRole(rancher) ->
+    appendXElmt(X,PrevList1,[15],NewList1);
+    appendXElmt(X,PrevList1,[20],NewList1)),
     assertz(produceEgg(NewList1)),
     producePoultry(PrevList2),
     retractall(producePoultry(_)),
     /* Asumsi ayam siap panen di umur 40 hari (sample belum fix) */
-    appendXElmt(X,PrevList2,[[40,0]],NewList2),
+    (playerRole(rancher) ->
+    appendXElmt(X,PrevList2,[[35,0]],NewList2);
+    appendXElmt(X,PrevList2,[[40,0]],NewList2)),
     assertz(producePoultry(NewList2)).
 
 /* Konfigurasi apabila ada domba baru */
@@ -337,12 +355,16 @@ newSheep(X) :-
     produceWool(PrevList1),
     retractall(produceWool(_)),
     /* Asumsi domba butuh waktu 60 hari sampai bulunya siap dicukur (sample belum fix) */
-    appendXElmt(X,PrevList1,[60],NewList1),
+    (playerRole(rancher) ->
+    appendXElmt(X,PrevList1,[50],NewList1);
+    appendXElmt(X,PrevList1,[60],NewList1)),
     assertz(produceWool(NewList1)),
     produceSheepMeat(PrevList2),
     retractall(produceSheepMeat(_)),
     /* Asumsi domba siap panen di umur 80 hari (sample belum fix) */
-    appendXElmt(X,PrevList2,[[80,0]],NewList2),
+    (playerRole(rancher) ->
+    appendXElmt(X,PrevList2,[[70,0]],NewList2),
+    appendXElmt(X,PrevList2,[[80,0]],NewList2)),
     assertz(produceSheepMeat(NewList2)).
 
 /* Konfigurasi apabila ada sapi baru */
@@ -354,12 +376,16 @@ newCow(X) :-
     produceMilk(PrevList1),
     retractall(produceMilk(_)),
     /* Asumsi sapi butuh waktu 30 hari sampai susunya siap diperah (sample belum fix) */
-    appendXElmt(X,PrevList1,[30],NewList1),
+    (playerRole(rancher) ->
+    appendXElmt(X,PrevList1,[25],NewList1);
+    appendXElmt(X,PrevList1,[30],NewList1)),
     assertz(produceMilk(NewList1)),
     produceBeef(PrevList2),
     retractall(produceBeef(_)),
     /* Asumsi sapi siap panen di umur 100 hari (sample belum fix) */
-    appendXElmt(X,PrevList2,[[100,0]],NewList2),
+    (playerRole(rancher) ->
+    appendXElmt(X,PrevList2,[[90,0]],NewList2);
+    appendXElmt(X,PrevList2,[[100,0]],NewList2)),
     assertz(produceBeef(NewList2)).
 
 /* Hewan dijual */
@@ -413,8 +439,3 @@ sellCow(X) :-
     /* Asumsi sapi siap panen di umur 100 hari (sample belum fix) */
     removeXElmt(X,PrevList2,NewList2),
     assertz(produceBeef(NewList2)).
-
-/* 
-TODO:
-    - kalo jual/beli ayam, domba, atau sapi, kondisi di ranch harus diupdate
-*/
