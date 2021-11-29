@@ -252,8 +252,9 @@ addEgg :-
 /* Menambah wool */
 addWool :-
     shearerLevel(Level), wool(X),
-    retractall(produceWool(_)), retractall(wool(_)),
+    retractall(wool(_)),
     (Level =:= 0 -> X1 is Level+X, assertz(wool(X1));
+    retractall(produceWool(_)), 
     produceWool(W), addItemRanch1(W,Y),
     X1 is Level+X+Y, assertz(wool(X1)),
     playerRanchingLevel(Level),
@@ -266,9 +267,10 @@ addWool :-
 /* Menambah milk */
 addMilk :-
     bucketLevel(Level), milk(X),
-    retractall(produceMilk(_)), retractall(milk(_)),
+    retractall(milk(_)),
     (Level =:= 0 -> X1 is Level+X, assertz(milk(X1));
     produceMilk(M), addItemRanch1(M,Y),
+    retractall(produceMilk(_)), 
     X1 is Level+X+Y, assertz(milk(X1)),
     playerRanchingLevel(Level),
     (playerRole(rancher) ->
@@ -389,7 +391,7 @@ newSheep(X) :-
     retractall(produceSheepMeat(_)),
     (playerRole(rancher) ->
     Time2 is 11-Level, (Time2 =< 0 -> Time2 is 5; Time2 is Time2),
-    appendXElmt(X,PrevList2,[[Time2,0]],NewList2),
+    appendXElmt(X,PrevList2,[[Time2,0]],NewList2);
     Time2 is 12-Level, (Time2 =< 0 -> Time2 is 5; Time2 is Time2),
     appendXElmt(X,PrevList2,[[Time2,0]],NewList2)),
     assertz(produceSheepMeat(NewList2)), !.
