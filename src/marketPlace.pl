@@ -79,6 +79,15 @@ addEQtoShop([[Name, Level]|Tail]) :-
     retractall(shop(_)),
     assertz(shop(NewS)),
     addEQtoShop(Tail), !.
+addEQtoShop([[Name, Level]|Tail]) :-
+    Name == 'Shearer',
+    UpLv is (Level + 1),
+    Price is UpLv*400,
+    shop(S),
+    append(S, [[Name, UpLv, Price]], NewS), !,
+    retractall(shop(_)),
+    assertz(shop(NewS)),
+    addEQtoShop(Tail), !.
 
 addEQtoShop([[Name, _]|Tail]) :-
     \+ equipment(Name, _),
