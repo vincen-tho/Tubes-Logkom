@@ -74,11 +74,15 @@ ranch :-
     totalSheep(Y),
     totalCow(Z),
     initRanching,
+    (X =:= 0, Y =:= 0, Z =:= 0 ->
+    write('Welcome to the ranch!'), nl,
+    write('You don\'t have any ranch animals!'), nl,
+    write('Please come back later!');
     write('Welcome to the ranch! You have:'), nl,
-    write(X), write(' '), write(chicken), nl,    
-    write(Y), write(' '), write(sheep), nl,    
-    write(Z), write(' '), write(cow), nl, nl,
-    write('What do you want to do?'), !.
+    (X > 0 -> write(X), write(' '), write(chicken), nl; write('')),    
+    (Y > 0 -> write(Y), write(' '), write(sheep), nl; write('')),    
+    (Z > 0 -> write(Z), write(' '), write(cow), nl; write('')), nl,
+    write('What do you want to do?')), !.
 
 /* Menghapus semua elemen yang bernilai X */  
 removeAllX(_, [], [], 0).
@@ -103,7 +107,6 @@ count([_|T],Count) :-
 /* Command chicken mengecek apakah ayam bertelur atau sudah siap panen (ayam diambil untuk kemudian dikonsumsi) */
 chicken :-
     egg(X), goldenEgg(X1), poultry(Y),
-    write(X), write(X1), write(Y),
     gainedExpRanch(Z),
     (X > 0, X1 =:= 0 -> write('Your chickens lay '), write(X), write(' eggs!'), nl,
     X2 is 0, retractall(egg(_)), assertz(egg(X2));
@@ -118,12 +121,13 @@ chicken :-
     producePoultry(P), produceEgg(E), 
     retractall(producePoultry(_)), removeAllX(0,P,P1,Mark), assertz(producePoultry(P1)),
     retractall(produceEgg(_)), removeXElmt(Mark,E,E1), assertz(produceEgg(E1)),
-    retractall(totalChicken(_)), count(P1,Count), assertz(totalChicken(Count));
+    retractall(totalChicken(_)), count(P1,Count), assertz(totalChicken(Count)),
+    changeBarang('Chicken', Count);
     write('You didn\'t get any poultries!'), nl),
     (X =:= 0, X1 =:= 0, Y =:= 0 -> write('Please check again later!');
     (playerRole(rancher) -> Z1 is Z*2; Z1 is Z),
     write('You gained '), write(Z1), write(' ranching exp!'),
-    addRanchingEXP(Z), addEXP(Z), addBarang('Egg', X), addBarang('Poultry', Y), addBarang('Golden Egg', X1)), !.
+    addRanchingEXP(Z), addBarang('Egg', X), addBarang('Poultry', Y), addBarang('Golden Egg', X1)), !.
 
 /* Command sheep mengecek apakah domba siap panen (domba diambil untuk kemudian dikonsumsi) atau bulunya siap dicukur (wool) */
 sheep :-
@@ -137,12 +141,13 @@ sheep :-
     produceSheepMeat(SM), produceWool(W),
     retractall(produceSheepMeat(_)), removeAllX(0,SM,SM1,Mark), assertz(produceSheepMeat(SM1)),
     retractall(produceWool(_)), removeXElmt(Mark,W,W1), assertz(produceWool(W1)),
-    retractall(totalSheep(_)), count(SM1,Count), assertz(totalSheep(Count));
+    retractall(totalSheep(_)), count(SM1,Count), assertz(totalSheep(Count)),
+    changeBarang('Sheep', Count);
     write('You didn\'t get any sheep meats!'), nl),
     (X =:= 0, Y =:= 0 -> write('Please check again later!');
     (playerRole(rancher) -> Z1 is Z*2; Z1 is Z),
     write('You gained '), write(Z1), write(' ranching exp!'),
-    addRanchingEXP(Z), addEXP(Z), addBarang('Wool', X), addBarang('Sheep Meat', Y)), !.
+    addRanchingEXP(Z), addBarang('Wool', X), addBarang('Sheep Meat', Y)), !.
 
 /* Command cow mengecek apakah sapi siap panen (sapi diambil untuk kemudian dikonsumsi) atau siap diperah susunya */
 cow :-
@@ -156,12 +161,13 @@ cow :-
     produceBeef(B), produceMilk(M),
     retractall(produceBeef(_)), removeAllX(0,B,B1,Mark), assertz(produceBeef(B1)),
     retractall(produceMilk(_)), removeXElmt(Mark,M,M1), assertz(produceMilk(M1)),
-    retractall(totalCow(_)), count(B1,Count), assertz(totalCow(Count));
+    retractall(totalCow(_)), count(B1,Count), assertz(totalCow(Count)),
+    changeBarang('Cow', Count);
     write('You didn\'t get any beefs!'), nl),
     (X =:= 0, Y =:= 0 -> write('Please check again later!');
     (playerRole(rancher) -> Z1 is Z*2; Z1 is Z),
     write('You gained '), write(Z1), write(' ranching exp!'),
-    addRanchingEXP(Z), addEXP(Z), addBarang('Milk', X), addBarang('Beef', Y)), !.
+    addRanchingEXP(Z), addBarang('Milk', X), addBarang('Beef', Y)), !.
 
 /* Menghasilkan jumlah item yang nilainya adalah 0 */
 addItemRanch1([],0).
