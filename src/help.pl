@@ -81,7 +81,7 @@ help :-
     write(' #                            What do you want to do ?                          #'),nl,
     write(' ################################################################################'),nl,
     write(' #                             ~RANCHING MENU~                                  #'),nl,
-    write(' # 1. ranchStatus   : Check your ranch                                          #'),nl,
+    write(' # 1. ranch         : Check your ranch                                          #'),nl,
     write(' # 2. chicken       : Check your chicken                                        #'),nl,
     write(' # 3. sheep         : Check your sheep                                          #'),nl,
     write(' # 3. cow           : Check your cow                                            #'),nl,

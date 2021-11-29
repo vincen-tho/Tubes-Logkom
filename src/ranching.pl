@@ -106,6 +106,7 @@ count([_|T],Count) :-
 /* Cek kondisi hewan ternak */
 /* Command chicken mengecek apakah ayam bertelur atau sudah siap panen (ayam diambil untuk kemudian dikonsumsi) */
 chicken :-
+    checkPosRanch,
     egg(X), goldenEgg(X1), poultry(Y),
     gainedExpRanch(Z),
     (X > 0, X1 =:= 0 -> write('Your chickens lay '), write(X), write(' eggs!'), nl,
@@ -131,6 +132,7 @@ chicken :-
 
 /* Command sheep mengecek apakah domba siap panen (domba diambil untuk kemudian dikonsumsi) atau bulunya siap dicukur (wool) */
 sheep :-
+    checkPosRanch,
     wool(X), sheepMeat(Y),
     gainedExpRanch(Z),
     (X > 0 -> write('You got '), write(X), write(' wools!'), nl,
@@ -151,6 +153,7 @@ sheep :-
 
 /* Command cow mengecek apakah sapi siap panen (sapi diambil untuk kemudian dikonsumsi) atau siap diperah susunya */
 cow :-
+    checkPosRanch,
     milk(X), beef(Y),
     gainedExpRanch(Z),
     (X > 0, haveBucket -> write('You got '), write(X), write(' milks!'), nl,
