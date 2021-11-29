@@ -45,6 +45,7 @@ equipment('Shovel', 'F').
 
 /* RANCHING */
 equipment('Bucket', 'R').
+equipment('Shearer', 'R').
 
 /* FISHING */
 equipment('Fishing Rod', 'H').
@@ -56,6 +57,10 @@ shovelLevel(Level) :-
 bucketLevel(Level) :-
     inventory(Inv),
     member(['Bucket', Level], Inv), !.
+
+shearerLevel(Level) :-
+    inventory(Inv),
+    member(['Shearer', Level], Inv), !.
 
 fishingRodLevel(Level) :-
     inventory(Inv),

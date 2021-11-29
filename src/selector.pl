@@ -145,7 +145,11 @@ haveFishingRod :-
 
 haveBucket :-
     inventory(Inv),
-    member(['Bucket', Level], Inv), Level =\= 0, !.
+    member(['Bucket', Level], Inv), !.
+
+haveShearer :-
+    inventory(Inv),
+    member(['Shearer', Level], Inv), !.
 
 
 /* number valid inklusif */

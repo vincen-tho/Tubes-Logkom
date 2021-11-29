@@ -107,13 +107,13 @@ count([_|T],Count) :-
 /* Command chicken mengecek apakah ayam bertelur atau sudah siap panen (ayam diambil untuk kemudian dikonsumsi) */
 chicken :-
     checkPosRanch,
-    egg(X), goldenEgg(X1), poultry(Y),
+    egg(X), goldenEgg(X1), poultry(Y), Sum is X+X1+Y,
     gainedExpRanch(Z),
     (X > 0, X1 =:= 0 -> write('Your chickens lay '), write(X), write(' eggs!'), nl,
     X2 is 0, retractall(egg(_)), assertz(egg(X2));
     X > 0, X1 > 0 -> write('Your chickens lay '), write(X), write(' eggs!'), nl,
     write('Congrats! Your chickens lay '), write(X1), write(' golden eggs too!'), nl,
-    X2 is 0, retractall(egg(_)), assertz(egg(X2)), retractall(goldenEgg(_)), assertz(goldenEgg(_));
+    X2 is 0, retractall(egg(_)), assertz(egg(X2)), retractall(goldenEgg(_)), assertz(goldenEgg(X2));
     X =:= 0, X1 > 0 -> write('Congrats! Your chickens lay '), write(X1), write(' golden eggs!'), nl,
     X2 is 0, retractall(goldenEgg(_)), assertz(goldenEgg(X2));
     write('Your chickens didn\'t lay any eggs!'), nl), 
@@ -128,12 +128,12 @@ chicken :-
     (X =:= 0, X1 =:= 0, Y =:= 0 -> write('Please check again later!');
     (playerRole(rancher) -> Z1 is Z*2; Z1 is Z),
     write('You gained '), write(Z1), write(' ranching exp!'),
-    addRanchingEXP(Z), addBarang('Egg', X), addBarang('Poultry', Y), addBarang('Golden Egg', X1)), !.
+    addRanchingEXP(Z), addBarang('Egg', X), addBarang('Poultry', Y), addBarang('Golden Egg', X1)), addCountRanch(Sum), !.
 
 /* Command sheep mengecek apakah domba siap panen (domba diambil untuk kemudian dikonsumsi) atau bulunya siap dicukur (wool) */
 sheep :-
     checkPosRanch,
-    wool(X), sheepMeat(Y),
+    wool(X), sheepMeat(Y), Sum is X+Y,
     gainedExpRanch(Z),
     (X > 0 -> write('You got '), write(X), write(' wools!'), nl,
     X1 is 0, retractall(wool(_)), assertz(wool(X1));
@@ -149,14 +149,14 @@ sheep :-
     (X =:= 0, Y =:= 0 -> write('Please check again later!');
     (playerRole(rancher) -> Z1 is Z*2; Z1 is Z),
     write('You gained '), write(Z1), write(' ranching exp!'),
-    addRanchingEXP(Z), addBarang('Wool', X), addBarang('Sheep Meat', Y)), !.
+    addRanchingEXP(Z), addBarang('Wool', X), addBarang('Sheep Meat', Y)), addCountRanch(Sum), !.
 
 /* Command cow mengecek apakah sapi siap panen (sapi diambil untuk kemudian dikonsumsi) atau siap diperah susunya */
 cow :-
     checkPosRanch,
-    milk(X), beef(Y),
+    milk(X), beef(Y), Sum is X+Y,
     gainedExpRanch(Z),
-    (X > 0, haveBucket -> write('You got '), write(X), write(' milks!'), nl,
+    (X > 0 -> write('You got '), write(X), write(' milks!'), nl,
     X1 is 0, retractall(milk(_)), assertz(milk(X1));
     write('You didn\'t get any milks!'), nl), 
     (Y > 0 -> write('You got '), write(Y), write(' beefs!'), nl,
@@ -170,7 +170,7 @@ cow :-
     (X =:= 0, Y =:= 0 -> write('Please check again later!');
     (playerRole(rancher) -> Z1 is Z*2; Z1 is Z),
     write('You gained '), write(Z1), write(' ranching exp!'),
-    addRanchingEXP(Z), addBarang('Milk', X), addBarang('Beef', Y)), !.
+    addRanchingEXP(Z), addBarang('Milk', X), addBarang('Beef', Y)), addCountRanch(Sum), !.
 
 /* Menghasilkan jumlah item yang nilainya adalah 0 */
 addItemRanch1([],0).
@@ -244,38 +244,39 @@ addEgg :-
     assertz(egg(X2)), assertz(goldenEgg(X4)),
     playerRanchingLevel(Level),
     (playerRole(rancher) ->
-    Time1 is 15-Level,
+    Time1 is 3-Level, (Time1 =< 0 -> Time1 is 1; Time1 is Time1),
     changeList1(E, Time1, Z);
-    Time1 is 20-Level,
+    Time1 is 4-Level, (Time1 =< 0 -> Time1 is 2; Time1 is Time1),
     changeList1(E, Time1, Z)),
     assertz(produceEgg(Z)), !.
 /* Menambah wool */
 addWool :-
-    produceWool(W), wool(X),
-    retractall(produceWool(W)), addItemRanch1(W,Y),
-    retractall(wool(_)), X1 is X+Y,
-    assertz(wool(X1)),
+    shearerLevel(Level), wool(X),
+    retractall(produceWool(_)), retractall(wool(_)),
+    (Level =:= 0 -> X1 is Level+X, assertz(wool(X1));
+    produceWool(W), addItemRanch1(W,Y),
+    X1 is Level+X+Y, assertz(wool(X1)),
     playerRanchingLevel(Level),
     (playerRole(rancher) ->
-    Time1 is 50-Level,
+    Time1 is 9-Level, (Time1 =< 0 -> Time1 is 7; Time1 is Time1),
     changeList1(W, Time1, Z);
-    Time1 is 60-Level,
+    Time1 is 10-Level, (Time1 =< 0 -> Time1 is 8; Time1 is Time1),
     changeList1(W, Time1, Z)),
-    assertz(produceWool(Z)), !.
+    assertz(produceWool(Z))), !.
 /* Menambah milk */
 addMilk :-
-    bucketLevel(Level),
-    produceMilk(M), milk(X),
-    retractall(produceMilk(_)), addItemRanch1(M,Y),
-    retractall(milk(_)), X1 is Level+X+Y,
-    assertz(milk(X1)),
+    bucketLevel(Level), milk(X),
+    retractall(produceMilk(_)), retractall(milk(_)),
+    (Level =:= 0 -> X1 is Level+X, assertz(milk(X1));
+    produceMilk(M), addItemRanch1(M,Y),
+    X1 is Level+X+Y, assertz(milk(X1)),
     playerRanchingLevel(Level),
     (playerRole(rancher) ->
-    Time1 is 25-Level,
+    Time1 is 5-Level, (Time1 =< 0 -> Time1 is 3; Time1 is Time1),
     changeList1(M, Time1, Z);
-    Time1 is 30-Level,
+    Time1 is 6-Level, (Time1 =< 0 -> Time1 is 4; Time1 is Time1),
     changeList1(M, Time1, Z)),
-    assertz(produceMilk(Z)), !.
+    assertz(produceMilk(Z))), !.
 /* Menambah poultry */
 addPoultry :-
     producePoultry(P), poultry(X), addItemRanch2(P,Y),
@@ -355,17 +356,17 @@ newChicken(X) :-
     retractall(produceEgg(_)),
     playerRanchingLevel(Level),
     (playerRole(rancher) ->
-    Time1 is 15-Level,
+    Time1 is 3-Level, (Time1 =< 0 -> Time1 is 1; Time1 is Time1),
     appendXElmt(X,PrevList1,[Time1],NewList1);
-    Time1 is 20-Level,
-    appendXElmt(X,PrevList1,[20],NewList1)),
+    Time1 is 4-Level, (Time1 =< 0 -> Time1 is 1; Time1 is Time1),
+    appendXElmt(X,PrevList1,[Time1],NewList1)),
     assertz(produceEgg(NewList1)),
     producePoultry(PrevList2),
     retractall(producePoultry(_)),
     (playerRole(rancher) ->
-    Time2 is 35-Level,
+    Time2 is 7-Level, (Time2 =< 0 -> Time2 is 3; Time2 is Time2),
     appendXElmt(X,PrevList2,[[Time2,0]],NewList2);
-    Time2 is 40-Level,
+    Time2 is 8-Level, (Time2 =< 0 -> Time2 is 3; Time2 is Time2),
     appendXElmt(X,PrevList2,[[Time2,0]],NewList2)),
     assertz(producePoultry(NewList2)), !.
 
@@ -379,17 +380,17 @@ newSheep(X) :-
     retractall(produceWool(_)),
     playerRanchingLevel(Level),
     (playerRole(rancher) ->
-    Time1 is 50-Level,
+    Time1 is 9-Level, (Time1 =< 0 -> Time1 is 4; Time1 is Time1),
     appendXElmt(X,PrevList1,[Time1],NewList1);
-    Time1 is 60-Level,
+    Time1 is 10-Level, (Time1 =< 0 -> Time1 is 4; Time1 is Time1),
     appendXElmt(X,PrevList1,[Time1],NewList1)),
     assertz(produceWool(NewList1)),
     produceSheepMeat(PrevList2),
     retractall(produceSheepMeat(_)),
     (playerRole(rancher) ->
-    Time2 is 70-Level,
+    Time2 is 11-Level, (Time2 =< 0 -> Time2 is 5; Time2 is Time2),
     appendXElmt(X,PrevList2,[[Time2,0]],NewList2),
-    Time2 is 80-Level,
+    Time2 is 12-Level, (Time2 =< 0 -> Time2 is 5; Time2 is Time2),
     appendXElmt(X,PrevList2,[[Time2,0]],NewList2)),
     assertz(produceSheepMeat(NewList2)), !.
 
@@ -403,17 +404,17 @@ newCow(X) :-
     retractall(produceMilk(_)),
     playerRanchingLevel(Level),
     (playerRole(rancher) ->
-    Time1 is 25-Level,
+    Time1 is 5-Level, (Time1 =< 0 -> Time1 is 2; Time1 is Time1),
     appendXElmt(X,PrevList1,[Time1],NewList1);
-    Time1 is 30-Level,
+    Time1 is 6-Level, (Time1 =< 0 -> Time1 is 2; Time1 is Time1),
     appendXElmt(X,PrevList1,[Time1],NewList1)),
     assertz(produceMilk(NewList1)),
     produceBeef(PrevList2),
     retractall(produceBeef(_)),
     (playerRole(rancher) ->
-    Time2 is 90-Level,
+    Time2 is 13-Level, (Time2 =< 0 -> Time2 is 6; Time2 is Time2),
     appendXElmt(X,PrevList2,[[Time2,0]],NewList2);
-    Time2 is 100-Level,
+    Time2 is 14-Level, (Time2 =< 0 -> Time2 is 6; Time2 is Time2),
     appendXElmt(X,PrevList2,[[Time2,0]],NewList2)),
     assertz(produceBeef(NewList2)), !.
 

@@ -23,9 +23,9 @@ initFishing :-
     Y is L1+L2,
     Z is X*2,
     (playerRole(fisherman) ->
-    Y1 is 0.13-Y, Y2 is 0.3-Y, Y3 is 0.15-Y, Y4 is 0.12+Y, Y5 is 0.09+Y, Y6 is 0.07+Y,
+    Y1 is 0.15-Y, Y2 is 0.28-Y, Y3 is 0.15-Y, Y4 is 0.12+Y, Y5 is 0.09+Y, Y6 is 0.07+Y,
     (Y1 < 0.14; Y2 < 0.14; Y3 < 0.14; Y4 < 0.14; Y5 < 0.14; Y6 < 0.14),
-    Y1 is 0.22+Y, Y2 is 0.3+Y, Y3 is 0.17+Y, Y4 is 0.1-Y, Y5 is 0.06-Y, Y6 is 0.01-Y,
+    Y1 is 0.15+Y, Y2 is 0.28+Y, Y3 is 0.15+Y, Y4 is 0.12-Y, Y5 is 0.09-Y, Y6 is 0.07-Y,
     Z1 is 5+Z, Z2 is 10+Z;
     Y1 is 0.22-Y, Y2 is 0.3-Y, Y3 is 0.17-Y, Y4 is 0.1+Y, Y5 is 0.06+Y, Y6 is 0.01+Y,
     (Y1 < 0.14; Y2 < 0.14; Y3 < 0.14; Y4 < 0.14; Y5 < 0.14; Y6 < 0.14),
@@ -42,7 +42,7 @@ initFishing :-
     Y is L1+L2,
     Z is X*2,
     (playerRole(fisherman) ->
-    Y1 is 0.13-Y, Y2 is 0.3-Y, Y3 is 0.15-Y, Y4 is 0.12+Y, Y5 is 0.09+Y, Y6 is 0.07+Y,
+    Y1 is 0.15-Y, Y2 is 0.28-Y, Y3 is 0.15-Y, Y4 is 0.12+Y, Y5 is 0.09+Y, Y6 is 0.07+Y,
     Z1 is 5+Z, Z2 is 10+Z;
     Y1 is 0.22-Y, Y2 is 0.3-Y, Y3 is 0.17-Y, Y4 is 0.1+Y, Y5 is 0.06+Y, Y6 is 0.01+Y,
     Z1 is 5+Z, Z2 is 10+Z),
