@@ -463,3 +463,15 @@ sellCow(X) :-
     retractall(produceBeef(_)),
     removeXElmt(X,PrevList2,NewList2),
     assertz(produceBeef(NewList2)), !.
+
+/* ranching guide */
+ranchingGuide :-
+    write(' #################################################################################'),nl,
+    write(' #                    ~TIME REQUIRED TO COLLECT EACH PRODUCT~                    #'),nl,
+    write(' # 1. Egg        : 1-4 days                                                      #'),nl,
+    write(' # 2. Poultry    : 3-8 days                                                      #'),nl,
+    write(' # 3. Wool       : 4-10 days                                                     #'),nl,
+    write(' # 4. Sheep Meat : 5-12 days                                                     #'),nl,
+    write(' # 5. Milk       : 2-6 days                                                      #'),nl,
+    write(' # 6. Beef       : 6-14 days                                                     #'),nl,
+    write(' #################################################################################'), !.

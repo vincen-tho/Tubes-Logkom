@@ -85,6 +85,7 @@ help :-
     write(' # 2. chicken       : Check your chicken                                        #'),nl,
     write(' # 3. sheep         : Check your sheep                                          #'),nl,
     write(' # 3. cow           : Check your cow                                            #'),nl,
+    write(' # 4. ranchingGuide : Read the ranching guide                                   #'),nl,
     write(' ################################################################################'), !.
 
 help :-
