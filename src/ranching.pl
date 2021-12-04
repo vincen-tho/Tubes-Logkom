@@ -254,8 +254,8 @@ addWool :-
     shearerLevel(Level), wool(X),
     retractall(wool(_)),
     (Level =:= 0 -> X1 is Level+X, assertz(wool(X1));
-    retractall(produceWool(_)), 
     produceWool(W), addItemRanch1(W,Y),
+    retractall(produceWool(_)),
     X1 is Level+X+Y, assertz(wool(X1)),
     playerRanchingLevel(Level),
     (playerRole(rancher) ->
